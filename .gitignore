@@ -1,3 +1,9 @@
+JRE/
 target/
 com/prism/
 src/test/
+.vscode/
+config.properties
+prism.jar
+Prism.exe
+inno_welcome_img.bmp

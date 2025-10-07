@@ -1,16 +1,19 @@
 package com.prism.components.frames;
 
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyledDocument;
 
 import com.prism.Prism;
 import com.prism.utils.ResourceUtil;
-
-import java.awt.*;
 
 public class LoadingFrame extends JFrame {
     public Prism prism = Prism.getInstance();
@@ -57,7 +60,7 @@ public class LoadingFrame extends JFrame {
 
         JProgressBar progressBar = new JProgressBar();
         progressBar.setIndeterminate(true);
-        progressBar.setPreferredSize(new Dimension(250, 30));
+        progressBar.setPreferredSize(new Dimension(250, 20));
 
         JLabel copyrightLabel = new JLabel("Copyright \u00a9 " + YEAR + " " + AUTHOR + ". All rights reserved.");
         copyrightLabel.setFont(new Font("SansSerif", Font.PLAIN, 10));

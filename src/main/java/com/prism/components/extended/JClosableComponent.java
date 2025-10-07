@@ -1,6 +1,7 @@
 package com.prism.components.extended;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -8,12 +9,13 @@ import java.awt.FlowLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 import com.prism.Prism;
 import com.prism.utils.ResourceUtil;
@@ -28,22 +30,18 @@ public class JClosableComponent extends JPanel {
 
     public final ComponentType type;
 
-    public JClosableComponent(ComponentType type, List<JComponent> headerComponents, JComponent component) {
+    public JClosableComponent(ComponentType type, JComponent header, JComponent component) {
         this.type = type;
 
         setLayout(new BorderLayout());
 
-        JPanel headerPanel = new JPanel();
+        JGradientPanel headerPanel = new JGradientPanel(Color.decode("#f0f0f0"), Color.decode("#bcbcbc"), JGradientPanel.Direction.BOTTOM_TO_TOP);
         headerPanel.setLayout(new BorderLayout());
 
-        JPanel secondaryHeaderPanel = new JPanel();
-        secondaryHeaderPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+        header.setOpaque(false);
+        header.setBorder(new EmptyBorder(5, 5, 5, 0));
 
-        for (JComponent headerComponent : headerComponents) {
-            secondaryHeaderPanel.add(headerComponent);
-        }
-
-        headerPanel.add(secondaryHeaderPanel, BorderLayout.WEST);
+        headerPanel.add(header, BorderLayout.WEST);
 
         JButton closeButton = new JButton();
         closeButton.setBorderPainted(false);

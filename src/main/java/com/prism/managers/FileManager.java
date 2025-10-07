@@ -1,7 +1,12 @@
 package com.prism.managers;
 
 import java.awt.Desktop;
-import java.awt.event.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -27,7 +32,6 @@ import org.fife.ui.rtextarea.RTextScrollPane;
 import com.prism.Prism;
 import com.prism.components.files.PrismFile;
 import com.prism.components.frames.ErrorDialog;
-import com.prism.components.frames.WarningDialog;
 import com.prism.components.textarea.TextArea;
 import com.prism.config.Config;
 import com.prism.utils.Languages;
@@ -182,6 +186,14 @@ public class FileManager {
         prism.textAreaTabbedPane.redirectUserToTab(prismFile);
 
         prism.bookmarks.updateTreeData(TextAreaManager.getBookmarksOfAllFiles());
+
+        if (files.size() == 2) {
+            PrismFile firstFile = files.get(0);
+
+            if (firstFile.getPath() == null && firstFile.getTextArea().getText().trim().isEmpty()) {
+                prism.textAreaTabbedPane.closeTabByIndex(0);
+            }
+        }
     }
 
     private static void addListenersToTextArea(TextArea textArea, PrismFile prismFile) {
@@ -189,16 +201,22 @@ public class FileManager {
             @Override
             public void keyPressed(KeyEvent e) {
                 prism.updateStatusBar();
+
+                prism.codeOutline.updateTree();
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
                 prism.updateStatusBar();
+
+                prism.codeOutline.updateTree();
             }
 
             @Override
             public void keyTyped(KeyEvent e) {
                 prism.updateStatusBar();
+
+                prism.codeOutline.updateTree();
             }
         });
 
@@ -349,5 +367,11 @@ public class FileManager {
         prism.textAreaTabbedPane.updateTitle(file);
 
         prism.updateStatusBar();
+        
+        if (prism.codeOutline.textArea != null && prism.codeOutline.textArea.equals(file.getTextArea())) {
+            prism.codeOutline.updateTree();
+        } else {
+            prism.codeOutline.setSyntaxTextArea(file.getTextArea());
+        }
     }
 }

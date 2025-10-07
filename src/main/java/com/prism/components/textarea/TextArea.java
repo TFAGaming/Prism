@@ -2,7 +2,6 @@ package com.prism.components.textarea;
 
 import java.awt.Font;
 
-import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;

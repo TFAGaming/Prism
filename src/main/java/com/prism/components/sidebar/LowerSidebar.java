@@ -1,12 +1,16 @@
 package com.prism.components.sidebar;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import com.prism.utils.ResourceUtil;
 
 public class LowerSidebar extends JTabbedPane {
-    public LowerSidebar(JPanel terminalArea, JPanel bookmarksArea, JPanel tasksArea) {
+
+    public LowerSidebar(JLabel header, JPanel terminalArea, JPanel bookmarksArea, JPanel tasksArea) {
         super(JTabbedPane.BOTTOM);
 
         setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
@@ -19,6 +23,32 @@ public class LowerSidebar extends JTabbedPane {
         addErrorLogger();
 
         setSelectedIndex(1);
+
+        addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                int index = getSelectedIndex();
+
+                switch (index) {
+                    case 0:
+                        header.setText("Tasks");
+                        break;
+                    case 1:
+                        header.setText("Console");
+                        break;
+                    case 2:
+                        header.setText("Math");
+                        break;
+                    case 3:
+                        header.setText("Bookmarks");
+                        break;
+                    case 4:
+                        header.setText("Error Logs");
+                        break;
+                    
+                }
+            }
+        });
     }
 
     private void addTasks(JPanel tasksArea) {

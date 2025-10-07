@@ -120,7 +120,7 @@ public class TextAreaTabbedPane extends JTabbedPane {
 
         FileManager.files.remove(index);
 
-        if (openNewFileIfAllTabsAreClosed.length == 1 || openNewFileIfAllTabsAreClosed[0]) {
+        if (openNewFileIfAllTabsAreClosed.length == 1 && openNewFileIfAllTabsAreClosed[0]) {
             openNewFileIfAllTabsAreClosed();
         }
 

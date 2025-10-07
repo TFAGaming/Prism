@@ -18,6 +18,7 @@ import javax.swing.KeyStroke;
 import com.prism.Prism;
 import com.prism.components.extended.JClosableComponent;
 import com.prism.components.frames.AboutPrism;
+import com.prism.components.frames.ConfigurationDialog;
 import com.prism.components.frames.EditToolFrame;
 import com.prism.components.frames.WarningDialog;
 import com.prism.components.textarea.TextArea;
@@ -195,6 +196,14 @@ public class PrismMenuBar extends JMenuBar {
             }
         });
 
+        JMenuItem menuItemOptions = createMenuItem("Options", null, null, null);
+        menuItemOptions.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new ConfigurationDialog();
+            };
+        });
+
         editMenu.add(menuItemUndo);
         editMenu.add(menuItemRedo);
         editMenu.addSeparator();
@@ -203,6 +212,8 @@ public class PrismMenuBar extends JMenuBar {
         editMenu.add(menuItemPaste);
         editMenu.add(menuItemDelete);
         editMenu.add(menuItemSelectAll);
+        editMenu.addSeparator();
+        editMenu.add(menuItemOptions);
 
         /*
          * View menu

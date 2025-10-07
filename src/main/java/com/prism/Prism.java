@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -25,6 +24,7 @@ import javax.swing.text.BadLocationException;
 
 import com.prism.components.extended.JClosableComponent;
 import com.prism.components.extended.JClosableComponent.ComponentType;
+import com.prism.components.files.CodeOutline;
 import com.prism.components.files.FileExplorer;
 import com.prism.components.files.PrismFile;
 import com.prism.components.frames.ErrorDialog;
@@ -60,8 +60,15 @@ public class Prism extends JFrame {
     public TextAreaTabbedPane textAreaTabbedPane;
     public TerminalTabbedPane terminalTabbedPane;
     public FileExplorer fileExplorer;
+    public CodeOutline codeOutline;
     public Bookmarks bookmarks;
     public TasksList toolsList;
+
+    public LowerSidebar lowerSidebar;
+    public JLabel lowerSidebarHeader;
+
+    public Sidebar sidebar;
+    public JLabel sidebarHeader;
 
     public JPanel searchAndReplaceAndStatusBarPanel;
     public SearchAndReplace searchAndReplace;
@@ -181,21 +188,24 @@ public class Prism extends JFrame {
         tasksArea.add(toolsList, BorderLayout.CENTER);
 
         // Secondary Split pane
-        LowerSidebar lowerSidebar = new LowerSidebar(terminalArea, bookmarksArea, tasksArea);
+        lowerSidebarHeader = new JLabel("Console");
+        lowerSidebar = new LowerSidebar(lowerSidebarHeader, terminalArea, bookmarksArea, tasksArea);
 
         secondarySplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, textAreaTabbedPane, new JClosableComponent(
-                JClosableComponent.ComponentType.LOWER_SIDEBAR, new ArrayList<JComponent>(), lowerSidebar));
+                JClosableComponent.ComponentType.LOWER_SIDEBAR, lowerSidebarHeader, lowerSidebar));
         secondarySplitPane.setDividerLocation(300);
         secondarySplitPane.setResizeWeight(0.3);
 
-        // File Explorer
+        // File Explorer, Code outline
         fileExplorer = new FileExplorer(directory);
+        codeOutline = new CodeOutline();
 
         // Primary Split pane
-        Sidebar sidebar = new Sidebar(fileExplorer);
+        sidebarHeader = new JLabel("File Explorer");
+        sidebar = new Sidebar(sidebarHeader, fileExplorer, codeOutline);
 
         primarySplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-                new JClosableComponent(JClosableComponent.ComponentType.SIDEBAR, new ArrayList<JComponent>(), sidebar),
+                new JClosableComponent(JClosableComponent.ComponentType.SIDEBAR, sidebarHeader, sidebar),
                 secondarySplitPane);
         primarySplitPane.setDividerLocation(250);
         primarySplitPane.setResizeWeight(0.3);
@@ -308,25 +318,27 @@ public class Prism extends JFrame {
                 }
 
                 switch (type) {
-                    case JClosableComponent.ComponentType.LOWER_SIDEBAR:
+                    case LOWER_SIDEBAR:
                         removedComponents.remove(i);
 
                         secondarySplitPane.add(component);
                         secondarySplitPane.revalidate();
                         secondarySplitPane.repaint();
 
+                        secondarySplitPane.setDividerSize(5);
                         secondarySplitPane.setDividerLocation(300);
                         secondarySplitPane.setResizeWeight(0.3);
                         break;
-                    case JClosableComponent.ComponentType.SIDEBAR:
+                    case SIDEBAR:
                         removedComponents.remove(i);
 
                         primarySplitPane.add(component);
                         primarySplitPane.revalidate();
                         primarySplitPane.repaint();
 
-                        secondarySplitPane.setDividerLocation(300);
-                        secondarySplitPane.setResizeWeight(0.3);
+                        primarySplitPane.setDividerSize(5);
+                        primarySplitPane.setDividerLocation(300);
+                        primarySplitPane.setResizeWeight(0.3);
                         break;
                     default:
                         break;
@@ -352,7 +364,7 @@ public class Prism extends JFrame {
 
             // just to make it look cool
             Random random = new Random();
-            int randomNumber = random.nextInt(6) + 2;
+            int randomNumber = random.nextInt(3) + 2;
 
             setTimeout(() -> {
                 if (prism.loadingFrame.isDisplayable()) {

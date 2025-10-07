@@ -3,7 +3,11 @@ package com.prism.components.frames;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.Icon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -41,10 +45,28 @@ public class AboutPrism extends JFrame {
         tabbedPane.setFocusable(false);
 
         tabbedPane.addTab("General", createGeneralPanel());
+        tabbedPane.addTab("System", createOperatingSystemPanel());
         tabbedPane.addTab("License", createLicensePanel());
         tabbedPane.addTab("Credits", createCreditsPanel());
 
         getContentPane().add(tabbedPane, BorderLayout.CENTER);
+
+        JPanel buttonPanel = new JPanel(new BorderLayout());
+        buttonPanel.setBorder(new EmptyBorder(5, 0, 5, 5));
+
+        JButton okButton = new JButton("OK");
+        okButton.setPreferredSize(new Dimension(80, 25));
+        okButton.setFocusable(false);
+        okButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
+
+        buttonPanel.add(okButton, BorderLayout.EAST);
+
+        getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
         pack();
         setLocationRelativeTo(null);
@@ -106,6 +128,77 @@ public class AboutPrism extends JFrame {
 
         panel.add(headerPanel, BorderLayout.NORTH);
         panel.add(contentPanel, BorderLayout.CENTER);
+
+        return panel;
+    }
+
+    private JPanel createOperatingSystemPanel() {
+        JPanel panel = new JPanel(new BorderLayout(15, 15));
+        panel.setBorder(new EmptyBorder(20, 20, 20, 20));
+
+        String osName = System.getProperty("os.name");
+        String osVersion = System.getProperty("os.version");
+        String osArch = System.getProperty("os.arch");
+
+        Icon windowsIcon = ResourceUtil.getIcon("icons/windows.png", 64);
+        Icon macOSIcon = ResourceUtil.getIcon("icons/macos.png", 64);
+        Icon linuxIcon = ResourceUtil.getIcon("icons/linux.png", 64);
+        Icon javaIcon = ResourceUtil.getIcon("icons/java2.png", 64);
+
+        JLabel iconLabel = new JLabel();
+
+        if (osName.toLowerCase().contains("windows")) {
+            iconLabel.setIcon(windowsIcon);
+        } else if (osName.toLowerCase().contains("mac")) {
+            iconLabel.setIcon(macOSIcon);
+        } else if (osName.toLowerCase().contains("linux")) {
+            iconLabel.setIcon(linuxIcon);
+        } else {
+            iconLabel.setIcon(javaIcon);
+        }
+
+        iconLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+        JPanel logoPanel = new JPanel(new BorderLayout());
+        logoPanel.add(iconLabel, BorderLayout.CENTER);
+        logoPanel.setPreferredSize(new Dimension(80, 80));
+
+        JLabel titleLabel = new JLabel(
+                "<html><center><b>" + osName + "</b><br><font size='-1'>Version " + osVersion + "</font></center></html>");
+        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+        JPanel headerPanel = new JPanel(new BorderLayout(0, 10));
+        headerPanel.add(logoPanel, BorderLayout.NORTH);
+        headerPanel.add(titleLabel, BorderLayout.CENTER);
+
+        JTextPane descriptionArea = new JTextPane();
+
+        StyledDocument doc = descriptionArea.getStyledDocument();
+
+        SimpleAttributeSet center = new SimpleAttributeSet();
+        StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+
+        try {
+            String desc = "Architecture: {osarch}";
+
+            desc = desc.replace("{osarch}", osArch);
+
+            doc.insertString(doc.getLength(), desc, null);
+
+            doc.setParagraphAttributes(0, doc.getLength(), center, false);
+
+        } catch (BadLocationException e) {
+            WarningDialog.showWarningDialog(prism, e);
+        }
+
+        descriptionArea.setCaretColor(descriptionArea.getBackground());
+        descriptionArea.setEditable(false);
+        descriptionArea.setBackground(panel.getBackground()); // Match panel background
+        descriptionArea.setFont(new Font("SansSerif", Font.PLAIN, 12));
+
+        panel.add(headerPanel, BorderLayout.NORTH);
+        panel.add(descriptionArea, BorderLayout.CENTER);
 
         return panel;
     }

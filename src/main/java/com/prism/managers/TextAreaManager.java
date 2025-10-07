@@ -48,6 +48,8 @@ public class TextAreaManager {
         }
 
         gutter.setFoldIndicatorStyle(FoldIndicatorStyle.CLASSIC);
+
+        
     }
 
     public static List<BookmarkInfo> getBookmarksOfFile(PrismFile file) {
