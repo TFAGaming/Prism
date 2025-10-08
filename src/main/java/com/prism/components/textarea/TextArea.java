@@ -19,6 +19,7 @@ public class TextArea extends RSyntaxTextArea {
 
         Prism prism = Prism.getInstance();
 
+        setShowMatchedBracketPopup(prism.config.getBoolean(Config.Key.SHOW_MATCHED_BRACKET_POPUP, true));
         setCodeFoldingEnabled(prism.config.getBoolean(Config.Key.CODE_FOLDING_ENABLED, true));
         setAntiAliasingEnabled(prism.config.getBoolean(Config.Key.ANTI_ALIASING_ENABLED, true));
         setTabSize(prism.config.getInt(Config.Key.TAB_SIZE, 4));
@@ -43,32 +44,32 @@ public class TextArea extends RSyntaxTextArea {
 
         scheme.getStyle(Token.ANNOTATION).foreground = getConfigSyntaxHighlightingTokenColor(Config.Key.ANNOTATION);
         scheme.getStyle(Token.RESERVED_WORD).foreground = getConfigSyntaxHighlightingTokenColor(
-                Config.Key.RESERVED_WORD);
+                Config.Key.RESERVED_WORD, "#660066");
         scheme.getStyle(Token.RESERVED_WORD_2).foreground = getConfigSyntaxHighlightingTokenColor(
-                Config.Key.RESERVED_WORD);
+                Config.Key.RESERVED_WORD, "#660066");
 
         scheme.getStyle(Token.LITERAL_STRING_DOUBLE_QUOTE).foreground = getConfigSyntaxHighlightingTokenColor(
-                Config.Key.STRING_DOUBLE_QUOTE);
-        scheme.getStyle(Token.LITERAL_CHAR).foreground = getConfigSyntaxHighlightingTokenColor(Config.Key.CHARACTER);
+                Config.Key.STRING_DOUBLE_QUOTE, "#009933");
+        scheme.getStyle(Token.LITERAL_CHAR).foreground = getConfigSyntaxHighlightingTokenColor(Config.Key.CHARACTER, "#009933");
         scheme.getStyle(Token.LITERAL_BACKQUOTE).foreground = getConfigSyntaxHighlightingTokenColor(
-                Config.Key.BACKQUOTE);
+                Config.Key.BACKQUOTE, "#009933");
 
-        scheme.getStyle(Token.LITERAL_BOOLEAN).foreground = getConfigSyntaxHighlightingTokenColor(Config.Key.BOOLEAN);
+        scheme.getStyle(Token.LITERAL_BOOLEAN).foreground = getConfigSyntaxHighlightingTokenColor(Config.Key.BOOLEAN, "#3300FF");
 
         scheme.getStyle(Token.LITERAL_NUMBER_DECIMAL_INT).foreground = getConfigSyntaxHighlightingTokenColor(
-                Config.Key.NUMBER_INTEGER_DECIMAL);
+                Config.Key.NUMBER_INTEGER_DECIMAL, "#FF6633");
         scheme.getStyle(Token.LITERAL_NUMBER_FLOAT).foreground = getConfigSyntaxHighlightingTokenColor(
-                Config.Key.NUMBER_FLOAT);
+                Config.Key.NUMBER_FLOAT, "#FF6633");
         scheme.getStyle(Token.LITERAL_NUMBER_HEXADECIMAL).foreground = getConfigSyntaxHighlightingTokenColor(
-                Config.Key.NUMBER_HEXADECIMAL);
+                Config.Key.NUMBER_HEXADECIMAL, "#FF6633");
 
-        scheme.getStyle(Token.REGEX).foreground = getConfigSyntaxHighlightingTokenColor(Config.Key.REGULAR_EXPRESSION);
+        scheme.getStyle(Token.REGEX).foreground = getConfigSyntaxHighlightingTokenColor(Config.Key.REGULAR_EXPRESSION, "#df1d1d");
 
         scheme.getStyle(Token.COMMENT_MULTILINE).foreground = getConfigSyntaxHighlightingTokenColor(
-                Config.Key.MULTI_LINE_COMMENT);
+                Config.Key.MULTI_LINE_COMMENT, "#999999");
         scheme.getStyle(Token.COMMENT_DOCUMENTATION).foreground = getConfigSyntaxHighlightingTokenColor(
-                Config.Key.DOCUMENTATION_COMMENT);
-        scheme.getStyle(Token.COMMENT_EOL).foreground = getConfigSyntaxHighlightingTokenColor(Config.Key.EOL_COMMENT);
+                Config.Key.DOCUMENTATION_COMMENT, "#999999");
+        scheme.getStyle(Token.COMMENT_EOL).foreground = getConfigSyntaxHighlightingTokenColor(Config.Key.EOL_COMMENT, "#999999");
 
         scheme.getStyle(Token.SEPARATOR).foreground = getConfigSyntaxHighlightingTokenColor(Config.Key.SEPERATOR);
         scheme.getStyle(Token.OPERATOR).foreground = getConfigSyntaxHighlightingTokenColor(Config.Key.OPERATOR);
@@ -97,7 +98,11 @@ public class TextArea extends RSyntaxTextArea {
     }
 
     private Color getConfigSyntaxHighlightingTokenColor(Config.Key key) {
-        String hexColor = Prism.getInstance().config.getString(key, "#000000");
+        return getConfigSyntaxHighlightingTokenColor(key, "#000000");
+    }
+
+    private Color getConfigSyntaxHighlightingTokenColor(Config.Key key, String defaultValue) {
+        String hexColor = Prism.getInstance().config.getString(key, defaultValue);
 
         try {
             return Color.decode(hexColor);

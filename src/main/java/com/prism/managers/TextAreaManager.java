@@ -49,7 +49,7 @@ public class TextAreaManager {
 
         gutter.setFoldIndicatorStyle(FoldIndicatorStyle.CLASSIC);
 
-        
+        gutter.setLineNumbersEnabled(prism.config.getBoolean(Config.Key.SHOW_LINE_NUMBERS, true));
     }
 
     public static List<BookmarkInfo> getBookmarksOfFile(PrismFile file) {

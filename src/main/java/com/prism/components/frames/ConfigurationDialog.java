@@ -302,6 +302,19 @@ public class ConfigurationDialog extends JFrame {
             setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
             setBorder(new EmptyBorder(5, 5, 5, 5));
 
+            // 0
+            JCheckBox checkBox = new JCheckBox("Show line numbers");
+            checkBox.setFocusable(false);
+            checkBox.setSelected(prism.config.getBoolean(Config.Key.SHOW_LINE_NUMBERS, true));
+            checkBox.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    prism.config.set(Config.Key.SHOW_LINE_NUMBERS, checkBox.isSelected());
+                }
+            });
+
+            add(newJPanelLeftLayout(checkBox));
+
             // 1
             JCheckBox checkBox1 = new JCheckBox("Anti-Aliasing");
             checkBox1.setFocusable(false);
@@ -354,7 +367,7 @@ public class ConfigurationDialog extends JFrame {
             add(newJPanelLeftLayout(checkBox3));
 
             // 4
-            JCheckBox checkBox4 = new JCheckBox("Close curly braces");
+            JCheckBox checkBox4 = new JCheckBox("Close markup tags");
             checkBox4.setFocusable(false);
             checkBox4.setSelected(prism.config.getBoolean(Config.Key.CLOSE_MARKUP_TAGS, true));
             checkBox4.addActionListener(new ActionListener() {
@@ -467,6 +480,19 @@ public class ConfigurationDialog extends JFrame {
             });
 
             add(newJPanelLeftLayout(checkBox12));
+
+            // 13
+            JCheckBox checkBox13 = new JCheckBox("Show matched bracket popup");
+            checkBox13.setFocusable(false);
+            checkBox13.setSelected(prism.config.getBoolean(Config.Key.SHOW_MATCHED_BRACKET_POPUP, true));
+            checkBox13.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    prism.config.set(Config.Key.SHOW_MATCHED_BRACKET_POPUP, checkBox13.isSelected());
+                }
+            });
+
+            add(newJPanelLeftLayout(checkBox13));
         }
     }
 

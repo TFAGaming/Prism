@@ -40,6 +40,8 @@ public class Config {
         CHECK_FOR_UPDATES(23),
         MAX_FILE_SIZE_FOR_WARNING(24),
         WARN_BEFORE_OPENING_LARGE_FILES(25),
+        SHOW_MATCHED_BRACKET_POPUP(26),
+        SHOW_LINE_NUMBERS(27),
 
         // Token color keys
         ANNOTATION(100),
