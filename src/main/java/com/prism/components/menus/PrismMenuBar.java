@@ -17,6 +17,7 @@ import javax.swing.KeyStroke;
 
 import com.prism.Prism;
 import com.prism.components.extended.JClosableComponent;
+import com.prism.components.files.PrismFile;
 import com.prism.components.frames.AboutPrism;
 import com.prism.components.frames.ConfigurationDialog;
 import com.prism.components.frames.EditToolFrame;
@@ -26,7 +27,30 @@ import com.prism.managers.FileManager;
 import com.prism.utils.ResourceUtil;
 
 public class PrismMenuBar extends JMenuBar {
-    public PrismMenuBar(Prism prism) {
+    public Prism prism = Prism.getInstance();
+
+    JMenuItem menuItemNewFile;
+    JMenuItem menuItemOpenFile;
+    JMenuItem menuItemOpenFolder;
+    JMenuItem menuItemSave;
+    JMenuItem menuItemSaveAs;
+    JMenuItem menuItemSaveAll;
+    JMenuItem menuItemCloseApp;
+    JMenuItem menuItemUndo;
+    JMenuItem menuItemRedo;
+    JMenuItem menuItemCut;
+    JMenuItem menuItemCopy;
+    JMenuItem menuItemPaste;
+    JMenuItem menuItemDelete;
+    JMenuItem menuItemSelectAll;
+    JMenuItem menuItemOptions;
+    JMenuItem menuItemSidebar;
+    JMenuItem menuItemLowerSidebar;
+    JMenuItem menuItemNewTool;
+    JMenuItem menuItemHelp;
+    JMenuItem menuItemAbout;
+
+    public PrismMenuBar() {
         /*
          * File menu
          */
@@ -41,7 +65,7 @@ public class PrismMenuBar extends JMenuBar {
             }
         });
 
-        JMenuItem menuItemOpenFile = createMenuItem("Open File", ResourceUtil.getIcon("icons/file_open.png"), null,
+        menuItemOpenFile = createMenuItem("Open File", ResourceUtil.getIcon("icons/file_open.png"), null,
                 KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK));
         menuItemOpenFile.addActionListener(new ActionListener() {
             @Override
@@ -50,7 +74,7 @@ public class PrismMenuBar extends JMenuBar {
             }
         });
 
-        JMenuItem menuItemOpenFolder = createMenuItem("Open Folder", ResourceUtil.getIcon("icons/folder_open.png"),
+        menuItemOpenFolder = createMenuItem("Open Folder", ResourceUtil.getIcon("icons/folder_open.png"),
                 null, null);
         menuItemOpenFolder.addActionListener(new ActionListener() {
             @Override
@@ -59,7 +83,7 @@ public class PrismMenuBar extends JMenuBar {
             }
         });
 
-        JMenuItem menuItemSave = createMenuItem("Save", ResourceUtil.getIcon("icons/save.gif"), null,
+        menuItemSave = createMenuItem("Save", ResourceUtil.getIcon("icons/save.gif"), null,
                 KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));
         menuItemSave.addActionListener(new ActionListener() {
             @Override
@@ -68,7 +92,7 @@ public class PrismMenuBar extends JMenuBar {
             }
         });
 
-        JMenuItem menuItemSaveAs = createMenuItem("Save As", ResourceUtil.getIcon("icons/saveas.gif"), null,
+        menuItemSaveAs = createMenuItem("Save As", ResourceUtil.getIcon("icons/saveas.gif"), null,
                 KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK + KeyEvent.SHIFT_DOWN_MASK));
         menuItemSaveAs.addActionListener(new ActionListener() {
             @Override
@@ -77,7 +101,7 @@ public class PrismMenuBar extends JMenuBar {
             }
         });
 
-        JMenuItem menuItemSaveAll = createMenuItem("Save All", ResourceUtil.getIcon("icons/saveall.gif"), null,
+        menuItemSaveAll = createMenuItem("Save All", ResourceUtil.getIcon("icons/saveall.gif"), null,
                 null);
         menuItemSaveAll.addActionListener(new ActionListener() {
             @Override
@@ -86,7 +110,7 @@ public class PrismMenuBar extends JMenuBar {
             }
         });
 
-        JMenuItem menuItemCloseApp = createMenuItem("Exit", null, null,
+        menuItemCloseApp = createMenuItem("Exit", null, null,
                 null);
         menuItemCloseApp.addActionListener(new ActionListener() {
             @Override
@@ -115,7 +139,7 @@ public class PrismMenuBar extends JMenuBar {
 
         JMenu editMenu = new JMenu("Edit");
 
-        JMenuItem menuItemUndo = createMenuItem("Undo", ResourceUtil.getIcon("icons/undo.gif"), null,
+        menuItemUndo = createMenuItem("Undo", ResourceUtil.getIcon("icons/undo.gif"), null,
                 KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK));
         menuItemUndo.addActionListener(new ActionListener() {
             @Override
@@ -128,7 +152,7 @@ public class PrismMenuBar extends JMenuBar {
             }
         });
 
-        JMenuItem menuItemRedo = createMenuItem("Redo", ResourceUtil.getIcon("icons/redo.gif"), null,
+        menuItemRedo = createMenuItem("Redo", ResourceUtil.getIcon("icons/redo.gif"), null,
                 KeyStroke.getKeyStroke(KeyEvent.VK_Y, KeyEvent.CTRL_DOWN_MASK));
         menuItemRedo.addActionListener(new ActionListener() {
             @Override
@@ -141,7 +165,7 @@ public class PrismMenuBar extends JMenuBar {
             }
         });
 
-        JMenuItem menuItemCut = createMenuItem("Cut", ResourceUtil.getIcon("icons/cut.gif"), null,
+        menuItemCut = createMenuItem("Cut", ResourceUtil.getIcon("icons/cut.gif"), null,
                 KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK));
         menuItemCut.addActionListener(new ActionListener() {
             @Override
@@ -152,7 +176,7 @@ public class PrismMenuBar extends JMenuBar {
             }
         });
 
-        JMenuItem menuItemCopy = createMenuItem("Copy", ResourceUtil.getIcon("icons/copy.gif"), null,
+        menuItemCopy = createMenuItem("Copy", ResourceUtil.getIcon("icons/copy.gif"), null,
                 KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK));
         menuItemCopy.addActionListener(new ActionListener() {
             @Override
@@ -163,7 +187,7 @@ public class PrismMenuBar extends JMenuBar {
             }
         });
 
-        JMenuItem menuItemPaste = createMenuItem("Paste", ResourceUtil.getIcon("icons/paste.gif"), null,
+        menuItemPaste = createMenuItem("Paste", ResourceUtil.getIcon("icons/paste.gif"), null,
                 KeyStroke.getKeyStroke(KeyEvent.VK_V, KeyEvent.CTRL_DOWN_MASK));
         menuItemPaste.addActionListener(new ActionListener() {
             @Override
@@ -174,7 +198,7 @@ public class PrismMenuBar extends JMenuBar {
             }
         });
 
-        JMenuItem menuItemDelete = createMenuItem("Delete", ResourceUtil.getIcon("icons/trash.gif"), null,
+        menuItemDelete = createMenuItem("Delete", ResourceUtil.getIcon("icons/trash.gif"), null,
                 KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
         menuItemDelete.addActionListener(new ActionListener() {
             @Override
@@ -185,7 +209,7 @@ public class PrismMenuBar extends JMenuBar {
             }
         });
 
-        JMenuItem menuItemSelectAll = createMenuItem("Select All", null, null,
+        menuItemSelectAll = createMenuItem("Select All", null, null,
                 KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_DOWN_MASK));
         menuItemSelectAll.addActionListener(new ActionListener() {
             @Override
@@ -196,7 +220,7 @@ public class PrismMenuBar extends JMenuBar {
             }
         });
 
-        JMenuItem menuItemOptions = createMenuItem("Options", null, null, null);
+        menuItemOptions = createMenuItem("Options", null, null, null);
         menuItemOptions.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -221,7 +245,7 @@ public class PrismMenuBar extends JMenuBar {
 
         JMenu viewMenu = new JMenu("View");
 
-        JMenuItem menuItemSidebar = createMenuItem("Sidebar", ResourceUtil.getIcon("icons/sidebar.gif"), null, null);
+        menuItemSidebar = createMenuItem("Sidebar", ResourceUtil.getIcon("icons/sidebar.gif"), null, null);
         menuItemSidebar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -229,7 +253,7 @@ public class PrismMenuBar extends JMenuBar {
             }
         });
 
-        JMenuItem menuItemLowerSidebar = createMenuItem("Lower Sidebar",
+        menuItemLowerSidebar = createMenuItem("Lower Sidebar",
                 ResourceUtil.getIcon("icons/lower_sidebar.gif"), null, null);
         menuItemLowerSidebar.addActionListener(new ActionListener() {
             @Override
@@ -247,7 +271,7 @@ public class PrismMenuBar extends JMenuBar {
 
         JMenu toolsMenu = new JMenu("Tools");
 
-        JMenuItem menuItemNewTool = createMenuItem("New Tool", null, null, null);
+        menuItemNewTool = createMenuItem("New Tool", null, null, null);
         menuItemNewTool.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -269,7 +293,7 @@ public class PrismMenuBar extends JMenuBar {
 
         JMenu helpMenu = new JMenu("Help");
 
-        JMenuItem menuItemHelp = createMenuItem("Help?", ResourceUtil.getIcon("icons/help.gif"),
+        menuItemHelp = createMenuItem("Help?", ResourceUtil.getIcon("icons/help.gif"),
                 null,
                 null);
         menuItemHelp.addActionListener(new ActionListener() {
@@ -289,7 +313,7 @@ public class PrismMenuBar extends JMenuBar {
             }
         });
 
-        JMenuItem menuItemAbout = createMenuItem("About Prism", ResourceUtil.getIcon("icons/information.png"),
+        menuItemAbout = createMenuItem("About Prism", ResourceUtil.getIcon("icons/information.png"),
                 null,
                 null);
         menuItemAbout.addActionListener(new ActionListener() {
@@ -313,6 +337,23 @@ public class PrismMenuBar extends JMenuBar {
         add(toolsMenu);
         add(goMenu);
         add(helpMenu);
+    }
+
+    public void updateMenuBar() {
+        PrismFile prismFile = prism.textAreaTabbedPane.getCurrentFile();
+
+        if (prismFile == null) {
+            return;
+        }
+        
+        com.prism.components.textarea.TextArea textArea = prismFile.getTextArea();
+
+        if (textArea != null) {
+            menuItemRedo.setEnabled(textArea.canRedo());
+            menuItemUndo.setEnabled(textArea.canUndo());
+
+            menuItemSave.setEnabled(!prismFile.isSaved());
+        }
     }
 
     private JMenuItem createMenuItem(String text, ImageIcon menuItemIcon, String tooltip, KeyStroke accelerator) {

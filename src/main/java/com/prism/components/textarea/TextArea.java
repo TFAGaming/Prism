@@ -1,10 +1,13 @@
 package com.prism.components.textarea;
 
+import java.awt.Color;
 import java.awt.Font;
 
 import javax.swing.text.Document;
 
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
+import org.fife.ui.rsyntaxtextarea.Token;
 
 import com.prism.Prism;
 import com.prism.config.Config;
@@ -35,6 +38,74 @@ public class TextArea extends RSyntaxTextArea {
         setFont(font.deriveFont((float) prism.config.getInt(Config.Key.TEXTAREA_ZOOM, 12)));
     }
 
+    public void addSyntaxHighlighting() {
+        SyntaxScheme scheme = getSyntaxScheme();
+
+        scheme.getStyle(Token.ANNOTATION).foreground = getConfigSyntaxHighlightingTokenColor(Config.Key.ANNOTATION);
+        scheme.getStyle(Token.RESERVED_WORD).foreground = getConfigSyntaxHighlightingTokenColor(
+                Config.Key.RESERVED_WORD);
+        scheme.getStyle(Token.RESERVED_WORD_2).foreground = getConfigSyntaxHighlightingTokenColor(
+                Config.Key.RESERVED_WORD);
+
+        scheme.getStyle(Token.LITERAL_STRING_DOUBLE_QUOTE).foreground = getConfigSyntaxHighlightingTokenColor(
+                Config.Key.STRING_DOUBLE_QUOTE);
+        scheme.getStyle(Token.LITERAL_CHAR).foreground = getConfigSyntaxHighlightingTokenColor(Config.Key.CHARACTER);
+        scheme.getStyle(Token.LITERAL_BACKQUOTE).foreground = getConfigSyntaxHighlightingTokenColor(
+                Config.Key.BACKQUOTE);
+
+        scheme.getStyle(Token.LITERAL_BOOLEAN).foreground = getConfigSyntaxHighlightingTokenColor(Config.Key.BOOLEAN);
+
+        scheme.getStyle(Token.LITERAL_NUMBER_DECIMAL_INT).foreground = getConfigSyntaxHighlightingTokenColor(
+                Config.Key.NUMBER_INTEGER_DECIMAL);
+        scheme.getStyle(Token.LITERAL_NUMBER_FLOAT).foreground = getConfigSyntaxHighlightingTokenColor(
+                Config.Key.NUMBER_FLOAT);
+        scheme.getStyle(Token.LITERAL_NUMBER_HEXADECIMAL).foreground = getConfigSyntaxHighlightingTokenColor(
+                Config.Key.NUMBER_HEXADECIMAL);
+
+        scheme.getStyle(Token.REGEX).foreground = getConfigSyntaxHighlightingTokenColor(Config.Key.REGULAR_EXPRESSION);
+
+        scheme.getStyle(Token.COMMENT_MULTILINE).foreground = getConfigSyntaxHighlightingTokenColor(
+                Config.Key.MULTI_LINE_COMMENT);
+        scheme.getStyle(Token.COMMENT_DOCUMENTATION).foreground = getConfigSyntaxHighlightingTokenColor(
+                Config.Key.DOCUMENTATION_COMMENT);
+        scheme.getStyle(Token.COMMENT_EOL).foreground = getConfigSyntaxHighlightingTokenColor(Config.Key.EOL_COMMENT);
+
+        scheme.getStyle(Token.SEPARATOR).foreground = getConfigSyntaxHighlightingTokenColor(Config.Key.SEPERATOR);
+        scheme.getStyle(Token.OPERATOR).foreground = getConfigSyntaxHighlightingTokenColor(Config.Key.OPERATOR);
+        scheme.getStyle(Token.IDENTIFIER).foreground = getConfigSyntaxHighlightingTokenColor(Config.Key.IDENTIFIER);
+        scheme.getStyle(Token.VARIABLE).foreground = getConfigSyntaxHighlightingTokenColor(Config.Key.VARIABLE);
+        scheme.getStyle(Token.FUNCTION).foreground = getConfigSyntaxHighlightingTokenColor(Config.Key.FUNCTION);
+        scheme.getStyle(Token.PREPROCESSOR).foreground = getConfigSyntaxHighlightingTokenColor(Config.Key.PREPROCESSOR);
+
+        // HTML / XML related
+        scheme.getStyle(Token.MARKUP_CDATA).foreground = getConfigSyntaxHighlightingTokenColor(Config.Key.MARKUP_CDATA);
+        scheme.getStyle(Token.MARKUP_COMMENT).foreground = getConfigSyntaxHighlightingTokenColor(
+                Config.Key.MARKUP_COMMENT);
+        scheme.getStyle(Token.MARKUP_DTD).foreground = getConfigSyntaxHighlightingTokenColor(Config.Key.MARKUP_DTD);
+        // scheme.getStyle(Token.MARKUP_ENTITY_REFERENCE).foreground = Color.BLUE;
+        // scheme.getStyle(Token.MARKUP_PROCESSING_INSTRUCTION).foreground = Color.BLUE;
+        scheme.getStyle(Token.MARKUP_TAG_ATTRIBUTE).foreground = getConfigSyntaxHighlightingTokenColor(
+                Config.Key.MARKUP_TAG_ATTRIBUTE);
+        scheme.getStyle(Token.MARKUP_TAG_ATTRIBUTE_VALUE).foreground = getConfigSyntaxHighlightingTokenColor(
+                Config.Key.MARKUP_TAG_ATTRIBUTE_VALUE);
+        scheme.getStyle(Token.MARKUP_TAG_DELIMITER).foreground = getConfigSyntaxHighlightingTokenColor(
+                Config.Key.MARKUP_TAG_DELIMITER);
+        scheme.getStyle(Token.MARKUP_TAG_NAME).foreground = getConfigSyntaxHighlightingTokenColor(
+                Config.Key.MARKUP_TAG_NAME);
+
+        setSyntaxScheme(scheme);
+    }
+
+    private Color getConfigSyntaxHighlightingTokenColor(Config.Key key) {
+        String hexColor = Prism.getInstance().config.getString(key, "#000000");
+
+        try {
+            return Color.decode(hexColor);
+        } catch (NumberFormatException e) {
+            return Color.BLACK;
+        }
+    }
+
     public void setCursorOnLine(int line) {
         Document doc = getDocument();
         try {
@@ -42,7 +113,7 @@ public class TextArea extends RSyntaxTextArea {
             setCaretPosition(lineStartOffset);
             requestFocusInWindow();
         } catch (ArrayIndexOutOfBoundsException e) {
-            
+
         }
     }
 }

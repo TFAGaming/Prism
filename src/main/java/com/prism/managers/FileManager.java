@@ -82,6 +82,7 @@ public class FileManager {
         TextArea textArea = new TextArea();
 
         textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_NONE);
+        textArea.addSyntaxHighlighting();
 
         PrismFile prismFile = new PrismFile(null, textArea);
 
@@ -156,6 +157,7 @@ public class FileManager {
         TextArea textArea = new TextArea();
 
         textArea.setSyntaxEditingStyle(Languages.getHighlighter(file));
+        textArea.addSyntaxHighlighting();
 
         PrismFile prismFile = new PrismFile(file, textArea);
 
@@ -203,6 +205,8 @@ public class FileManager {
                 prism.updateStatusBar();
 
                 prism.codeOutline.updateTree();
+                prism.primaryToolbar.updateToolbar();
+                prism.menuBar.updateMenuBar();
             }
 
             @Override
@@ -210,6 +214,8 @@ public class FileManager {
                 prism.updateStatusBar();
 
                 prism.codeOutline.updateTree();
+                prism.primaryToolbar.updateToolbar();
+                prism.menuBar.updateMenuBar();
             }
 
             @Override
@@ -217,6 +223,8 @@ public class FileManager {
                 prism.updateStatusBar();
 
                 prism.codeOutline.updateTree();
+                prism.primaryToolbar.updateToolbar();
+                prism.menuBar.updateMenuBar();
             }
         });
 
@@ -367,6 +375,9 @@ public class FileManager {
         prism.textAreaTabbedPane.updateTitle(file);
 
         prism.updateStatusBar();
+        
+        prism.primaryToolbar.updateToolbar();
+        prism.menuBar.updateMenuBar();
         
         if (prism.codeOutline.textArea != null && prism.codeOutline.textArea.equals(file.getTextArea())) {
             prism.codeOutline.updateTree();

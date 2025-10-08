@@ -204,8 +204,11 @@ public class EditToolFrame extends JFrame {
         // Bottom OK/Cancel
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JButton okBtn = new JButton("OK");
+        okBtn.setPreferredSize(new Dimension(80, 25));
         okBtn.setFocusable(false);
+        
         JButton cancelBtn = new JButton("Cancel");
+        cancelBtn.setPreferredSize(new Dimension(80, 25));
         cancelBtn.setFocusable(false);
         bottomPanel.add(okBtn);
         bottomPanel.add(cancelBtn);

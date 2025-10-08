@@ -1,13 +1,10 @@
 package com.prism.components.toolbar;
 
-
 import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-
-import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
 import com.prism.Prism;
 import com.prism.components.files.PrismFile;
@@ -16,12 +13,29 @@ import com.prism.managers.TextAreaManager;
 import com.prism.utils.ResourceUtil;
 
 public class PrimaryToolbar extends JToolBar {
-    public PrimaryToolbar(Prism prism) {
+    public Prism prism = Prism.getInstance();
+
+    public JButton buttonNewFile;
+    public JButton buttonFileOpen;
+    public JButton buttonFolder;
+    public JButton buttonSave;
+    public JButton buttonSaveAll;
+    public JButton buttonCopy;
+    public JButton buttonPaste;
+    public JButton buttonCut;
+    public JButton buttonUndo;
+    public JButton buttonRedo;
+    public JButton buttonZoomIn;
+    public JButton buttonZoomOut;
+    public JButton buttonRefreshTextArea;
+    public JButton buttonSortTabs;
+
+    public PrimaryToolbar() {
         setFloatable(false);
         setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         setBorder(new EmptyBorder(5, 5, 5, 0));
 
-        JButton buttonNewFile = createButton(ResourceUtil.getIcon("icons/new_file.png"), "New File");
+        buttonNewFile = createButton(ResourceUtil.getIcon("icons/new_file.png"), "New File");
         buttonNewFile.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -29,7 +43,15 @@ public class PrimaryToolbar extends JToolBar {
             }
         });
 
-        JButton buttonFolder = createButton(ResourceUtil.getIcon("icons/folder_open.png"), "Open Folder");
+        buttonFileOpen = createButton(ResourceUtil.getIcon("icons/file_open.png"), "New File");
+        buttonFileOpen.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FileManager.openFile();
+            }
+        });
+
+        buttonFolder = createButton(ResourceUtil.getIcon("icons/folder_open.png"), "Open Folder");
         buttonFolder.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -37,7 +59,7 @@ public class PrimaryToolbar extends JToolBar {
             }
         });
 
-        JButton buttonSave = createButton(ResourceUtil.getIcon("icons/save.gif"), "Save");
+        buttonSave = createButton(ResourceUtil.getIcon("icons/save.gif"), "Save");
         buttonSave.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -47,7 +69,7 @@ public class PrimaryToolbar extends JToolBar {
             }
         });
 
-        JButton buttonSaveAll = createButton(ResourceUtil.getIcon("icons/saveall.gif"), "Save All");
+        buttonSaveAll = createButton(ResourceUtil.getIcon("icons/saveall.gif"), "Save All");
         buttonSaveAll.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -55,7 +77,7 @@ public class PrimaryToolbar extends JToolBar {
             }
         });
 
-        JButton buttonCopy = createButton(ResourceUtil.getIcon("icons/copy.gif"), "Copy");
+        buttonCopy = createButton(ResourceUtil.getIcon("icons/copy.gif"), "Copy");
         buttonCopy.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -67,7 +89,7 @@ public class PrimaryToolbar extends JToolBar {
             }
         });
 
-        JButton buttonPaste = createButton(ResourceUtil.getIcon("icons/paste.gif"), "Paste");
+        buttonPaste = createButton(ResourceUtil.getIcon("icons/paste.gif"), "Paste");
         buttonPaste.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -79,7 +101,7 @@ public class PrimaryToolbar extends JToolBar {
             }
         });
 
-        JButton buttonCut = createButton(ResourceUtil.getIcon("icons/cut.gif"), "Cut");
+        buttonCut = createButton(ResourceUtil.getIcon("icons/cut.gif"), "Cut");
         buttonCut.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -91,7 +113,7 @@ public class PrimaryToolbar extends JToolBar {
             }
         });
 
-        JButton buttonUndo = createButton(ResourceUtil.getIcon("icons/undo.gif"), "Undo Edit");
+        buttonUndo = createButton(ResourceUtil.getIcon("icons/undo.gif"), "Undo Edit");
         buttonUndo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -103,7 +125,7 @@ public class PrimaryToolbar extends JToolBar {
             }
         });
 
-        JButton buttonRedo = createButton(ResourceUtil.getIcon("icons/redo.gif"), "Redo Edit");
+        buttonRedo = createButton(ResourceUtil.getIcon("icons/redo.gif"), "Redo Edit");
         buttonRedo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -115,7 +137,7 @@ public class PrimaryToolbar extends JToolBar {
             }
         });
 
-        JButton buttonZoomIn = createButton(ResourceUtil.getIcon("icons/zoom_in.png"), "Zoom In");
+        buttonZoomIn = createButton(ResourceUtil.getIcon("icons/zoom_in.png"), "Zoom In");
         buttonZoomIn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -123,7 +145,7 @@ public class PrimaryToolbar extends JToolBar {
             }
         });
 
-        JButton buttonZoomOut = createButton(ResourceUtil.getIcon("icons/zoom_out.png"), "Zoom Out");
+        buttonZoomOut = createButton(ResourceUtil.getIcon("icons/zoom_out.png"), "Zoom Out");
         buttonZoomOut.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -131,31 +153,25 @@ public class PrimaryToolbar extends JToolBar {
             }
         });
 
-        JButton buttonRefreshTextArea = createButton(ResourceUtil.getIcon("icons/refresh_txt_area.gif"), "Refresh All Tabs");
+        buttonRefreshTextArea = createButton(ResourceUtil.getIcon("icons/refresh_txt_area.gif"), "Refresh All Tabs");
         buttonRefreshTextArea.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
+
             }
         });
 
-        JButton buttonSortTabs = createButton(ResourceUtil.getIcon("icons/sort_tabs.gif"), "Sort Tabs Alphabetically");
+        buttonSortTabs = createButton(ResourceUtil.getIcon("icons/sort_tabs.gif"), "Sort Tabs Alphabetically");
         buttonSortTabs.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
-            }
-        });
 
-        JButton buttonCloseAllTabs = createButton(ResourceUtil.getIcon("icons/close_all_tabs.gif"), "Close All Tabs");
-        buttonCloseAllTabs.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                
             }
         });
 
         add(buttonNewFile);
+        add(Box.createRigidArea(new Dimension(4, 0)));
+        add(buttonFileOpen);
         add(Box.createRigidArea(new Dimension(4, 0)));
         add(buttonFolder);
         add(Box.createRigidArea(new Dimension(4, 0)));
@@ -196,11 +212,26 @@ public class PrimaryToolbar extends JToolBar {
         add(buttonRefreshTextArea);
         add(Box.createRigidArea(new Dimension(4, 0)));
         add(buttonSortTabs);
-        add(Box.createRigidArea(new Dimension(4, 0)));
-        add(buttonCloseAllTabs);
 
         JPanel panel = new JPanel();
         add(panel, BorderLayout.CENTER);
+    }
+
+    public void updateToolbar() {
+        PrismFile prismFile = prism.textAreaTabbedPane.getCurrentFile();
+
+        if (prismFile == null) {
+            return;
+        }
+        
+        com.prism.components.textarea.TextArea textArea = prismFile.getTextArea();
+
+        if (textArea != null) {
+            buttonRedo.setEnabled(textArea.canRedo());
+            buttonUndo.setEnabled(textArea.canUndo());
+
+            buttonSave.setEnabled(!prismFile.isSaved());
+        }
     }
 
     private JButton createButton(ImageIcon buttonIcon, String tooltip) {
@@ -219,11 +250,5 @@ public class PrimaryToolbar extends JToolBar {
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         return button;
-    }
-
-    private ImageIcon getIcon(String iconName) {
-        ImageIcon icon = new ImageIcon("resources/" + iconName);
-
-        return icon;
     }
 }

@@ -1,43 +1,28 @@
 package com.prism.components.frames;
 
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JColorChooser;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
-import javax.swing.JSplitPane;
-import javax.swing.JTextArea;
-import javax.swing.JTree;
+import javax.swing.*;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeSelectionModel;
 
-import com.prism.components.extended.JExtendedTextField;
-import com.prism.managers.FileManager;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rtextarea.RTextScrollPane;
+
+import com.prism.Prism;
+import com.prism.config.Config;
 
 public class ConfigurationDialog extends JFrame {
+    public Prism prism = Prism.getInstance();
 
     private JPanel contentPane;
     private JTree configTree;
@@ -67,8 +52,10 @@ public class ConfigurationDialog extends JFrame {
         setSize(800, 600);
         setLocationRelativeTo(null);
 
+        setResizable(false);
+
         contentPane = new JPanel(new BorderLayout(10, 10));
-        contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
+        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
 
         createLeftPanel();
@@ -165,17 +152,28 @@ public class ConfigurationDialog extends JFrame {
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
         okButton = new JButton("OK");
+        okButton.setFocusable(false);
+        okButton.setPreferredSize(new Dimension(80, 25));
         cancelButton = new JButton("Cancel");
-        applyButton = new JButton("Apply");
+        cancelButton.setFocusable(false);
+        cancelButton.setPreferredSize(new Dimension(80, 25));
 
-        // Add action listeners
-        okButton.addActionListener(new ButtonListener());
-        cancelButton.addActionListener(new ButtonListener());
-        applyButton.addActionListener(new ButtonListener());
+        okButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
+
+        cancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
 
         bottomPanel.add(okButton);
         bottomPanel.add(cancelButton);
-        bottomPanel.add(applyButton);
 
         contentPane.add(bottomPanel, BorderLayout.SOUTH);
     }
@@ -209,191 +207,266 @@ public class ConfigurationDialog extends JFrame {
         }
     }
 
-    // Button action listener
-    private class ButtonListener implements ActionListener {
+    private JPanel newJPanelLeftLayout(JComponent... components) {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
 
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if (e.getSource() == okButton) {
-                applyAllChanges();
-                dispose();
-            } else if (e.getSource() == cancelButton) {
-                dispose();
-            } else if (e.getSource() == applyButton) {
-                applyAllChanges();
-            }
+        if (!(components[components.length - 1] == null)) {
+            panel.setBorder(new EmptyBorder(5, 5, 0, 0));
         }
 
-        private void applyAllChanges() {
-            Component[] components = rightPanel.getComponents();
-            for (Component comp : components) {
-                if (comp.isVisible()) {
-                    if (comp instanceof GeneralPanel) {
-                        ((GeneralPanel) comp).applyChanges();
-                    } else if (comp instanceof EditorPanel) {
-                        ((EditorPanel) comp).applyChanges();
-                    } else if (comp instanceof SyntaxHighlightingPanel) {
-                        ((SyntaxHighlightingPanel) comp).applyChanges();
-                    }
-                    break;
-                }
+        for (JComponent component : components) {
+            if (component == null) {
+                continue;
             }
+
+            component.setAlignmentX(Component.LEFT_ALIGNMENT);
+            component.setMaximumSize(component.getPreferredSize());
+            component.setFocusable(false);
+
+            panel.add(component);
+            panel.add(Box.createRigidArea(new Dimension(5, 0)));
         }
+
+        panel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        return panel;
+    }
+
+    private JComboBox newJComboBox(String[] data) {
+        JComboBox comboBox = new JComboBox<>(data);
+
+        comboBox.setFocusable(false);
+
+        return comboBox;
     }
 
     // General Configuration Panel
     private class GeneralPanel extends JPanel {
-
-        private JExtendedTextField defaultDirPath;
-        private JButton defaultDirPathBrowse;
-        private JComboBox defaultShell;
-        private JCheckBox warnWhenOpeningLargeFile;
-        private JSpinner maxFileSize;
 
         public GeneralPanel() {
             initializeUI();
         }
 
         private void initializeUI() {
-            setLayout(new BorderLayout());
-            setBorder(new EmptyBorder(10, 10, 10, 10));
+            setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+            setBorder(new EmptyBorder(5, 5, 5, 5));
 
-            JPanel mainPanel = new JPanel(new GridLayout(10, 1, 0, 0));
-
-            // Default directory
-            JPanel defaultDirtPathPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-
-            defaultDirPath = new JExtendedTextField(30);
-            defaultDirPath.setText(FileManager.getDirectory().getAbsolutePath());
-            defaultDirPath.setEnabled(false);
-            defaultDirPathBrowse = new JButton("Browse...");
-            defaultDirPathBrowse.setFocusable(false);
-
-            defaultDirtPathPanel.add(new JLabel("Default directory:"));
-            defaultDirtPathPanel.add(defaultDirPath);
-            defaultDirtPathPanel.add(defaultDirPathBrowse);
-
-            // Default shell
-            JPanel defaultShellPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-
-            String[] terminalShells = {"Command Prompt", "PowerShell"};
-            defaultShell = new JComboBox<>(terminalShells);
-            defaultShell.setFocusable(false);
-
-            Dimension preferredSize = defaultShell.getPreferredSize();
-            preferredSize.width += 20;
-            defaultShell.setPreferredSize(preferredSize);
-
-            defaultShellPanel.add(new JLabel("Default console shell: "));
-            defaultShellPanel.add(defaultShell);
-
-            // Max File Size
-            JPanel warnWhenOpeningLargeFilePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-
-            warnWhenOpeningLargeFile = new JCheckBox("Warn when opening file size over (MB): ");
-            warnWhenOpeningLargeFile.setFocusable(false);
-            maxFileSize = new JSpinner(new SpinnerNumberModel(10, 1, 500, 1));
-
-            preferredSize = maxFileSize.getPreferredSize();
-            preferredSize.width += 20;
-            maxFileSize.setPreferredSize(preferredSize);
-
-            warnWhenOpeningLargeFilePanel.add(warnWhenOpeningLargeFile);   
-            warnWhenOpeningLargeFilePanel.add(maxFileSize);  
-
-            // End
-            mainPanel.add(defaultDirtPathPanel);
-            mainPanel.add(defaultShellPanel);
-            mainPanel.add(warnWhenOpeningLargeFilePanel);
-
-            add(mainPanel, BorderLayout.NORTH);
-
-            defaultDirPathBrowse.addActionListener(e -> {
-                JFileChooser chooser = new JFileChooser();
-                chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-
-                int result = chooser.showOpenDialog(GeneralPanel.this);
-
-                if (result == JFileChooser.APPROVE_OPTION) {
-                    defaultDirPath.setText(chooser.getSelectedFile().getAbsolutePath());
+            // 1
+            JCheckBox checkBox1 = new JCheckBox("Check for Updates");
+            checkBox1.setFocusable(false);
+            checkBox1.setSelected(prism.config.getBoolean(Config.Key.CHECK_FOR_UPDATES, false));
+            checkBox1.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    prism.config.set(Config.Key.CHECK_FOR_UPDATES, checkBox1.isSelected());
                 }
             });
-        }
 
-        public void applyChanges() {
-            System.out.println("Applying General settings:");
-            
+            add(newJPanelLeftLayout(checkBox1));
+
+            // 2
+            JCheckBox checkBox2 = new JCheckBox("Warn before opening files larger than (MB): ");
+            JSpinner maxFileSize = new JSpinner(
+                    new SpinnerNumberModel(prism.config.getInt(Config.Key.MAX_FILE_SIZE_FOR_WARNING, 10), 1, 500, 1));
+            checkBox2.setFocusable(false);
+            checkBox2.setSelected(prism.config.getBoolean(Config.Key.WARN_BEFORE_OPENING_LARGE_FILES, true));
+            maxFileSize.setFocusable(false);
+            maxFileSize.setEnabled(prism.config.getBoolean(Config.Key.WARN_BEFORE_OPENING_LARGE_FILES, true));
+            checkBox2.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    prism.config.set(Config.Key.WARN_BEFORE_OPENING_LARGE_FILES, checkBox2.isSelected());
+
+                    maxFileSize.setEnabled(checkBox2.isSelected());
+                }
+            });
+            maxFileSize.addChangeListener(new ChangeListener() {
+                @Override
+                public void stateChanged(ChangeEvent e) {
+                    prism.config.set(Config.Key.MAX_FILE_SIZE_FOR_WARNING, (int) maxFileSize.getValue());
+                }
+            });
+
+            add(newJPanelLeftLayout(checkBox2, maxFileSize));
         }
     }
 
     private class EditorPanel extends JPanel {
-
-        private JCheckBox lineNumbersCheckBox;
-        private JCheckBox wordWrapCheckBox;
-        private JSpinner tabSizeSpinner;
-        private JComboBox<String> fontCombo;
-        private JSpinner fontSizeSpinner;
 
         public EditorPanel() {
             initializeUI();
         }
 
         private void initializeUI() {
-            setLayout(new BorderLayout());
-            setBorder(new EmptyBorder(10, 10, 10, 10));
+            setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+            setBorder(new EmptyBorder(5, 5, 5, 5));
 
-            JPanel mainPanel = new JPanel(new GridLayout(6, 1, 5, 5));
+            // 1
+            JCheckBox checkBox1 = new JCheckBox("Anti-Aliasing");
+            checkBox1.setFocusable(false);
+            checkBox1.setSelected(prism.config.getBoolean(Config.Key.ANTI_ALIASING_ENABLED, true));
+            checkBox1.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    prism.config.set(Config.Key.ANTI_ALIASING_ENABLED, checkBox1.isSelected());
+                }
+            });
 
-            // Line numbers
-            JPanel lineNumbersPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            lineNumbersCheckBox = new JCheckBox("Show line numbers");
-            lineNumbersPanel.add(lineNumbersCheckBox);
+            add(newJPanelLeftLayout(checkBox1));
 
-            // Word wrap
-            JPanel wordWrapPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            wordWrapCheckBox = new JCheckBox("Enable word wrap");
-            wordWrapPanel.add(wordWrapCheckBox);
+            // 2
+            JCheckBox checkBox2 = new JCheckBox("Auto-Indent, Tab size: ");
+            JSpinner autoIndentTabSize = new JSpinner(
+                    new SpinnerNumberModel(prism.config.getInt(Config.Key.TAB_SIZE, 4), 1, 8, 1));
+            checkBox2.setFocusable(false);
+            checkBox2.setSelected(prism.config.getBoolean(Config.Key.AUTO_INDENT_ENABLED, true));
+            autoIndentTabSize.setFocusable(false);
+            autoIndentTabSize.setEnabled(prism.config.getBoolean(Config.Key.AUTO_INDENT_ENABLED, true));
+            checkBox2.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    prism.config.set(Config.Key.AUTO_INDENT_ENABLED, checkBox2.isSelected());
 
-            // Tab size
-            JPanel tabSizePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            tabSizePanel.add(new JLabel("Tab size:"));
-            tabSizeSpinner = new JSpinner(new SpinnerNumberModel(4, 1, 8, 1));
-            tabSizePanel.add(tabSizeSpinner);
+                    autoIndentTabSize.setEnabled(checkBox2.isSelected());
+                }
+            });
+            autoIndentTabSize.addChangeListener(new ChangeListener() {
+                @Override
+                public void stateChanged(ChangeEvent e) {
+                    prism.config.set(Config.Key.TAB_SIZE, (int) autoIndentTabSize.getValue());
+                }
+            });
 
-            // Font family
-            JPanel fontPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            fontPanel.add(new JLabel("Font:"));
-            fontCombo = new JComboBox<>(new String[]{"Monospaced", "Consolas", "Courier New", "Arial"});
-            fontPanel.add(fontCombo);
+            add(newJPanelLeftLayout(checkBox2, autoIndentTabSize));
 
-            // Font size
-            JPanel fontSizePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            fontSizePanel.add(new JLabel("Font size:"));
-            fontSizeSpinner = new JSpinner(new SpinnerNumberModel(12, 8, 24, 1));
-            fontSizePanel.add(fontSizeSpinner);
+            // 3
+            JCheckBox checkBox3 = new JCheckBox("Close curly braces");
+            checkBox3.setFocusable(false);
+            checkBox3.setSelected(prism.config.getBoolean(Config.Key.CLOSE_CURLY_BRACES, true));
+            checkBox3.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    prism.config.set(Config.Key.CLOSE_CURLY_BRACES, checkBox3.isSelected());
+                }
+            });
 
-            // Syntax highlighting
-            JPanel syntaxPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            syntaxPanel.add(new JLabel("Syntax theme:"));
-            JComboBox<String> syntaxCombo = new JComboBox<>(new String[]{"Default", "Dark", "Solarized", "Monokai"});
-            syntaxPanel.add(syntaxCombo);
+            add(newJPanelLeftLayout(checkBox3));
 
-            mainPanel.add(lineNumbersPanel);
-            mainPanel.add(wordWrapPanel);
-            mainPanel.add(tabSizePanel);
-            mainPanel.add(fontPanel);
-            mainPanel.add(fontSizePanel);
-            mainPanel.add(syntaxPanel);
+            // 4
+            JCheckBox checkBox4 = new JCheckBox("Close curly braces");
+            checkBox4.setFocusable(false);
+            checkBox4.setSelected(prism.config.getBoolean(Config.Key.CLOSE_MARKUP_TAGS, true));
+            checkBox4.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    prism.config.set(Config.Key.CLOSE_MARKUP_TAGS, checkBox4.isSelected());
+                }
+            });
 
-            add(mainPanel, BorderLayout.NORTH);
-        }
+            add(newJPanelLeftLayout(checkBox4));
 
-        public void applyChanges() {
-            System.out.println("Applying Editor settings:");
-            System.out.println("Line numbers: " + lineNumbersCheckBox.isSelected());
-            System.out.println("Word wrap: " + wordWrapCheckBox.isSelected());
-            System.out.println("Tab size: " + tabSizeSpinner.getValue());
-            System.out.println("Font: " + fontCombo.getSelectedItem());
+            // 5
+            JCheckBox checkBox5 = new JCheckBox("Bookmarks");
+            checkBox5.setFocusable(false);
+            checkBox5.setSelected(prism.config.getBoolean(Config.Key.BOOK_MARKS, true));
+            checkBox5.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    prism.config.set(Config.Key.BOOK_MARKS, checkBox5.isSelected());
+                }
+            });
+
+            add(newJPanelLeftLayout(checkBox5));
+
+            // 6
+            JCheckBox checkBox6 = new JCheckBox("Bracket matching");
+            checkBox6.setFocusable(false);
+            checkBox6.setSelected(prism.config.getBoolean(Config.Key.BRACKET_MATCHING_ENABLED, true));
+            checkBox6.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    prism.config.set(Config.Key.BRACKET_MATCHING_ENABLED, checkBox6.isSelected());
+                }
+            });
+
+            add(newJPanelLeftLayout(checkBox6));
+
+            // 7
+            JCheckBox checkBox7 = new JCheckBox("Mark occurences");
+            checkBox7.setFocusable(false);
+            checkBox7.setSelected(prism.config.getBoolean(Config.Key.MARK_OCCURRENCES, true));
+            checkBox7.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    prism.config.set(Config.Key.MARK_OCCURRENCES, checkBox7.isSelected());
+                }
+            });
+
+            add(newJPanelLeftLayout(checkBox7));
+
+            // 8
+            JCheckBox checkBox8 = new JCheckBox("Fade current line highlight");
+            checkBox8.setFocusable(false);
+            checkBox8.setSelected(prism.config.getBoolean(Config.Key.FADE_CURRENT_LINE_HIGHLIGHT, true));
+            checkBox8.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    prism.config.set(Config.Key.FADE_CURRENT_LINE_HIGHLIGHT, checkBox8.isSelected());
+                }
+            });
+
+            // 9
+            JCheckBox checkBox9 = new JCheckBox("Highlight current line");
+            checkBox9.setFocusable(false);
+            checkBox9.setSelected(prism.config.getBoolean(Config.Key.HIGHLIGHT_CURRENT_LINE, true));
+            checkBox9.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    prism.config.set(Config.Key.HIGHLIGHT_CURRENT_LINE, checkBox9.isSelected());
+                }
+            });
+
+            add(newJPanelLeftLayout(checkBox9));
+
+            // 10
+            JCheckBox checkBox10 = new JCheckBox("Word wrap");
+            checkBox10.setFocusable(false);
+            checkBox10.setSelected(prism.config.getBoolean(Config.Key.WORD_WRAP_ENABLED, false));
+            checkBox10.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    prism.config.set(Config.Key.WORD_WRAP_ENABLED, checkBox10.isSelected());
+                }
+            });
+
+            add(newJPanelLeftLayout(checkBox10));
+
+            // 11
+            JCheckBox checkBox11 = new JCheckBox("Word wrap style");
+            checkBox11.setFocusable(false);
+            checkBox11.setSelected(prism.config.getBoolean(Config.Key.WORD_WRAP_STYLE_WORD, true));
+            checkBox11.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    prism.config.set(Config.Key.WORD_WRAP_STYLE_WORD, checkBox11.isSelected());
+                }
+            });
+
+            add(newJPanelLeftLayout(checkBox11));
+
+            // 12
+            JCheckBox checkBox12 = new JCheckBox("Code folding");
+            checkBox12.setFocusable(false);
+            checkBox12.setSelected(prism.config.getBoolean(Config.Key.CODE_FOLDING_ENABLED, true));
+            checkBox12.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    prism.config.set(Config.Key.CODE_FOLDING_ENABLED, checkBox12.isSelected());
+                }
+            });
+
+            add(newJPanelLeftLayout(checkBox12));
         }
     }
 
@@ -411,14 +484,14 @@ public class ConfigurationDialog extends JFrame {
 
         private void initializeUI() {
             setLayout(new BorderLayout());
-            setBorder(new EmptyBorder(10, 10, 10, 10));
+            setBorder(new EmptyBorder(5, 5, 5, 5));
 
             JPanel mainPanel = new JPanel(new GridLayout(5, 1, 5, 5));
 
             // Interface language
             JPanel languagePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
             languagePanel.add(new JLabel("Interface Language:"));
-            languageCombo = new JComboBox<>(new String[]{"English", "Spanish", "French", "German", "Japanese"});
+            languageCombo = new JComboBox<>(new String[] { "English", "Spanish", "French", "German", "Japanese" });
             languagePanel.add(languageCombo);
 
             // Spell check
@@ -445,7 +518,8 @@ public class ConfigurationDialog extends JFrame {
             // Regional format
             JPanel regionalPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
             regionalPanel.add(new JLabel("Regional Format:"));
-            JComboBox<String> regionalCombo = new JComboBox<>(new String[]{"System Default", "US", "UK", "European", "Asian"});
+            JComboBox<String> regionalCombo = new JComboBox<>(
+                    new String[] { "System Default", "US", "UK", "European", "Asian" });
             regionalPanel.add(regionalCombo);
 
             mainPanel.add(languagePanel);
@@ -468,199 +542,201 @@ public class ConfigurationDialog extends JFrame {
 
     // Syntax Highlighting Panel
     private class SyntaxHighlightingPanel extends JPanel {
-
-        private JComboBox<String> fontCombo;
-        private JSpinner fontSizeSpinner;
-        private JButton fontBrowseButton;
-        private JButton bgColorButton;
-        private JButton fgColorButton;
-        private JComboBox<String> elementCombo;
-        private JButton elementFontButton;
-        private JTextArea previewArea;
-        private JColorChooser colorChooser;
+        private Map<String, Config.Key> tokenKeyMap;
+        private JComboBox<String> tokenComboBox;
+        private JButton colorButton;
+        private com.prism.components.textarea.TextArea previewTextArea;
 
         public SyntaxHighlightingPanel() {
+            initializeTokenMap();
             initializeUI();
         }
 
+        private void initializeTokenMap() {
+            tokenKeyMap = new LinkedHashMap<>();
+            tokenKeyMap.put("Annotation", Config.Key.ANNOTATION);
+            tokenKeyMap.put("Reserved Word", Config.Key.RESERVED_WORD);
+            tokenKeyMap.put("String Double Quote", Config.Key.STRING_DOUBLE_QUOTE);
+            tokenKeyMap.put("Character", Config.Key.CHARACTER);
+            tokenKeyMap.put("Backquote", Config.Key.BACKQUOTE);
+            tokenKeyMap.put("Boolean", Config.Key.BOOLEAN);
+            tokenKeyMap.put("Number Integer/Decimal", Config.Key.NUMBER_INTEGER_DECIMAL);
+            tokenKeyMap.put("Number Float", Config.Key.NUMBER_FLOAT);
+            tokenKeyMap.put("Number Hexadecimal", Config.Key.NUMBER_HEXADECIMAL);
+            tokenKeyMap.put("Regular Expression", Config.Key.REGULAR_EXPRESSION);
+            tokenKeyMap.put("Multi-line Comment", Config.Key.MULTI_LINE_COMMENT);
+            tokenKeyMap.put("Documentation Comment", Config.Key.DOCUMENTATION_COMMENT);
+            tokenKeyMap.put("EOL Comment", Config.Key.EOL_COMMENT);
+            tokenKeyMap.put("Seperator", Config.Key.SEPERATOR);
+            tokenKeyMap.put("Operator", Config.Key.OPERATOR);
+            tokenKeyMap.put("Identifier", Config.Key.IDENTIFIER);
+            tokenKeyMap.put("Variable", Config.Key.VARIABLE);
+            tokenKeyMap.put("Function", Config.Key.FUNCTION);
+            tokenKeyMap.put("Preprocessor", Config.Key.PREPROCESSOR);
+            tokenKeyMap.put("Markup CData", Config.Key.MARKUP_CDATA);
+            tokenKeyMap.put("Markup Comment", Config.Key.MARKUP_COMMENT);
+            tokenKeyMap.put("Markup DTD", Config.Key.MARKUP_DTD);
+            tokenKeyMap.put("Markup Tag Attribute", Config.Key.MARKUP_TAG_ATTRIBUTE);
+            tokenKeyMap.put("Markup Tag Attribute Value", Config.Key.MARKUP_TAG_ATTRIBUTE_VALUE);
+            tokenKeyMap.put("Markup Tag Delimiter", Config.Key.MARKUP_TAG_DELIMITER);
+            tokenKeyMap.put("Markup Tag Name", Config.Key.MARKUP_TAG_NAME);
+        }
+
         private void initializeUI() {
-            setLayout(new BorderLayout(10, 10));
-            setBorder(new EmptyBorder(10, 10, 10, 10));
+            setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+            setBorder(new EmptyBorder(5, 5, 5, 5));
 
-            // Create main panels
-            JPanel settingsPanel = createSettingsPanel();
-            JPanel previewPanel = createPreviewPanel();
+            String[] tokens = tokenKeyMap.keySet().toArray(new String[0]);
 
-            // Add panels to main layout
-            JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, settingsPanel, previewPanel);
-            splitPane.setResizeWeight(0.6);
-            splitPane.setDividerLocation(0.6);
+            tokenComboBox = new JComboBox<>(tokens);
+            colorButton = new JButton("#000000");
 
-            add(splitPane, BorderLayout.CENTER);
+            updateColorButton();
+
+            tokenComboBox.addActionListener(e -> updateColorButton());
+            colorButton.addActionListener(e -> chooseColor());
+
+            colorButton.setOpaque(true);
+            colorButton.setForeground(Color.LIGHT_GRAY);
+
+            add(newJPanelLeftLayout(new JLabel("Token: "), tokenComboBox));
+            add(newJPanelLeftLayout(new JLabel("Color: "), colorButton));
+
+            add(newJPanelLeftLayout(new JLabel("Preview Text Area:")));
+
+            previewTextArea = new com.prism.components.textarea.TextArea();
+            previewTextArea.setEditable(false);
+            previewTextArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
+            previewTextArea.addSyntaxHighlighting();
+            previewTextArea.setText("""
+                    package com.example.tokens;
+
+                    import java.io.Serializable;
+                    import java.util.List;
+                    import static java.lang.Math.PI;
+
+                    public class TokenExample implements Serializable {
+
+                        private static final int MAX_VALUE = 100;
+                        protected String name = "Java";
+                        public volatile boolean active = true;
+
+                        public TokenExample() {
+                            super();
+                        }
+
+                        public static void main(String[] args) {
+                            int x = 10;
+                            double y = 20.5;
+                            char grade = 'A';
+                            boolean isValid = true;
+                            String message = "Hello, World!";
+
+                            if (x < y && isValid) {
+                                System.out.println(message + " The value of PI is: " + PI);
+                            } else {
+                                for (int i = 0; i < 5; i++) {
+                                    switch (i) {
+                                        case 0:
+                                            System.out.println("Case zero");
+                                            break;
+                                        case 1:
+                                            System.out.println("Case one");
+                                            break;
+                                        default:
+                                            System.out.println("Other case");
+                                    }
+                                }
+                            }
+
+                            try {
+                                List<Integer> numbers = null;
+                                int first = numbers.get(0); // This will throw NullPointerException
+                            } catch (NullPointerException e) {
+                                System.err.println("Caught an exception: " + e.getMessage());
+                            } finally {
+                                System.out.println("Finally block executed.");
+                            }
+
+                            long bigNumber = 1234567890123L;
+                            float smallFloat = 3.14f;
+                            short s = 50;
+                            byte b = 127;
+                        }
+
+                        public final void processData(int data) throws IllegalArgumentException {
+                            if (data > MAX_VALUE) {
+                                throw new IllegalArgumentException("Data exceeds max value.");
+                            }
+                            synchronized (this) {
+                                // Some synchronized operation
+                            }
+                        }
+
+                        enum Status {
+                            PENDING, COMPLETE, FAILED
+                        }
+                    }
+                                        """.trim());
+
+            add(newJPanelLeftLayout(new RTextScrollPane(previewTextArea)));
         }
 
-        private JPanel createSettingsPanel() {
-            JPanel panel = new JPanel(new BorderLayout(5, 5));
+        private void updateColorButton() {
+            String selectedToken = (String) tokenComboBox.getSelectedItem();
+            Config.Key configKey = tokenKeyMap.get(selectedToken);
 
-            // Description label
-            JLabel descLabel = new JLabel("<html>You can fine-tune the fonts and colors used in the editor here, but consider using the User Interface panel before starting customizations.</html>");
-            descLabel.setBorder(new EmptyBorder(0, 0, 10, 0));
-            panel.add(descLabel, BorderLayout.NORTH);
+            if (configKey != null) {
+                String hexColor = prism.config.getString(configKey, "#000000");
+                Color color = hexToColor(hexColor);
 
-            // Main settings
-            JPanel mainSettings = new JPanel(new GridLayout(0, 1, 5, 5));
+                colorButton.setForeground(color);
+                colorButton.setText(hexColor);
 
-            // Global font settings
-            JPanel globalFontPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            globalFontPanel.add(new JLabel("Font:"));
-            fontCombo = new JComboBox<>(new String[]{"Consolas", "Monospaced", "Courier New", "Source Code Pro", "Fira Code"});
-            fontCombo.setSelectedItem("Consolas");
-            fontSizeSpinner = new JSpinner(new SpinnerNumberModel(13, 8, 24, 1));
-            fontBrowseButton = new JButton("Browse...");
-
-            globalFontPanel.add(fontCombo);
-            globalFontPanel.add(fontSizeSpinner);
-            globalFontPanel.add(fontBrowseButton);
-
-            // Background color
-            JPanel bgColorPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            bgColorPanel.add(new JLabel("Background:"));
-            bgColorButton = new JButton("r=255,g=255,b=255");
-            bgColorButton.setBackground(Color.WHITE);
-            bgColorButton.setOpaque(true);
-            bgColorButton.setBorderPainted(true);
-            bgColorPanel.add(bgColorButton);
-
-            // Fonts and Colors section
-            JLabel fontsColorsLabel = new JLabel("Fonts and Colors:");
-            fontsColorsLabel.setFont(fontsColorsLabel.getFont().deriveFont(Font.BOLD));
-
-            // Element-specific settings
-            JPanel elementPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            elementPanel.add(new JLabel("Font:"));
-            elementCombo = new JComboBox<>(new String[]{
-                "End-of-line Comment",
-                "Multiline Comment",
-                "Documentation Comment",
-                "Comment Keyword",
-                "Comment Markup",
-                "Keyword",
-                "Keyword 2",
-                "Function"
-            });
-            elementFontButton = new JButton("Consolas 13");
-            elementFontButton.setBackground(Color.WHITE);
-            elementFontButton.setOpaque(true);
-            elementFontButton.setBorderPainted(true);
-
-            elementPanel.add(elementCombo);
-            elementPanel.add(elementFontButton);
-
-            // Add action listeners
-            //fontBrowseButton.addActionListener(e -> browseFont());
-            bgColorButton.addActionListener(e -> chooseBackgroundColor());
-            elementFontButton.addActionListener(e -> chooseElementFont());
-            elementCombo.addActionListener(e -> updateElementButton());
-
-            // Add all components to main settings
-            mainSettings.add(globalFontPanel);
-            mainSettings.add(bgColorPanel);
-            mainSettings.add(fontsColorsLabel);
-            mainSettings.add(elementPanel);
-
-            panel.add(mainSettings, BorderLayout.CENTER);
-            return panel;
-        }
-
-        private JPanel createPreviewPanel() {
-            JPanel panel = new JPanel(new BorderLayout(5, 5));
-
-            // Preview label
-            JLabel previewLabel = new JLabel("Preview:");
-            previewLabel.setFont(previewLabel.getFont().deriveFont(Font.BOLD));
-
-            // Sample text label
-            JLabel sampleLabel = new JLabel("Sample Text: Java");
-
-            // Preview text area
-            previewArea = new JTextArea();
-            previewArea.setText(
-                    "/**\n"
-                    + " * This is about <code>ClassName</code>.\n"
-                    + " * @author author\n"
-                    + " */\n"
-                    + "public class ClassName<E> implements InterfaceName<String> {\n"
-                    + "    enum Color { RED, GREEN, BLUE };\n"
-                    + "    /* This comment may span multiple lines. */\n"
-                    + "    static Object staticField;\n"
-                    + "    // This comment may span only this line\n"
-                    + "}"
-            );
-            previewArea.setFont(new Font("Consolas", Font.PLAIN, 13));
-            previewArea.setBackground(Color.WHITE);
-            previewArea.setEditable(false);
-
-            JScrollPane scrollPane = new JScrollPane(previewArea);
-            scrollPane.setPreferredSize(new Dimension(300, 200));
-
-            // Layout for labels
-            JPanel labelPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            labelPanel.add(previewLabel);
-            labelPanel.add(Box.createHorizontalStrut(20));
-            labelPanel.add(sampleLabel);
-
-            panel.add(labelPanel, BorderLayout.NORTH);
-            panel.add(scrollPane, BorderLayout.CENTER);
-
-            return panel;
-        }
-
-        private void chooseBackgroundColor() {
-            Color color = JColorChooser.showDialog(this, "Choose Background Color", bgColorButton.getBackground());
-            if (color != null) {
-                bgColorButton.setBackground(color);
-                bgColorButton.setText(String.format("r=%d,g=%d,b=%d", color.getRed(), color.getGreen(), color.getBlue()));
-                previewArea.setBackground(color);
+                if (previewTextArea != null) {
+                    previewTextArea.addSyntaxHighlighting();
+                }
             }
         }
 
-        private void chooseElementFont() {
-            // For simplicity, using color chooser for element font color
-            Color color = JColorChooser.showDialog(this, "Choose Element Color", elementFontButton.getBackground());
-            if (color != null) {
-                elementFontButton.setBackground(color);
-                elementFontButton.setForeground(getContrastColor(color));
-                updatePreviewStyling();
+        private void chooseColor() {
+            String selectedToken = (String) tokenComboBox.getSelectedItem();
+            Config.Key configKey = tokenKeyMap.get(selectedToken);
+
+            if (configKey != null) {
+                Color currentColor = colorButton.getBackground();
+                Color selectedColor = JColorChooser.showDialog(
+                        prism,
+                        "Choose Color for " + selectedToken,
+                        currentColor);
+
+                if (selectedColor != null) {
+                    String hexColor = colorToHex(selectedColor);
+                    prism.config.set(configKey, hexColor);
+
+                    colorButton.setForeground(selectedColor);
+                    colorButton.setText(hexColor);
+
+                    if (previewTextArea != null) {
+                        previewTextArea.addSyntaxHighlighting();
+                    }
+                }
             }
         }
 
-        private void updateElementButton() {
-            // Update button text based on selected element
-            String element = (String) elementCombo.getSelectedItem();
-            elementFontButton.setText("Consolas 13");
-            // You could load saved settings for each element here
+        private String colorToHex(Color color) {
+            return String.format("#%02x%02x%02x",
+                    color.getRed(),
+                    color.getGreen(),
+                    color.getBlue()).toUpperCase();
         }
 
-        private void updatePreviewStyling() {
-            // This would apply the actual syntax highlighting to the preview
-            // For now, we just update the global font and background
-            String fontName = (String) fontCombo.getSelectedItem();
-            int fontSize = (Integer) fontSizeSpinner.getValue();
-            previewArea.setFont(new Font(fontName, Font.PLAIN, fontSize));
-            previewArea.setBackground(bgColorButton.getBackground());
-        }
-
-        private Color getContrastColor(Color color) {
-            // Calculate contrasting color for text
-            double luminance = (0.299 * color.getRed() + 0.587 * color.getGreen() + 0.114 * color.getBlue()) / 255;
-            return luminance > 0.5 ? Color.BLACK : Color.WHITE;
-        }
-
-        public void applyChanges() {
-            System.out.println("Applying Syntax Highlighting settings:");
-            System.out.println("Font: " + fontCombo.getSelectedItem() + " " + fontSizeSpinner.getValue());
-            System.out.println("Background: " + bgColorButton.getText());
-            // Save individual element settings here
+        private Color hexToColor(String hex) {
+            try {
+                return Color.decode(hex);
+            } catch (NumberFormatException e) {
+                return Color.WHITE;
+            }
         }
     }
 
@@ -668,7 +744,7 @@ public class ConfigurationDialog extends JFrame {
 
         public CPanel() {
             setLayout(new BorderLayout());
-            setBorder(new EmptyBorder(10, 10, 10, 10));
+            setBorder(new EmptyBorder(5, 5, 5, 5));
 
             JPanel mainPanel = new JPanel(new GridLayout(3, 1, 5, 5));
 
@@ -696,7 +772,7 @@ public class ConfigurationDialog extends JFrame {
 
         public CppPanel() {
             setLayout(new BorderLayout());
-            setBorder(new EmptyBorder(10, 10, 10, 10));
+            setBorder(new EmptyBorder(5, 5, 5, 5));
 
             JPanel mainPanel = new JPanel(new GridLayout(4, 1, 5, 5));
 
@@ -722,7 +798,7 @@ public class ConfigurationDialog extends JFrame {
 
         public JavaPanel() {
             setLayout(new BorderLayout());
-            setBorder(new EmptyBorder(10, 10, 10, 10));
+            setBorder(new EmptyBorder(5, 5, 5, 5));
 
             JPanel mainPanel = new JPanel(new GridLayout(3, 1, 5, 5));
 

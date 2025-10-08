@@ -4,12 +4,17 @@ import java.awt.BorderLayout;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.prism.Prism;
 import com.prism.components.files.CodeOutline;
 import com.prism.components.files.FileExplorer;
+import com.prism.components.toolbar.FileExplorerToolbar;
 import com.prism.utils.ResourceUtil;
 
 public class Sidebar extends JTabbedPane {
@@ -50,11 +55,25 @@ public class Sidebar extends JTabbedPane {
     }
 
     private void addFileExplorer(FileExplorer fileExplorer) {
-        addTab("File Explorer", ResourceUtil.getIcon("icons/tree_explorer.gif"), fileExplorer);
+        JPanel panel = new JPanel(new BorderLayout());
+
+        JPanel headerPanel = new JPanel(new BorderLayout());
+
+        headerPanel.add(new FileExplorerToolbar(Prism.getInstance()), BorderLayout.NORTH);
+        headerPanel.add(new JSeparator(SwingConstants.HORIZONTAL), BorderLayout.SOUTH);
+
+        JScrollPane scrollPane = new JScrollPane(fileExplorer);
+
+        panel.add(headerPanel, BorderLayout.NORTH);
+        panel.add(scrollPane, BorderLayout.CENTER);
+
+        addTab("File Explorer", ResourceUtil.getIcon("icons/tree_explorer.gif"), panel);
     }
 
     private void addOutline(CodeOutline codeOutline) {
-        addTab("Outline", ResourceUtil.getIcon("icons/outline.gif"), codeOutline);
+        JScrollPane scrollPane = new JScrollPane(codeOutline);
+
+        addTab("Outline", ResourceUtil.getIcon("icons/outline.gif"), scrollPane);
     }
 
     private void addSearch() {

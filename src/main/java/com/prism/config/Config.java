@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import com.prism.Prism;
+import com.prism.components.frames.ErrorDialog;
+
 public class Config {
     private final File configFile;
 
@@ -33,7 +36,38 @@ public class Config {
         AUTO_COMPLETION_ENABLED(19),
         CODE_FOLDING_ENABLED(20),
         TEXTAREA_ZOOM(21),
-        RECENT_FILES(22);
+        RECENT_FILES(22),
+        CHECK_FOR_UPDATES(23),
+        MAX_FILE_SIZE_FOR_WARNING(24),
+        WARN_BEFORE_OPENING_LARGE_FILES(25),
+
+        // Token color keys
+        ANNOTATION(100),
+        RESERVED_WORD(101),
+        STRING_DOUBLE_QUOTE(102),
+        CHARACTER(103),
+        BACKQUOTE(104),
+        BOOLEAN(105),
+        NUMBER_INTEGER_DECIMAL(106),
+        NUMBER_FLOAT(107),
+        NUMBER_HEXADECIMAL(108),
+        REGULAR_EXPRESSION(109),
+        MULTI_LINE_COMMENT(110),
+        DOCUMENTATION_COMMENT(111),
+        EOL_COMMENT(112),
+        SEPERATOR(113),
+        OPERATOR(114),
+        IDENTIFIER(115),
+        VARIABLE(116),
+        FUNCTION(117),
+        PREPROCESSOR(118),
+        MARKUP_CDATA(119),
+        MARKUP_COMMENT(120),
+        MARKUP_DTD(121),
+        MARKUP_TAG_ATTRIBUTE(122),
+        MARKUP_TAG_ATTRIBUTE_VALUE(123),
+        MARKUP_TAG_DELIMITER(124),
+        MARKUP_TAG_NAME(125);
 
         private final int id;
 
@@ -64,26 +98,60 @@ public class Config {
 
     public void set(Key key, String value) {
         configMap.put(key.getId(), value);
+
+        try {
+            save();
+        } catch (Exception e1) {
+            ErrorDialog.showErrorDialog(Prism.getInstance(), e1);
+        }
     }
 
     public void set(Key key, int value) {
         configMap.put(key.getId(), Integer.toString(value));
+
+        try {
+            save();
+        } catch (Exception e1) {
+            ErrorDialog.showErrorDialog(Prism.getInstance(), e1);
+        }
     }
 
     public void set(Key key, double value) {
         configMap.put(key.getId(), Double.toString(value));
+
+        try {
+            save();
+        } catch (Exception e1) {
+            ErrorDialog.showErrorDialog(Prism.getInstance(), e1);
+        }
     }
 
     public void set(Key key, boolean value) {
         configMap.put(key.getId(), Boolean.toString(value));
+
+        try {
+            save();
+        } catch (Exception e1) {
+            ErrorDialog.showErrorDialog(Prism.getInstance(), e1);
+        }
     }
 
     public void set(Key key, String[] values) {
         configMap.put(key.getId(), String.join(",", values));
+
+        try {
+            save();
+        } catch (Exception e1) {
+            ErrorDialog.showErrorDialog(Prism.getInstance(), e1);
+        }
     }
 
     public String getString(Key key) {
         return configMap.get(key.getId());
+    }
+
+    public String getString(Key key, String defaultValue) {
+        return configMap.getOrDefault(key.getId(), defaultValue);
     }
 
     public int getInt(Key key, int defaultValue) {

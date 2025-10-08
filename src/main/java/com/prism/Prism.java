@@ -57,6 +57,9 @@ public class Prism extends JFrame {
 
     public LoadingFrame loadingFrame;
 
+    public PrismMenuBar menuBar;
+    public PrimaryToolbar primaryToolbar;
+
     public TextAreaTabbedPane textAreaTabbedPane;
     public TerminalTabbedPane terminalTabbedPane;
     public FileExplorer fileExplorer;
@@ -138,19 +141,14 @@ public class Prism extends JFrame {
 
                     config.set(Config.Key.WINDOW_POSITION_X, (int) getLocation().getX());
                     config.set(Config.Key.WINDOW_POSITION_Y, (int) getLocation().getY());
-
-                    try {
-                        config.save();
-                    } catch (Exception e1) {
-                        ErrorDialog.showErrorDialog(getInstance(), e1);
-                    }
                 }
             }
         });
 
-        setJMenuBar(new PrismMenuBar(this));
+        menuBar = new PrismMenuBar();
+        setJMenuBar(menuBar);
 
-        PrimaryToolbar primaryToolbar = new PrimaryToolbar(this);
+        primaryToolbar = new PrimaryToolbar();
         add(primaryToolbar, BorderLayout.NORTH);
 
         // Text Area Tabbed pane
