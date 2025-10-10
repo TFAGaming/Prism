@@ -35,6 +35,7 @@ public class Terminal extends JPanel {
     public int shell = 0;
     public JTextPane terminalArea;
     public JExtendedTextField commandTextField;
+    public JComboBox comboBoxCommands;
 
     public Terminal(File directory, int shell) {
         this.shell = shell;
@@ -123,6 +124,24 @@ public class Terminal extends JPanel {
 
         secondaryPanel.add(commandTextField, BorderLayout.CENTER);
 
+        comboBoxCommands = new JComboBox<>(new String[] { "No commands..." });
+        comboBoxCommands.setBorder(new EmptyBorder(0, 5, 0, 5));
+        comboBoxCommands.setFocusable(false);
+        comboBoxCommands.setEnabled(false);
+        Dimension preferredSize = comboBoxCommands.getPreferredSize();
+        preferredSize.width += 20;
+        comboBoxCommands.setPreferredSize(preferredSize);
+        comboBoxCommands.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String selectedItem = (String) comboBoxCommands.getSelectedItem();
+
+                commandTextField.setText(selectedItem);
+            }
+        });
+
+        secondaryPanel.add(comboBoxCommands, BorderLayout.EAST);
+
         dirPathLabel = new JTextField();
         dirPathLabel.setText(">>");
         dirPathLabel.setEnabled(false);
@@ -196,6 +215,13 @@ public class Terminal extends JPanel {
     public void executeCommand(String command) {
         commands.add(command);
         commandsIndex = commands.size() - 1;
+
+        if (!comboBoxCommands.isEnabled()) {
+            comboBoxCommands.setEnabled(true);
+        }
+
+        comboBoxCommands.setModel(new DefaultComboBoxModel<>(commands.toArray()));
+        comboBoxCommands.setSelectedIndex(commands.size() - 1);
 
         if (command.trim().startsWith("exit")) {
             appendPrompt();

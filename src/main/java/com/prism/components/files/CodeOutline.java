@@ -16,6 +16,8 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.folding.Fold;
 import org.fife.ui.rsyntaxtextarea.folding.FoldManager;
 
+import com.prism.Prism;
+import com.prism.config.Config;
 import com.prism.utils.ResourceUtil;
 
 public class CodeOutline extends JTree {
@@ -56,6 +58,11 @@ public class CodeOutline extends JTree {
             Fold fold = fm.getFold(i);
 
             DefaultMutableTreeNode node = createNodeFromFold(fold);
+
+            if (node == null) {
+                continue;
+            }
+
             root.add(node);
         }
 
@@ -68,13 +75,23 @@ public class CodeOutline extends JTree {
 
     private DefaultMutableTreeNode createNodeFromFold(Fold fold) {
         String title = getFoldTitle(fold);
+
+        if (Prism.getInstance().config.getBoolean(Config.Key.CODE_OUTLINE_IGNORE_COMMENTS, true) && (title.startsWith("//") || title.startsWith("/*") || title.startsWith("/**"))) {
+            return null;
+        }
+
         FoldWrapper wrapper = new FoldWrapper(title, fold);
         DefaultMutableTreeNode node = new DefaultMutableTreeNode(wrapper);
 
         int childCount = fold.getChildCount();
         for (int i = 0; i < childCount; i++) {
             Fold childFold = fold.getChild(i);
-            node.add(createNodeFromFold(childFold));
+
+            DefaultMutableTreeNode childNode = createNodeFromFold(childFold);
+
+            if (childNode != null) {
+                node.add(childNode);
+            }
         }
 
         return node;

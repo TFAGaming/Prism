@@ -1,13 +1,24 @@
 package com.prism.components.toolbar;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 
-import javax.swing.*;
+import javax.swing.Box;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JToolBar;
 import javax.swing.border.EmptyBorder;
 
 import com.prism.Prism;
 import com.prism.components.files.PrismFile;
+import com.prism.components.frames.TextDiffer;
 import com.prism.managers.FileManager;
 import com.prism.managers.TextAreaManager;
 import com.prism.utils.ResourceUtil;
@@ -29,6 +40,7 @@ public class PrimaryToolbar extends JToolBar {
     public JButton buttonZoomOut;
     public JButton buttonRefreshTextArea;
     public JButton buttonSortTabs;
+    public JButton buttonTextDiff;
 
     public PrimaryToolbar() {
         setFloatable(false);
@@ -169,6 +181,30 @@ public class PrimaryToolbar extends JToolBar {
             }
         });
 
+        buttonTextDiff = createButton(ResourceUtil.getIcon("icons/textdiff.png"), "Text Difference");
+        buttonTextDiff.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PrismFile prismFile = prism.textAreaTabbedPane.getCurrentFile();
+                com.prism.components.textarea.TextArea textArea = prismFile.getTextArea();
+                File file = prismFile.getFile();
+
+                if (file == null) {
+                    return;
+                }
+
+                String oldText = FileManager.getOldText(file);
+
+                if (oldText == null) {
+                    return;
+                }
+
+                if (textArea != null) {
+                    new TextDiffer(file, oldText, file, textArea.getText());
+                }
+            }
+        });
+
         add(buttonNewFile);
         add(Box.createRigidArea(new Dimension(4, 0)));
         add(buttonFileOpen);
@@ -212,6 +248,8 @@ public class PrimaryToolbar extends JToolBar {
         add(buttonRefreshTextArea);
         add(Box.createRigidArea(new Dimension(4, 0)));
         add(buttonSortTabs);
+        add(Box.createRigidArea(new Dimension(4, 0)));
+        add(buttonTextDiff);
 
         JPanel panel = new JPanel();
         add(panel, BorderLayout.CENTER);

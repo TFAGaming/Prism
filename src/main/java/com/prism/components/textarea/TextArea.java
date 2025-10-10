@@ -19,6 +19,7 @@ public class TextArea extends RSyntaxTextArea {
 
         Prism prism = Prism.getInstance();
 
+        setAnimateBracketMatching(false);
         setShowMatchedBracketPopup(prism.config.getBoolean(Config.Key.SHOW_MATCHED_BRACKET_POPUP, true));
         setCodeFoldingEnabled(prism.config.getBoolean(Config.Key.CODE_FOLDING_ENABLED, true));
         setAntiAliasingEnabled(prism.config.getBoolean(Config.Key.ANTI_ALIASING_ENABLED, true));
@@ -44,9 +45,9 @@ public class TextArea extends RSyntaxTextArea {
 
         scheme.getStyle(Token.ANNOTATION).foreground = getConfigSyntaxHighlightingTokenColor(Config.Key.ANNOTATION);
         scheme.getStyle(Token.RESERVED_WORD).foreground = getConfigSyntaxHighlightingTokenColor(
-                Config.Key.RESERVED_WORD, "#660066");
+                Config.Key.RESERVED_WORD, "#990099");
         scheme.getStyle(Token.RESERVED_WORD_2).foreground = getConfigSyntaxHighlightingTokenColor(
-                Config.Key.RESERVED_WORD, "#660066");
+                Config.Key.RESERVED_WORD, "#990099");
 
         scheme.getStyle(Token.LITERAL_STRING_DOUBLE_QUOTE).foreground = getConfigSyntaxHighlightingTokenColor(
                 Config.Key.STRING_DOUBLE_QUOTE, "#009933");
@@ -75,7 +76,7 @@ public class TextArea extends RSyntaxTextArea {
         scheme.getStyle(Token.OPERATOR).foreground = getConfigSyntaxHighlightingTokenColor(Config.Key.OPERATOR);
         scheme.getStyle(Token.IDENTIFIER).foreground = getConfigSyntaxHighlightingTokenColor(Config.Key.IDENTIFIER);
         scheme.getStyle(Token.VARIABLE).foreground = getConfigSyntaxHighlightingTokenColor(Config.Key.VARIABLE);
-        scheme.getStyle(Token.FUNCTION).foreground = getConfigSyntaxHighlightingTokenColor(Config.Key.FUNCTION);
+        scheme.getStyle(Token.FUNCTION).foreground = getConfigSyntaxHighlightingTokenColor(Config.Key.FUNCTION, "#006666");
         scheme.getStyle(Token.PREPROCESSOR).foreground = getConfigSyntaxHighlightingTokenColor(Config.Key.PREPROCESSOR);
 
         // HTML / XML related

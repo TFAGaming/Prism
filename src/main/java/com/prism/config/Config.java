@@ -42,6 +42,8 @@ public class Config {
         WARN_BEFORE_OPENING_LARGE_FILES(25),
         SHOW_MATCHED_BRACKET_POPUP(26),
         SHOW_LINE_NUMBERS(27),
+        CODE_OUTLINE_IGNORE_COMMENTS(28),
+        FILE_EXPLORER_USE_SYSTEM_ICONS(29),
 
         // Token color keys
         ANNOTATION(100),

@@ -32,6 +32,7 @@ import com.prism.components.frames.LoadingFrame;
 import com.prism.components.frames.WarningDialog;
 import com.prism.components.menus.PrismMenuBar;
 import com.prism.components.menus.SearchAndReplace;
+import com.prism.components.panels.PluginsPanel;
 import com.prism.components.sidebar.LowerSidebar;
 import com.prism.components.sidebar.Sidebar;
 import com.prism.components.tables.Bookmarks;
@@ -46,6 +47,7 @@ import com.prism.components.toolbar.TasksToolbar;
 import com.prism.config.Config;
 import com.prism.managers.FileManager;
 import com.prism.managers.TextAreaManager;
+import com.prism.plugins.PluginLoader;
 import com.prism.utils.Languages;
 import com.prism.utils.ResourceUtil;
 
@@ -54,6 +56,7 @@ public class Prism extends JFrame {
     public static Prism instance;
 
     public Config config;
+    public PluginLoader pluginLoader;
 
     public LoadingFrame loadingFrame;
 
@@ -73,6 +76,7 @@ public class Prism extends JFrame {
     public Sidebar sidebar;
     public JLabel sidebarHeader;
 
+    public PluginsPanel pluginsPanel;
     public JPanel searchAndReplaceAndStatusBarPanel;
     public SearchAndReplace searchAndReplace;
     public JPanel statusBarPanel;
@@ -102,6 +106,8 @@ public class Prism extends JFrame {
         } catch (Exception e) {
             ErrorDialog.showErrorDialog(this, e);
         }
+
+        pluginLoader = new PluginLoader(null);
 
         loadingFrame = new LoadingFrame();
         loadingFrame.setVisible(true);
@@ -194,13 +200,14 @@ public class Prism extends JFrame {
         secondarySplitPane.setDividerLocation(300);
         secondarySplitPane.setResizeWeight(0.3);
 
-        // File Explorer, Code outline
+        // File Explorer, Code outline, Plugins
         fileExplorer = new FileExplorer(directory);
         codeOutline = new CodeOutline();
+        pluginsPanel = new PluginsPanel();
 
         // Primary Split pane
         sidebarHeader = new JLabel("File Explorer");
-        sidebar = new Sidebar(sidebarHeader, fileExplorer, codeOutline);
+        sidebar = new Sidebar(sidebarHeader, fileExplorer, codeOutline, pluginsPanel);
 
         primarySplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                 new JClosableComponent(JClosableComponent.ComponentType.SIDEBAR, sidebarHeader, sidebar),

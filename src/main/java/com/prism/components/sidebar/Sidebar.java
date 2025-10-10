@@ -14,11 +14,13 @@ import javax.swing.event.ChangeListener;
 import com.prism.Prism;
 import com.prism.components.files.CodeOutline;
 import com.prism.components.files.FileExplorer;
+import com.prism.components.panels.PluginsPanel;
+import com.prism.components.toolbar.CodeOutlineToolbar;
 import com.prism.components.toolbar.FileExplorerToolbar;
 import com.prism.utils.ResourceUtil;
 
 public class Sidebar extends JTabbedPane {
-    public Sidebar(JLabel header, FileExplorer fileExplorer, CodeOutline codeOutline) {
+    public Sidebar(JLabel header, FileExplorer fileExplorer, CodeOutline codeOutline, PluginsPanel pluginsPanel) {
         super(JTabbedPane.BOTTOM);
 
         setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
@@ -27,7 +29,7 @@ public class Sidebar extends JTabbedPane {
         addFileExplorer(fileExplorer);
         addOutline(codeOutline);
         addSearch();
-        addPlugins();
+        addPlugins(pluginsPanel);
 
         setSelectedIndex(0);
 
@@ -71,9 +73,19 @@ public class Sidebar extends JTabbedPane {
     }
 
     private void addOutline(CodeOutline codeOutline) {
+        JPanel panel = new JPanel(new BorderLayout());
+
+        JPanel headerPanel = new JPanel(new BorderLayout());
+
+        headerPanel.add(new CodeOutlineToolbar(Prism.getInstance()), BorderLayout.NORTH);
+        headerPanel.add(new JSeparator(SwingConstants.HORIZONTAL), BorderLayout.SOUTH);
+
         JScrollPane scrollPane = new JScrollPane(codeOutline);
 
-        addTab("Outline", ResourceUtil.getIcon("icons/outline.gif"), scrollPane);
+        panel.add(headerPanel, BorderLayout.NORTH);
+        panel.add(scrollPane, BorderLayout.CENTER);
+
+        addTab("Outline", ResourceUtil.getIcon("icons/outline.gif"), panel);
     }
 
     private void addSearch() {
@@ -82,9 +94,7 @@ public class Sidebar extends JTabbedPane {
         addTab("Find File", ResourceUtil.getIcon("icons/search_text.png"), panel);
     }
 
-    private void addPlugins() {
-        JPanel panel = new JPanel(new BorderLayout());
-
-        addTab("Plugins", ResourceUtil.getIcon("icons/plugin.gif"), panel);
+    private void addPlugins(PluginsPanel pluginsPanel) {
+        addTab("Plugins", ResourceUtil.getIcon("icons/plugin.gif"), pluginsPanel);
     }
 }

@@ -7,7 +7,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.swing.*;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -16,10 +15,12 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeSelectionModel;
 
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rsyntaxtextarea.Token;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 import com.prism.Prism;
 import com.prism.config.Config;
+import com.prism.utils.ResourceUtil;
 
 public class ConfigurationDialog extends JFrame {
     public Prism prism = Prism.getInstance();
@@ -53,6 +54,8 @@ public class ConfigurationDialog extends JFrame {
         setLocationRelativeTo(null);
 
         setResizable(false);
+
+        setIconImage(ResourceUtil.getIcon("icons/Prism.png").getImage());
 
         contentPane = new JPanel(new BorderLayout(10, 10));
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -289,6 +292,19 @@ public class ConfigurationDialog extends JFrame {
             });
 
             add(newJPanelLeftLayout(checkBox2, maxFileSize));
+
+            // 3
+            JCheckBox checkBox3 = new JCheckBox("Use system icons for File explorer");
+            checkBox3.setFocusable(false);
+            checkBox3.setSelected(prism.config.getBoolean(Config.Key.FILE_EXPLORER_USE_SYSTEM_ICONS, true));
+            checkBox3.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    prism.config.set(Config.Key.FILE_EXPLORER_USE_SYSTEM_ICONS, checkBox3.isSelected());
+                }
+            });
+
+            add(newJPanelLeftLayout(checkBox3));
         }
     }
 
@@ -615,7 +631,7 @@ public class ConfigurationDialog extends JFrame {
             String[] tokens = tokenKeyMap.keySet().toArray(new String[0]);
 
             tokenComboBox = new JComboBox<>(tokens);
-            colorButton = new JButton("#000000");
+            colorButton = new JButton(getDefaultColor(Config.Key.ANNOTATION));
 
             updateColorButton();
 
@@ -623,7 +639,7 @@ public class ConfigurationDialog extends JFrame {
             colorButton.addActionListener(e -> chooseColor());
 
             colorButton.setOpaque(true);
-            colorButton.setForeground(Color.LIGHT_GRAY);
+            colorButton.setForeground(Color.decode(getDefaultColor(Config.Key.ANNOTATION)));
 
             add(newJPanelLeftLayout(new JLabel("Token: "), tokenComboBox));
             add(newJPanelLeftLayout(new JLabel("Color: "), colorButton));
@@ -713,7 +729,7 @@ public class ConfigurationDialog extends JFrame {
             Config.Key configKey = tokenKeyMap.get(selectedToken);
 
             if (configKey != null) {
-                String hexColor = prism.config.getString(configKey, "#000000");
+                String hexColor = prism.config.getString(configKey, getDefaultColor(configKey));
                 Color color = hexToColor(hexColor);
 
                 colorButton.setForeground(color);
@@ -725,12 +741,39 @@ public class ConfigurationDialog extends JFrame {
             }
         }
 
+        private String getDefaultColor(Config.Key configKey) {
+            switch (configKey) {
+                case RESERVED_WORD:
+                    return "#990099";
+                case STRING_DOUBLE_QUOTE:
+                case CHARACTER:
+                case BACKQUOTE:
+                    return "#009933";
+                case BOOLEAN:
+                    return "#3300FF";
+                case NUMBER_INTEGER_DECIMAL:
+                case NUMBER_FLOAT:
+                case NUMBER_HEXADECIMAL:
+                    return "#FF6633";
+                case REGULAR_EXPRESSION:
+                    return "#DF1D1D";
+                case MULTI_LINE_COMMENT:
+                case DOCUMENTATION_COMMENT:
+                case EOL_COMMENT:
+                    return "#999999";
+                case FUNCTION:
+                    return "#006666";
+                default:
+                    return "#000000";
+            }
+        }
+
         private void chooseColor() {
             String selectedToken = (String) tokenComboBox.getSelectedItem();
             Config.Key configKey = tokenKeyMap.get(selectedToken);
 
             if (configKey != null) {
-                Color currentColor = colorButton.getBackground();
+                Color currentColor = colorButton.getForeground();
                 Color selectedColor = JColorChooser.showDialog(
                         prism,
                         "Choose Color for " + selectedToken,

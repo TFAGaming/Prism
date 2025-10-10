@@ -6,7 +6,9 @@ import javax.swing.Icon;
 
 import org.fife.ui.rtextarea.RTextScrollPane;
 
+import com.prism.Prism;
 import com.prism.components.textarea.TextArea;
+import com.prism.config.Config;
 import com.prism.utils.Languages;
 import com.prism.utils.ResourceUtil;
 
@@ -38,7 +40,15 @@ public class PrismFile {
     }
 
     public Icon getIcon() {
-        return this.file == null ? ResourceUtil.getIcon("icons/file.png") : Languages.getIcon(this.file);
+        Prism prism = Prism.getInstance();
+
+        return this.file == null
+            ? ResourceUtil.getIcon("icons/file.png")
+            : (
+                prism.config.getBoolean(Config.Key.FILE_EXPLORER_USE_SYSTEM_ICONS, true)
+                    ? prism.fileExplorer.getFileIcon(this.file)
+                    : Languages.getIcon(this.file)
+            );
     }
 
     public TextArea getTextArea() {

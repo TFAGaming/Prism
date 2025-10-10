@@ -17,6 +17,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.JFileChooser;
@@ -39,8 +40,9 @@ import com.prism.utils.Languages;
 public class FileManager {
 
     public static Prism prism = Prism.getInstance();
-    
+
     public static File directory = null;
+    public static HashMap<String, String> textDiffCache = new HashMap<>();
     public static List<PrismFile> files = new ArrayList<>();
 
     public static JFileChooser fileChooser = new JFileChooser();
@@ -144,6 +146,25 @@ public class FileManager {
             }
         }
 
+        if (prism.config.getBoolean(Config.Key.WARN_BEFORE_OPENING_LARGE_FILES, true)) {
+            int size = getFileSizeInMBExact(file);
+            int maxSize = prism.config.getInt(Config.Key.MAX_FILE_SIZE_FOR_WARNING, 10);
+
+            if (size >= maxSize) {
+                int confirm = JOptionPane.showConfirmDialog(
+                        prism,
+                        "Are you sure you want to open \"" + file.getName() + "\"? The file is too large to open.",
+                        "Large File",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.WARNING_MESSAGE
+                );
+
+                if (confirm != JOptionPane.YES_OPTION) {
+                    return;
+                }
+            }
+        }
+
         for (int i = 0; i < files.size(); i++) {
             PrismFile prismFile = files.get(i);
 
@@ -195,6 +216,10 @@ public class FileManager {
             if (firstFile.getPath() == null && firstFile.getTextArea().getText().trim().isEmpty()) {
                 prism.textAreaTabbedPane.closeTabByIndex(0);
             }
+        }
+
+        if (!textDiffCache.containsKey(file.getAbsolutePath())) {
+            textDiffCache.put(file.getAbsolutePath(), textArea.getText());
         }
     }
 
@@ -375,14 +400,33 @@ public class FileManager {
         prism.textAreaTabbedPane.updateTitle(file);
 
         prism.updateStatusBar();
-        
+
         prism.primaryToolbar.updateToolbar();
         prism.menuBar.updateMenuBar();
-        
+
         if (prism.codeOutline.textArea != null && prism.codeOutline.textArea.equals(file.getTextArea())) {
             prism.codeOutline.updateTree();
         } else {
             prism.codeOutline.setSyntaxTextArea(file.getTextArea());
         }
+    }
+
+    public static int getFileSizeInMBExact(File file) {
+        if (file == null || !file.exists() || file.isDirectory()) {
+            return -1;
+        }
+
+        double fileSizeInBytes = file.length();
+        double fileSizeInMB = fileSizeInBytes / (1024.0 * 1024.0);
+
+        return (int) Math.round(fileSizeInMB);
+    }
+
+    public static String getOldText(File file) {
+        if (!textDiffCache.containsKey(file.getAbsolutePath())) {
+            return null;
+        }
+
+        return textDiffCache.get(file.getAbsolutePath());
     }
 }
