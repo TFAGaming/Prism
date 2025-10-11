@@ -34,7 +34,9 @@ import com.prism.Prism;
 import com.prism.components.files.PrismFile;
 import com.prism.components.frames.ErrorDialog;
 import com.prism.components.textarea.TextArea;
+import com.prism.components.textarea.TextAreaTabbedPane.ImageViewerContainer;
 import com.prism.config.Config;
+import com.prism.utils.Extensions;
 import com.prism.utils.Languages;
 
 public class FileManager {
@@ -60,7 +62,9 @@ public class FileManager {
 
     public static void setDirectory(File dir) {
         if (dir == null || !dir.exists() || !dir.isDirectory()) {
-            JOptionPane.showMessageDialog(prism, "Unable to set the directory; Received a null object or the directory is a file.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(prism,
+                    "Unable to set the directory; Received a null object or the directory is a file.", "Error",
+                    JOptionPane.ERROR_MESSAGE);
 
             return;
         }
@@ -125,13 +129,17 @@ public class FileManager {
 
     public static void openFile(File file) {
         if (file == null || !file.exists() || !file.isFile()) {
-            JOptionPane.showMessageDialog(prism, "Unable to load the file; Received a null object or the file is a directory.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(prism,
+                    "Unable to load the file; Received a null object or the file is a directory.", "Error",
+                    JOptionPane.ERROR_MESSAGE);
 
             return;
         }
 
         if (!Languages.isSupported(file)) {
-            int response = JOptionPane.showConfirmDialog(prism, "This file extension is not supported by Prism, would you like to open it by its default application?", "Unsupported File", JOptionPane.YES_NO_CANCEL_OPTION);
+            int response = JOptionPane.showConfirmDialog(prism,
+                    "This file extension is not supported by Prism, would you like to open it by its default application?",
+                    "Unsupported File", JOptionPane.YES_NO_CANCEL_OPTION);
 
             if (response == JOptionPane.YES_OPTION) {
                 try {
@@ -156,8 +164,7 @@ public class FileManager {
                         "Are you sure you want to open \"" + file.getName() + "\"? The file is too large to open.",
                         "Large File",
                         JOptionPane.YES_NO_OPTION,
-                        JOptionPane.WARNING_MESSAGE
-                );
+                        JOptionPane.WARNING_MESSAGE);
 
                 if (confirm != JOptionPane.YES_OPTION) {
                     return;
@@ -175,51 +182,62 @@ public class FileManager {
             }
         }
 
-        TextArea textArea = new TextArea();
+        boolean isImage = Extensions.isImageFormat(file);
 
-        textArea.setSyntaxEditingStyle(Languages.getHighlighter(file));
-        textArea.addSyntaxHighlighting();
+        if (!isImage) {
+            TextArea textArea = new TextArea();
 
-        PrismFile prismFile = new PrismFile(file, textArea);
+            textArea.setSyntaxEditingStyle(Languages.getHighlighter(file));
+            textArea.addSyntaxHighlighting();
 
-        files.add(prismFile);
-        prism.textAreaTabbedPane.addTextAreaTab(prismFile);
+            PrismFile prismFile = new PrismFile(file, textArea);
 
-        try {
-            BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
+            files.add(prismFile);
+            prism.textAreaTabbedPane.addTextAreaTab(prismFile);
 
-            textArea.read(reader, null);
+            try {
+                BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
 
-            reader.close();
+                textArea.read(reader, null);
 
-            RTextScrollPane scrollPane = (RTextScrollPane) SwingUtilities.getAncestorOfClass(RTextScrollPane.class,
-                    textArea);
+                reader.close();
 
-            SwingUtilities.invokeLater(() -> {
-                JScrollBar verticalScrollBar = scrollPane.getVerticalScrollBar();
-                verticalScrollBar.setValue(verticalScrollBar.getMinimum());
-            });
-        } catch (Exception e) {
-            ErrorDialog.showErrorDialog(prism, e);
-        }
+                RTextScrollPane scrollPane = (RTextScrollPane) SwingUtilities.getAncestorOfClass(RTextScrollPane.class,
+                        textArea);
 
-        addListenersToTextArea(textArea, prismFile);
-
-        prism.textAreaTabbedPane.redirectUserToTab(prismFile);
-
-        prism.bookmarks.updateTreeData(TextAreaManager.getBookmarksOfAllFiles());
-
-        if (files.size() == 2) {
-            PrismFile firstFile = files.get(0);
-
-            if (firstFile.getPath() == null && firstFile.getTextArea().getText().trim().isEmpty()) {
-                prism.textAreaTabbedPane.closeTabByIndex(0);
+                SwingUtilities.invokeLater(() -> {
+                    JScrollBar verticalScrollBar = scrollPane.getVerticalScrollBar();
+                    verticalScrollBar.setValue(verticalScrollBar.getMinimum());
+                });
+            } catch (Exception e) {
+                ErrorDialog.showErrorDialog(prism, e);
             }
-        }
 
-        if (!textDiffCache.containsKey(file.getAbsolutePath())) {
-            textDiffCache.put(file.getAbsolutePath(), textArea.getText());
+            addListenersToTextArea(textArea, prismFile);
+
+            prism.textAreaTabbedPane.redirectUserToTab(prismFile);
+
+            prism.bookmarks.updateTreeData(TextAreaManager.getBookmarksOfAllFiles());
+
+            if (files.size() == 2) {
+                PrismFile firstFile = files.get(0);
+
+                if (firstFile.getPath() == null && firstFile.getTextArea().getText().trim().isEmpty()) {
+                    prism.textAreaTabbedPane.closeTabByIndex(0);
+                }
+            }
+
+            if (!textDiffCache.containsKey(file.getAbsolutePath())) {
+                textDiffCache.put(file.getAbsolutePath(), textArea.getText());
+            }
+        } else {
+            ImageViewerContainer viewer = prism.textAreaTabbedPane.new ImageViewerContainer(file.getPath());
+
+            PrismFile prismFile = new PrismFile(file, viewer);
+
+            files.add(prismFile);
+            prism.textAreaTabbedPane.addImageViewerTab(prismFile);
         }
     }
 
@@ -299,7 +317,9 @@ public class FileManager {
 
     public static void openFolder(File folder) {
         if (folder == null || !folder.exists() || folder.isFile()) {
-            JOptionPane.showMessageDialog(prism, "Unable to load the folder; Received a null object or the folder is a file.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(prism,
+                    "Unable to load the folder; Received a null object or the folder is a file.", "Error",
+                    JOptionPane.ERROR_MESSAGE);
 
             return;
         }

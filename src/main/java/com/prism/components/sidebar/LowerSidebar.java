@@ -6,6 +6,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.prism.components.panels.MathPanel;
 import com.prism.utils.ResourceUtil;
 
 public class LowerSidebar extends JTabbedPane {
@@ -18,8 +19,8 @@ public class LowerSidebar extends JTabbedPane {
 
         addTasks(tasksArea);
         addTerminalArea(terminalArea);
-        addMath();
         addBookmarks(bookmarksArea);
+        addMath();
         addErrorLogger();
 
         setSelectedIndex(1);
@@ -60,7 +61,7 @@ public class LowerSidebar extends JTabbedPane {
     }
 
     private void addMath() {
-        addTab("Math", ResourceUtil.getIcon("icons/math.gif"), null);
+        addTab("Math", ResourceUtil.getIcon("icons/math.gif"), new MathPanel());
     }
 
     private void addBookmarks(JPanel bookmarksArea) {

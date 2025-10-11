@@ -1,8 +1,13 @@
 package com.prism.components.textarea;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -11,9 +16,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -21,7 +30,10 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JToolBar;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -32,6 +44,7 @@ import com.prism.Prism;
 import com.prism.components.files.PrismFile;
 import com.prism.managers.FileManager;
 import com.prism.managers.TextAreaManager;
+import com.prism.utils.ResourceUtil;
 
 public class TextAreaTabbedPane extends JTabbedPane {
 
@@ -63,6 +76,12 @@ public class TextAreaTabbedPane extends JTabbedPane {
         file.setScrollPane(scrollPane);
 
         addTab(file.getFileName(), scrollPane);
+
+        addFeaturesToTab(file);
+    }
+
+    public void addImageViewerTab(PrismFile file) {
+        addTab(file.getFileName(), file.getImageViewerContainer());
 
         addFeaturesToTab(file);
     }
@@ -99,11 +118,21 @@ public class TextAreaTabbedPane extends JTabbedPane {
 
     public int findIndexByPrismFile(PrismFile file) {
         for (int i = 0; i < getTabCount(); i++) {
-            RTextScrollPane scrollPane = (RTextScrollPane) getComponentAt(i);
-            TextArea textArea = (TextArea) scrollPane.getViewport().getView();
+            Component componentIndex = getComponentAt(i);
 
-            if (textArea == file.getTextArea()) {
-                return i;
+            if (componentIndex instanceof RTextScrollPane) {
+                RTextScrollPane scrollPane = (RTextScrollPane) componentIndex;
+                TextArea textArea = (TextArea) scrollPane.getViewport().getView();
+
+                if (textArea == file.getTextArea()) {
+                    return i;
+                }
+            } else {
+                ImageViewerContainer container = (ImageViewerContainer) componentIndex;
+
+                if (container == file.getImageViewerContainer()) {
+                    return i;
+                }
             }
         }
 
@@ -284,5 +313,157 @@ public class TextAreaTabbedPane extends JTabbedPane {
         StringSelection stringSelection = new StringSelection(text);
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(stringSelection, null);
+    }
+
+    public class ImagePanel extends JPanel {
+        private BufferedImage image;
+        private double scale = 1.0;
+        private final String imagePath;
+
+        public ImagePanel(String path) {
+            this.imagePath = path;
+            try {
+                this.image = ImageIO.read(new File(path));
+                
+                if (this.image == null) {
+                    System.err.println("Error: Could not read image format for " + path);
+                    createPlaceholderImage("Error reading image format.");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                createPlaceholderImage("Failed to load image: " + new File(path).getName());
+            }
+
+            setLayout(new BorderLayout());
+        }
+
+        private void createPlaceholderImage(String message) {
+            int width = 400;
+            int height = 300;
+            this.image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+            Graphics2D g2d = this.image.createGraphics();
+            g2d.fillRect(0, 0, width, height);
+
+            g2d.setFont(new Font("Inter", Font.BOLD, 16));
+
+            FontMetrics fm = g2d.getFontMetrics();
+            int x = (width - fm.stringWidth(message)) / 2;
+            int y = (fm.getAscent() + (height - fm.getHeight()) / 2);
+            g2d.drawString(message, x, y);
+
+            g2d.dispose();
+        }
+
+        public void setScale(double newScale) {
+            if (newScale > 0.1 && newScale < 10.0) {
+                this.scale = newScale;
+                revalidate();
+                repaint();
+            }
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            if (image != null) {
+                Graphics2D g2d = (Graphics2D) g.create();
+
+                int scaledWidth = (int) (image.getWidth() * scale);
+                int scaledHeight = (int) (image.getHeight() * scale);
+
+                int x = (getWidth() - scaledWidth) / 2;
+                int y = (getHeight() - scaledHeight) / 2;
+
+                g2d.drawImage(image, x, y, scaledWidth, scaledHeight, this);
+
+                g2d.dispose();
+            }
+        }
+
+        @Override
+        public Dimension getPreferredSize() {
+            if (image == null) {
+                return new Dimension(500, 400);
+            }
+
+            return new Dimension(
+                    (int) (image.getWidth() * scale),
+                    (int) (image.getHeight() * scale));
+        }
+
+        public double getScale() {
+            return scale;
+        }
+    }
+
+    public class ImageViewerContainer extends JPanel {
+        private final ImagePanel imagePanel;
+        private final JLabel zoomLabel;
+
+        public ImageViewerContainer(String imagePath) {
+            super(new BorderLayout());
+
+            this.imagePanel = new ImagePanel(imagePath);
+            this.zoomLabel = new JLabel("Zoom: 100%", SwingConstants.CENTER);
+            this.zoomLabel.setFont(new Font("Inter", Font.PLAIN, 12));
+
+            JScrollPane scrollPane = new JScrollPane(imagePanel);
+            scrollPane.setBorder(BorderFactory.createEmptyBorder());
+
+            JToolBar zoomBar = createZoomToolBar();
+
+            add(zoomBar, BorderLayout.NORTH);
+            add(scrollPane, BorderLayout.CENTER);
+        }
+
+        private JToolBar createZoomToolBar() {
+            JToolBar toolBar = new JToolBar();
+            toolBar.setFloatable(false);
+            toolBar.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
+            // Zoom In Button
+            JButton zoomInButton = new JButton();
+            zoomInButton.setIcon(ResourceUtil.getIcon("icons/zoom_in.png"));
+            zoomInButton.setFocusable(false);
+            zoomInButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            zoomInButton.addActionListener(e -> {
+                imagePanel.setScale(imagePanel.getScale() * 1.2);
+                updateZoomLabel();
+            });
+
+            // Zoom Out Button
+            JButton zoomOutButton = new JButton();
+            zoomOutButton.setIcon(ResourceUtil.getIcon("icons/zoom_out.png"));
+            zoomOutButton.setFocusable(false);
+            zoomOutButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            zoomOutButton.addActionListener(e -> {
+                imagePanel.setScale(imagePanel.getScale() / 1.2);
+                updateZoomLabel();
+            });
+
+            // Reset Button
+            JButton resetButton = new JButton("1:1");
+            resetButton.setFocusable(false);
+            resetButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            resetButton.addActionListener(e -> {
+                imagePanel.setScale(1.0);
+                updateZoomLabel();
+            });
+
+            toolBar.add(zoomInButton);
+            toolBar.add(Box.createHorizontalStrut(5));
+            toolBar.add(zoomOutButton);
+            toolBar.add(Box.createHorizontalStrut(10));
+            toolBar.add(resetButton);
+            toolBar.add(Box.createHorizontalGlue());
+            toolBar.add(zoomLabel);
+
+            return toolBar;
+        }
+
+        private void updateZoomLabel() {
+            int percent = (int) (imagePanel.getScale() * 100);
+            zoomLabel.setText("Zoom: " + percent + "%");
+        }
     }
 }
