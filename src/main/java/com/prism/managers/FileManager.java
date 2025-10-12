@@ -238,6 +238,8 @@ public class FileManager {
 
             files.add(prismFile);
             prism.textAreaTabbedPane.addImageViewerTab(prismFile);
+
+            prism.textAreaTabbedPane.redirectUserToTab(prismFile);
         }
     }
 

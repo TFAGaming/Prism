@@ -405,7 +405,6 @@ public class TextAreaTabbedPane extends JTabbedPane {
 
             this.imagePanel = new ImagePanel(imagePath);
             this.zoomLabel = new JLabel("Zoom: 100%", SwingConstants.CENTER);
-            this.zoomLabel.setFont(new Font("Inter", Font.PLAIN, 12));
 
             JScrollPane scrollPane = new JScrollPane(imagePanel);
             scrollPane.setBorder(BorderFactory.createEmptyBorder());

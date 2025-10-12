@@ -49,7 +49,7 @@ public class Sidebar extends JTabbedPane {
                         header.setText("Find File");
                         break;
                     case 3:
-                        header.setText("Plugins");
+                        header.setText("Extensions");
                         break;
                 }
             }
@@ -95,6 +95,6 @@ public class Sidebar extends JTabbedPane {
     }
 
     private void addPlugins(PluginsPanel pluginsPanel) {
-        addTab("Plugins", ResourceUtil.getIcon("icons/plugin.gif"), pluginsPanel);
+        addTab("Extensions", ResourceUtil.getIcon("icons/plugin.gif"), pluginsPanel);
     }
 }
