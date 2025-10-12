@@ -74,7 +74,7 @@ public class JClosableComponent extends JPanel {
                             prism.secondarySplitPane.setDividerSize(0);
                             break;
                         case SIDEBAR:
-                            prism.config.set(Config.Key.PRIMARY_SPLITPANE_DIVIDER_LOCATION, prism.secondarySplitPane.getDividerLocation());
+                            prism.config.set(Config.Key.PRIMARY_SPLITPANE_DIVIDER_LOCATION, prism.primarySplitPane.getDividerLocation());
                             prism.primarySplitPane.setDividerSize(0);
                             break;
                         default:

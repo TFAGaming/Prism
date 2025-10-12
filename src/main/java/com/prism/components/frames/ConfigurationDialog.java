@@ -828,21 +828,27 @@ public class ConfigurationDialog extends JFrame {
             setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
             setBorder(new EmptyBorder(5, 5, 5, 5));
 
-            // 1
+            // 1 and 2
             JCheckBox checkBox1 = new JCheckBox("Enable Autocomplete");
+            JCheckBox checkBox2 = new JCheckBox("Autocomplete automatic popup menu");
+
             checkBox1.setFocusable(false);
             checkBox1.setSelected(prism.config.getBoolean(Config.Key.AUTOCOMPLETE_ENABLED, true));
+
+            checkBox2.setEnabled(checkBox1.isSelected());
+            
             checkBox1.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     prism.config.set(Config.Key.AUTOCOMPLETE_ENABLED, checkBox1.isSelected());
+
+                    checkBox2.setEnabled(checkBox1.isSelected());
                 }
             });
 
             add(newJPanelLeftLayout(checkBox1));
 
             // 2
-            JCheckBox checkBox2 = new JCheckBox("Autocomplete automatic popup menu");
             checkBox2.setFocusable(false);
             checkBox2.setSelected(prism.config.getBoolean(Config.Key.AUTOCOMPLETE_AUTO_POPUP_ENABLED, true));
             checkBox2.addActionListener(new ActionListener() {

@@ -20,6 +20,8 @@ import com.prism.components.toolbar.FileExplorerToolbar;
 import com.prism.utils.ResourceUtil;
 
 public class Sidebar extends JTabbedPane {
+    public Prism prism = Prism.getInstance();
+
     public Sidebar(JLabel header, FileExplorer fileExplorer, CodeOutline codeOutline, PluginsPanel pluginsPanel) {
         super(JTabbedPane.BOTTOM);
 
@@ -61,7 +63,7 @@ public class Sidebar extends JTabbedPane {
 
         JPanel headerPanel = new JPanel(new BorderLayout());
 
-        headerPanel.add(new FileExplorerToolbar(Prism.getInstance()), BorderLayout.NORTH);
+        headerPanel.add(new FileExplorerToolbar(prism), BorderLayout.NORTH);
         headerPanel.add(new JSeparator(SwingConstants.HORIZONTAL), BorderLayout.SOUTH);
 
         JScrollPane scrollPane = new JScrollPane(fileExplorer);
@@ -77,7 +79,7 @@ public class Sidebar extends JTabbedPane {
 
         JPanel headerPanel = new JPanel(new BorderLayout());
 
-        headerPanel.add(new CodeOutlineToolbar(Prism.getInstance()), BorderLayout.NORTH);
+        headerPanel.add(new CodeOutlineToolbar(prism), BorderLayout.NORTH);
         headerPanel.add(new JSeparator(SwingConstants.HORIZONTAL), BorderLayout.SOUTH);
 
         JScrollPane scrollPane = new JScrollPane(codeOutline);

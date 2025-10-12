@@ -9,8 +9,6 @@ import com.prism.managers.FileManager;
 
 public class Keybinds {
     public Keybinds(JTabbedPane tabbedPane) {
-        Prism prism = Prism.getInstance();
-
         tabbedPane.registerKeyboardAction(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

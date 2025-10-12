@@ -148,7 +148,7 @@ public class TextArea extends RSyntaxTextArea {
     }
 
     private Color getConfigSyntaxHighlightingTokenColor(Config.Key key, String defaultValue) {
-        String hexColor = Prism.getInstance().config.getString(key, defaultValue);
+        String hexColor = prism.config.getString(key, defaultValue);
 
         try {
             return Color.decode(hexColor);

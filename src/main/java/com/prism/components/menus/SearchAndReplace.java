@@ -30,6 +30,8 @@ import com.prism.components.frames.WarningDialog;
 import com.prism.utils.ResourceUtil;
 
 public class SearchAndReplace extends JPanel {
+    public Prism prism = Prism.getInstance();
+
     private final  JExtendedTextField searchField;
     private final  JExtendedTextField replaceField;
     private final  JCheckBox caseSensitiveCheck;
@@ -181,7 +183,7 @@ public class SearchAndReplace extends JPanel {
     }
 
     private void findMatches() {
-        com.prism.components.textarea.TextArea textArea = Prism.getInstance().textAreaTabbedPane.getCurrentFile().getTextArea();
+        com.prism.components.textarea.TextArea textArea = prism.textAreaTabbedPane.getCurrentFile().getTextArea();
 
         String searchText = searchField.getText();
 
@@ -240,7 +242,7 @@ public class SearchAndReplace extends JPanel {
     }
 
     private void replaceMatch() {
-        com.prism.components.textarea.TextArea textArea = Prism.getInstance().textAreaTabbedPane.getCurrentFile().getTextArea();
+        com.prism.components.textarea.TextArea textArea = prism.textAreaTabbedPane.getCurrentFile().getTextArea();
 
         if (currentMatchIndex == -1 || matchPositions.isEmpty()) {
             return;
@@ -256,12 +258,12 @@ public class SearchAndReplace extends JPanel {
 
             findMatches();
         } catch (Exception ex) {
-            WarningDialog.showWarningDialog(Prism.getInstance(), ex);
+            WarningDialog.showWarningDialog(prism, ex);
         }
     }
 
     private int getMatchLength(int position) {
-        com.prism.components.textarea.TextArea textArea = Prism.getInstance().textAreaTabbedPane.getCurrentFile().getTextArea();
+        com.prism.components.textarea.TextArea textArea = prism.textAreaTabbedPane.getCurrentFile().getTextArea();
 
         String searchText = searchField.getText();
         String text = textArea.getText().substring(position);
@@ -274,7 +276,7 @@ public class SearchAndReplace extends JPanel {
     }
 
     private void highlightMatch() {
-        com.prism.components.textarea.TextArea textArea = Prism.getInstance().textAreaTabbedPane.getCurrentFile().getTextArea();
+        com.prism.components.textarea.TextArea textArea = prism.textAreaTabbedPane.getCurrentFile().getTextArea();
 
         if (currentMatchIndex == -1 || matchPositions.isEmpty()) {
             return;

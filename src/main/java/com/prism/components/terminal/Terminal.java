@@ -16,8 +16,8 @@ import com.prism.Prism;
 import com.prism.components.extended.JExtendedTextField;
 
 public class Terminal extends JPanel {
-
-    private Prism prism = Prism.getInstance();
+    public Prism prism = Prism.getInstance();
+    
     private JTextField dirPathLabel;
 
     private String currentDirectory = "";
