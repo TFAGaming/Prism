@@ -282,165 +282,165 @@ public class FileExplorer extends JTree {
 
     private class FileTransferHandler extends TransferHandler {
 
-    // Define the actions supported (COPY and MOVE)
-    @Override
-    public int getSourceActions(JComponent c) {
-        return MOVE;
-    }
-
-    // Prepare the data to be dragged (export)
-    @Override
-    protected Transferable createTransferable(JComponent c) {
-        JTree tree = (JTree) c;
-        // Get all selected file nodes
-        TreePath[] paths = tree.getSelectionPaths();
-
-        if (paths == null || paths.length == 0) {
-            return null;
+        // Define the actions supported (COPY and MOVE)
+        @Override
+        public int getSourceActions(JComponent c) {
+            return MOVE;
         }
 
-        List<File> filesToTransfer = new ArrayList<>();
-        for (TreePath path : paths) {
-            DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
-            Object userObject = node.getUserObject();
-            if (userObject instanceof File) {
-                filesToTransfer.add((File) userObject);
-            }
-        }
+        // Prepare the data to be dragged (export)
+        @Override
+        protected Transferable createTransferable(JComponent c) {
+            JTree tree = (JTree) c;
+            // Get all selected file nodes
+            TreePath[] paths = tree.getSelectionPaths();
 
-        if (filesToTransfer.isEmpty()) {
-            return null;
-        }
-
-        // Use the standard DataFlavor for a list of files
-        return new Transferable() {
-            @Override
-            public DataFlavor[] getTransferDataFlavors() {
-                return new DataFlavor[]{DataFlavor.javaFileListFlavor};
+            if (paths == null || paths.length == 0) {
+                return null;
             }
 
-            @Override
-            public boolean isDataFlavorSupported(DataFlavor flavor) {
-                return flavor.equals(DataFlavor.javaFileListFlavor);
-            }
-
-            @Override
-            public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
-                if (!isDataFlavorSupported(flavor)) {
-                    throw new UnsupportedFlavorException(flavor);
+            List<File> filesToTransfer = new ArrayList<>();
+            for (TreePath path : paths) {
+                DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
+                Object userObject = node.getUserObject();
+                if (userObject instanceof File) {
+                    filesToTransfer.add((File) userObject);
                 }
-                return filesToTransfer;
             }
-        };
-    }
-    
-    // Check if data can be dropped (import)
-    @Override
-    public boolean canImport(TransferSupport support) {
-        if (!support.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
-            return false;
-        }
-        
-        JTree.DropLocation dropLocation = (JTree.DropLocation) support.getDropLocation();
-        TreePath path = dropLocation.getPath();
 
-        if (path == null) {
-            // Cannot drop outside the tree structure
-            return false;
-        }
+            if (filesToTransfer.isEmpty()) {
+                return null;
+            }
 
-        DefaultMutableTreeNode targetNode = (DefaultMutableTreeNode) path.getLastPathComponent();
-        Object userObject = targetNode.getUserObject();
+            // Use the standard DataFlavor for a list of files
+            return new Transferable() {
+                @Override
+                public DataFlavor[] getTransferDataFlavors() {
+                    return new DataFlavor[]{DataFlavor.javaFileListFlavor};
+                }
 
-        if (userObject instanceof File) {
-            File targetFile = (File) userObject;
-            
-            // Allow dropping on a directory, or on a file (to get its parent directory)
-            if (targetFile.isDirectory() || targetFile.isFile()) {
-                 // Prevent dropping a folder into itself or its descendant
-                try {
-                    @SuppressWarnings("unchecked")
-                    List<File> draggedFiles = (List<File>) support.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
-                    
-                    for (File draggedFile : draggedFiles) {
-                        File dropDir = getDropDirectory(targetFile);
-                        
-                        // Check if the dragged file is an ancestor of the target directory
-                        if (draggedFile.isDirectory() && dropDir.toPath().startsWith(draggedFile.toPath())) {
-                            return false; // Cannot drop an ancestor into a descendant
-                        }
-                        
-                        // Prevent dropping a file to its own current directory
-                        if (dropDir.equals(draggedFile.getParentFile())) {
-                            return false; 
-                        }
+                @Override
+                public boolean isDataFlavorSupported(DataFlavor flavor) {
+                    return flavor.equals(DataFlavor.javaFileListFlavor);
+                }
+
+                @Override
+                public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
+                    if (!isDataFlavorSupported(flavor)) {
+                        throw new UnsupportedFlavorException(flavor);
                     }
-                } catch (Exception e) {
-                    return true;
+                    return filesToTransfer;
                 }
-                
-                return true;
-            }
+            };
         }
 
-        return false;
-    }
-
-    // Perform the drop action (import)
-    @Override
-    public boolean importData(TransferSupport support) {
-        if (!canImport(support)) {
-            return false;
-        }
-
-        JTree.DropLocation dropLocation = (JTree.DropLocation) support.getDropLocation();
-        TreePath path = dropLocation.getPath();
-        DefaultMutableTreeNode targetNode = (DefaultMutableTreeNode) path.getLastPathComponent();
-        File targetFile = (File) targetNode.getUserObject();
-        
-        // Determine the actual destination directory based on the user's request
-        File destinationDir = getDropDirectory(targetFile);
-
-        try {
-            @SuppressWarnings("unchecked")
-            List<File> filesToMove = (List<File>) support.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
-
-            boolean success = true;
-            for (File sourceFile : filesToMove) {
-                File newFile = new File(destinationDir, sourceFile.getName());
-                
-                // Move the file (rename is a move on the same file system)
-                if (!sourceFile.renameTo(newFile)) {
-                    // Fallback to copy/delete if rename fails (e.g., cross-filesystem move)
-                    try {
-                        Files.move(sourceFile.toPath(), newFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-                    } catch (IOException e) {
-                        success = false;
-                        break; 
-                    }
-                }
-            }
-            
-            if (success) {
-                prism.fileExplorer.refresh(); 
-                return true;
-            } else {
+        // Check if data can be dropped (import)
+        @Override
+        public boolean canImport(TransferSupport support) {
+            if (!support.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
                 return false;
             }
 
-        } catch (Exception e) {
+            JTree.DropLocation dropLocation = (JTree.DropLocation) support.getDropLocation();
+            TreePath path = dropLocation.getPath();
+
+            if (path == null) {
+                // Cannot drop outside the tree structure
+                return false;
+            }
+
+            DefaultMutableTreeNode targetNode = (DefaultMutableTreeNode) path.getLastPathComponent();
+            Object userObject = targetNode.getUserObject();
+
+            if (userObject instanceof File) {
+                File targetFile = (File) userObject;
+
+                // Allow dropping on a directory, or on a file (to get its parent directory)
+                if (targetFile.isDirectory() || targetFile.isFile()) {
+                    // Prevent dropping a folder into itself or its descendant
+                    try {
+                        @SuppressWarnings("unchecked")
+                        List<File> draggedFiles = (List<File>) support.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
+
+                        for (File draggedFile : draggedFiles) {
+                            File dropDir = getDropDirectory(targetFile);
+
+                            // Check if the dragged file is an ancestor of the target directory
+                            if (draggedFile.isDirectory() && dropDir.toPath().startsWith(draggedFile.toPath())) {
+                                return false; // Cannot drop an ancestor into a descendant
+                            }
+
+                            // Prevent dropping a file to its own current directory
+                            if (dropDir.equals(draggedFile.getParentFile())) {
+                                return false;
+                            }
+                        }
+                    } catch (Exception e) {
+                        return true;
+                    }
+
+                    return true;
+                }
+            }
+
             return false;
         }
-    }
-    
-    private File getDropDirectory(File targetFile) {
-        if (targetFile.isDirectory()) {
-            return targetFile;
-        } else {
-            return targetFile.getParentFile();
+
+        // Perform the drop action (import)
+        @Override
+        public boolean importData(TransferSupport support) {
+            if (!canImport(support)) {
+                return false;
+            }
+
+            JTree.DropLocation dropLocation = (JTree.DropLocation) support.getDropLocation();
+            TreePath path = dropLocation.getPath();
+            DefaultMutableTreeNode targetNode = (DefaultMutableTreeNode) path.getLastPathComponent();
+            File targetFile = (File) targetNode.getUserObject();
+
+            // Determine the actual destination directory based on the user's request
+            File destinationDir = getDropDirectory(targetFile);
+
+            try {
+                @SuppressWarnings("unchecked")
+                List<File> filesToMove = (List<File>) support.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
+
+                boolean success = true;
+                for (File sourceFile : filesToMove) {
+                    File newFile = new File(destinationDir, sourceFile.getName());
+
+                    // Move the file (rename is a move on the same file system)
+                    if (!sourceFile.renameTo(newFile)) {
+                        // Fallback to copy/delete if rename fails (e.g., cross-filesystem move)
+                        try {
+                            Files.move(sourceFile.toPath(), newFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                        } catch (IOException e) {
+                            success = false;
+                            break;
+                        }
+                    }
+                }
+
+                if (success) {
+                    prism.fileExplorer.refresh();
+                    return true;
+                } else {
+                    return false;
+                }
+
+            } catch (Exception e) {
+                return false;
+            }
+        }
+
+        private File getDropDirectory(File targetFile) {
+            if (targetFile.isDirectory()) {
+                return targetFile;
+            } else {
+                return targetFile.getParentFile();
+            }
         }
     }
-}
 
     public void refresh() {
         TreePath[] expandedPaths = getExpandedPaths();
@@ -482,6 +482,7 @@ public class FileExplorer extends JTree {
 
         Object[] oldComponents = oldPath.getPath();
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) getModel().getRoot();
+        DefaultTreeModel model = (DefaultTreeModel) getModel(); // Get model once
 
         java.util.List<Object> newPathList = new java.util.ArrayList<>();
         newPathList.add(root);
@@ -494,10 +495,13 @@ public class FileExplorer extends JTree {
 
             loadChildren(currentNode);
 
+            model.nodeStructureChanged(currentNode);
+
             boolean found = false;
             for (int j = 0; j < currentNode.getChildCount(); j++) {
                 DefaultMutableTreeNode child = (DefaultMutableTreeNode) currentNode.getChildAt(j);
                 File childFile = (File) child.getUserObject();
+
                 if (childFile.equals(oldFile)) {
                     currentNode = child;
                     newPathList.add(child);
@@ -507,13 +511,12 @@ public class FileExplorer extends JTree {
             }
 
             if (!found) {
-                break;
+                return;
             }
         }
 
-        TreePath newPath = new TreePath(newPathList.toArray());
-
         if (newPathList.size() == oldComponents.length) {
+            TreePath newPath = new TreePath(newPathList.toArray());
             expandPath(newPath);
         }
     }

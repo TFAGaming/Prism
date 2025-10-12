@@ -38,10 +38,10 @@ public class LowerSidebar extends JTabbedPane {
                         header.setText("Console");
                         break;
                     case 2:
-                        header.setText("Math");
+                        header.setText("Bookmarks");
                         break;
                     case 3:
-                        header.setText("Bookmarks");
+                        header.setText("Math");
                         break;
                     case 4:
                         header.setText("Error Logs");

@@ -33,6 +33,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
+import javax.swing.JViewport;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
@@ -316,6 +317,7 @@ public class TextAreaTabbedPane extends JTabbedPane {
     }
 
     public class ImagePanel extends JPanel {
+
         private BufferedImage image;
         private double scale = 1.0;
         private final String imagePath;
@@ -324,7 +326,7 @@ public class TextAreaTabbedPane extends JTabbedPane {
             this.imagePath = path;
             try {
                 this.image = ImageIO.read(new File(path));
-                
+
                 if (this.image == null) {
                     System.err.println("Error: Could not read image format for " + path);
                     createPlaceholderImage("Error reading image format.");
@@ -397,6 +399,7 @@ public class TextAreaTabbedPane extends JTabbedPane {
     }
 
     public class ImageViewerContainer extends JPanel {
+
         private final ImagePanel imagePanel;
         private final JLabel zoomLabel;
 
@@ -408,6 +411,8 @@ public class TextAreaTabbedPane extends JTabbedPane {
 
             JScrollPane scrollPane = new JScrollPane(imagePanel);
             scrollPane.setBorder(BorderFactory.createEmptyBorder());
+
+            addInteractiveListeners(scrollPane);
 
             JToolBar zoomBar = createZoomToolBar();
 
@@ -463,6 +468,25 @@ public class TextAreaTabbedPane extends JTabbedPane {
         private void updateZoomLabel() {
             int percent = (int) (imagePanel.getScale() * 100);
             zoomLabel.setText("Zoom: " + percent + "%");
+        }
+
+        private void addInteractiveListeners(JScrollPane scrollPane) {
+            imagePanel.addMouseWheelListener(e -> {
+                if (e.isControlDown()) {
+                    double newScale = imagePanel.getScale();
+                    int rotation = e.getWheelRotation();
+
+                    if (rotation < 0) {
+                        newScale *= 1.1;
+                    } else {
+                        newScale /= 1.1;
+                    }
+
+                    imagePanel.setScale(newScale);
+                    updateZoomLabel();
+                    e.consume();
+                }
+            });
         }
     }
 }

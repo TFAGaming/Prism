@@ -4,22 +4,28 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
+import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import javax.swing.border.EmptyBorder;
 
 import com.prism.Prism;
 import com.prism.components.extended.JExtendedTextField;
-import com.prism.components.frames.ErrorDialog;
 import com.prism.components.frames.WarningDialog;
 import com.prism.utils.ResourceUtil;
 
@@ -35,6 +41,11 @@ public class SearchAndReplace extends JPanel {
     private JButton replaceButton;
     private int currentMatchIndex = -1;
     private java.util.List<Integer> matchPositions;
+
+    // --- History Fields ---
+    private final List<String> searchHistory = new ArrayList<>();
+    private int historyIndex = -1;
+    // ----------------------
 
     public SearchAndReplace() {
         setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
@@ -98,7 +109,58 @@ public class SearchAndReplace extends JPanel {
         downButton.addActionListener((e) -> findNextMatch(false));
         replaceButton.addActionListener((e) -> replaceMatch());
         searchField.addActionListener((e) -> findMatches());
+
+        // --- Setup history navigation for the search field ---
+        setupSearchHistory();
+        // -----------------------------------------------------
     }
+    
+    // --- New method to setup key bindings for history ---
+    private void setupSearchHistory() {
+        InputMap inputMap = searchField.getInputMap(WHEN_FOCUSED);
+        ActionMap actionMap = searchField.getActionMap();
+
+        // Key Binding for UP arrow (Previous search term)
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), "historyUp");
+        actionMap.put("historyUp", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                navigateHistory(true); // true for 'Up' (backwards in history)
+            }
+        });
+
+        // Key Binding for DOWN arrow (Next search term)
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "historyDown");
+        actionMap.put("historyDown", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                navigateHistory(false); // false for 'Down' (forwards in history)
+            }
+        });
+    }
+
+    private void navigateHistory(boolean isUp) {
+        if (searchHistory.isEmpty()) {
+            return;
+        }
+
+        if (historyIndex == -1) {
+            // Start history from the last search term if the field is empty or user is navigating history for the first time
+            historyIndex = searchHistory.size() - 1;
+        } else {
+            if (isUp) {
+                // Move backwards (up in the history list)
+                historyIndex = (historyIndex - 1 + searchHistory.size()) % searchHistory.size();
+            } else {
+                // Move forwards (down in the history list)
+                historyIndex = (historyIndex + 1) % searchHistory.size();
+            }
+        }
+
+        // Display the selected history item
+        searchField.setText(searchHistory.get(historyIndex));
+    }
+    // --------------------------------------------------
 
     private JButton createButton(ImageIcon buttonIcon, String tooltip) {
         JButton button = new JButton();
@@ -124,18 +186,20 @@ public class SearchAndReplace extends JPanel {
         String searchText = searchField.getText();
 
         if (searchText.length() == 0) {
-            JOptionPane.showMessageDialog(this, "You cannot search an empty string!", "Warning", JOptionPane.WARNING_MESSAGE);
-
             return;
         }
+
+        // --- History Logic: Add unique, non-empty search text to history ---
+        if (!searchText.trim().isEmpty() && !searchHistory.contains(searchText)) {
+            searchHistory.add(searchText);
+            // After a new search, reset history index so next UP starts from the newest entry
+            historyIndex = -1;
+        }
+        // -------------------------------------------------------------------
 
         String text = textArea.getText();
         matchPositions = new java.util.ArrayList<>();
         currentMatchIndex = -1;
-
-        if (searchText.isEmpty()) {
-            return;
-        }
 
         int flags = caseSensitiveCheck.isSelected() ? 0 : Pattern.CASE_INSENSITIVE;
         Pattern pattern;
