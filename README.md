@@ -12,12 +12,13 @@
 - Smooth and responsive text rendering
 - Multiple tabs & sessions
 - Line numbers and auto-indentation
+- Autocomplete
 - Compiler error checker (upcoming)
 
 ### 2. Bookmarks & Navigation
 - Add bookmarks to key lines for quick navigation
 - Jump between definitions or markers
-- Quick file switcher & recent file list (upcoming)
+- Quick file switcher & recent file list
 
 ### 3. Code Outline
 - Real-time structural view of your code
@@ -38,12 +39,11 @@
 ### 7. File Explorer
 - Tree-style project view  
 - Quick open, move files, and file details
-- Drag-and-drop file support (upcoming)
+- Drag-and-drop file support
 
 ### 8. Plugins & Customization
-- Extensible plugin system (upcoming)  
-- Custom themes, icons, and layouts  (upcoming)
-- Configurable settings via JSON (upcoming)
+- Extensible plugin system 
+- Configurable settings via JSON
 
 ### 9. Performance
 - Built for speed with efficient Swing rendering  

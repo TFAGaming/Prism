@@ -478,7 +478,10 @@ public class Languages {
             "gitignore",
             "git",
             "npmignore",
-            "yarn"
+            "yarn",
+            "png",
+            "jpeg",
+            "jpg"
         };
 
         for (String ext : supportedExtensions) {
