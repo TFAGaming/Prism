@@ -44,9 +44,9 @@ public class TextDiffer extends JFrame {
             new DefaultHighlighter.DefaultHighlightPainter(new Color(255, 255, 150)); // Light Yellow
 
     public TextDiffer(File oldFile, String oldText, File file, String text) {
-        setTitle("Text Comparison");
+        setTitle("Text Comparison: " + file.getAbsolutePath());
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(1000, 800);
+        setSize(800, 600);
         setLocationRelativeTo(null);
 
         setIconImage(ResourceUtil.getIcon("icons/Prism.png").getImage());

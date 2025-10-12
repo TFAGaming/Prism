@@ -422,19 +422,19 @@ public class AboutPrism extends JFrame {
 
         String creditsText = """
                 Development Team:
-                - Alex Turner (Project Lead)
-                - Jamie Chen (Core Engineer)
-                - Morgan Riley (UI/UX Designer)
+                - TFAGaming (Project Lead)
 
                 Special Thanks:
-                - The Java Swing community for valuable resources and support.
+                - Eclipse, for the toolbar and file icons
 
-                Third-Party Libraries Used (Mock):
-                - Apache Commons (Data Utility) - Apache License 2.0
-                - FlatLaf (Optional Look and Feel) - MIT License
-                - SLF4J (Logging) - MIT License
+                Third-Party Libraries Used:
+                - Fifesoft: RSyntaxTextArea - BSD-3-Clause license
+                - Fifesoft: Autocomplete - BSD-3-Clause license
+                - Java Diff Utils - Apache-2.0 license
+                - FasterXML: Jackson databind - Apache-2.0 license
+                - Sean Leary: JSON Java (org.json) - Public Domain
 
-                Contact: support@example.com
+                Contact (Discord): tfagaming
                 """;
 
         JTextArea creditsArea = new JTextArea(creditsText);
@@ -442,7 +442,7 @@ public class AboutPrism extends JFrame {
         creditsArea.setFont(new Font("SansSerif", Font.PLAIN, 12));
         creditsArea.setBackground(panel.getBackground());
 
-        panel.add(new JLabel("Acknowledgements and Component Information:"), BorderLayout.NORTH);
+        panel.add(new JLabel("Acknowledgements and Information:"), BorderLayout.NORTH);
         panel.add(new JScrollPane(creditsArea), BorderLayout.CENTER);
 
         return panel;
