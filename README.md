@@ -1,9 +1,15 @@
 # Prism — Code Editor based on Java Swing
 
 > **Status:** 🚧 *Under active development* 🚧<br> 
-> **Platform:** Windows 7 x86-64 → Latest Windows release  
+> **Platform:** Windows 7 (x86-64) → Latest Windows release  
 
 **Prism** is an **open-source**, **lightweight**, **super-fast**, and **highly customizable** code editor built entirely with **Java Swing**. Designed for performance and simplicity, Prism aims to deliver a smooth editing experience for developers who prefer a native desktop editor without the overhead of large frameworks.
+
+**Prism** is software designed for low-end computers, especially for users who still continue using outdated operating system versions, such as Windows 7. The application keeps its simplicity, without AI integration, and especially its performance.
+
+If you currently have a device that has the ability to run other IDEs without any issues, then we recommend you not use Prism, unless you want to try it out!
+
+[Click here](#installation) to install Prism.
 
 ## Features
 
@@ -59,6 +65,8 @@
 
 Go to [releases](https://github.com/TFAGaming/Prism/releases/), choose which version you want to download, click on **Assets**, and then click on the installer file (like `Prism_Setup_x64_build_07.10.2025.exe`) to download it. When the download finishes, double-click on it to install Prism.
 
+The **Java Runtime Environment** (**JRE**), SE 21, is bundled within the application's installer. There is no need to worry if you have an outdated Java version or have never installed Java before.
+
 <details>
 <summary>Installation Screenshot</summary>
 
@@ -66,6 +74,8 @@ Go to [releases](https://github.com/TFAGaming/Prism/releases/), choose which ver
 </details>
 
 ## Screenshots
+
+#### Windows 7 Home Basic Service Pack 1 (64-bit)
 
 <img src="./assets/screenshot-win7-1.png">
 
