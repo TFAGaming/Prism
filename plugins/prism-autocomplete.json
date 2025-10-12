@@ -1,0 +1,1652 @@
+{
+  "autocomplete" : {
+    "TypeScript" : {
+      "shorthand" : [ ],
+      "basic" : [ {
+        "keyword" : "abstract",
+        "type" : "keyword"
+      }, {
+        "keyword" : "any",
+        "type" : "datatype"
+      }, {
+        "keyword" : "as",
+        "type" : "keyword"
+      }, {
+        "keyword" : "asserts",
+        "type" : "keyword"
+      }, {
+        "keyword" : "await",
+        "type" : "keyword"
+      }, {
+        "keyword" : "bigint",
+        "type" : "datatype"
+      }, {
+        "keyword" : "boolean",
+        "type" : "datatype"
+      }, {
+        "keyword" : "break",
+        "type" : "keyword"
+      }, {
+        "keyword" : "case",
+        "type" : "keyword"
+      }, {
+        "keyword" : "catch",
+        "type" : "keyword"
+      }, {
+        "keyword" : "class",
+        "type" : "keyword"
+      }, {
+        "keyword" : "const",
+        "type" : "keyword"
+      }, {
+        "keyword" : "continue",
+        "type" : "keyword"
+      }, {
+        "keyword" : "debugger",
+        "type" : "keyword"
+      }, {
+        "keyword" : "declare",
+        "type" : "keyword"
+      }, {
+        "keyword" : "default",
+        "type" : "keyword"
+      }, {
+        "keyword" : "delete",
+        "type" : "keyword"
+      }, {
+        "keyword" : "do",
+        "type" : "keyword"
+      }, {
+        "keyword" : "else",
+        "type" : "keyword"
+      }, {
+        "keyword" : "enum",
+        "type" : "keyword"
+      }, {
+        "keyword" : "export",
+        "type" : "keyword"
+      }, {
+        "keyword" : "extends",
+        "type" : "keyword"
+      }, {
+        "keyword" : "false",
+        "type" : "literal"
+      }, {
+        "keyword" : "finally",
+        "type" : "keyword"
+      }, {
+        "keyword" : "for",
+        "type" : "keyword"
+      }, {
+        "keyword" : "function",
+        "type" : "keyword"
+      }, {
+        "keyword" : "global",
+        "type" : "keyword"
+      }, {
+        "keyword" : "if",
+        "type" : "keyword"
+      }, {
+        "keyword" : "implements",
+        "type" : "keyword"
+      }, {
+        "keyword" : "import",
+        "type" : "keyword"
+      }, {
+        "keyword" : "in",
+        "type" : "keyword"
+      }, {
+        "keyword" : "infer",
+        "type" : "keyword"
+      }, {
+        "keyword" : "instanceof",
+        "type" : "keyword"
+      }, {
+        "keyword" : "interface",
+        "type" : "keyword"
+      }, {
+        "keyword" : "intrinsic",
+        "type" : "keyword"
+      }, {
+        "keyword" : "is",
+        "type" : "keyword"
+      }, {
+        "keyword" : "keyof",
+        "type" : "keyword"
+      }, {
+        "keyword" : "let",
+        "type" : "keyword"
+      }, {
+        "keyword" : "module",
+        "type" : "keyword"
+      }, {
+        "keyword" : "namespace",
+        "type" : "keyword"
+      }, {
+        "keyword" : "never",
+        "type" : "datatype"
+      }, {
+        "keyword" : "new",
+        "type" : "keyword"
+      }, {
+        "keyword" : "null",
+        "type" : "literal"
+      }, {
+        "keyword" : "number",
+        "type" : "datatype"
+      }, {
+        "keyword" : "object",
+        "type" : "datatype"
+      }, {
+        "keyword" : "override",
+        "type" : "keyword"
+      }, {
+        "keyword" : "package",
+        "type" : "keyword"
+      }, {
+        "keyword" : "private",
+        "type" : "keyword"
+      }, {
+        "keyword" : "protected",
+        "type" : "keyword"
+      }, {
+        "keyword" : "public",
+        "type" : "keyword"
+      }, {
+        "keyword" : "readonly",
+        "type" : "keyword"
+      }, {
+        "keyword" : "require",
+        "type" : "keyword"
+      }, {
+        "keyword" : "return",
+        "type" : "keyword"
+      }, {
+        "keyword" : "satisfies",
+        "type" : "keyword"
+      }, {
+        "keyword" : "static",
+        "type" : "keyword"
+      }, {
+        "keyword" : "string",
+        "type" : "datatype"
+      }, {
+        "keyword" : "super",
+        "type" : "keyword"
+      }, {
+        "keyword" : "switch",
+        "type" : "keyword"
+      }, {
+        "keyword" : "symbol",
+        "type" : "datatype"
+      }, {
+        "keyword" : "this",
+        "type" : "keyword"
+      }, {
+        "keyword" : "throw",
+        "type" : "keyword"
+      }, {
+        "keyword" : "true",
+        "type" : "literal"
+      }, {
+        "keyword" : "try",
+        "type" : "keyword"
+      }, {
+        "keyword" : "type",
+        "type" : "keyword"
+      }, {
+        "keyword" : "typeof",
+        "type" : "keyword"
+      }, {
+        "keyword" : "undefined",
+        "type" : "literal"
+      }, {
+        "keyword" : "unique",
+        "type" : "keyword"
+      }, {
+        "keyword" : "unknown",
+        "type" : "datatype"
+      }, {
+        "keyword" : "var",
+        "type" : "keyword"
+      }, {
+        "keyword" : "void",
+        "type" : "datatype"
+      }, {
+        "keyword" : "while",
+        "type" : "keyword"
+      }, {
+        "keyword" : "with",
+        "type" : "keyword"
+      }, {
+        "keyword" : "yield",
+        "type" : "keyword"
+      }, {
+        "keyword" : "async",
+        "type" : "keyword"
+      }, {
+        "keyword" : "Record",
+        "type" : "datatype"
+      }, {
+        "keyword" : "Partial",
+        "type" : "datatype"
+      }, {
+        "keyword" : "Readonly",
+        "type" : "datatype"
+      }, {
+        "keyword" : "Array",
+        "type" : "datatype"
+      }, {
+        "keyword" : "Promise",
+        "type" : "datatype"
+      }, {
+        "keyword" : "Map",
+        "type" : "datatype"
+      }, {
+        "keyword" : "Set",
+        "type" : "datatype"
+      } ]
+    },
+    "Golang" : {
+      "shorthand" : [ ],
+      "basic" : [ {
+        "keyword" : "break",
+        "type" : "keyword"
+      }, {
+        "keyword" : "case",
+        "type" : "keyword"
+      }, {
+        "keyword" : "chan",
+        "type" : "datatype"
+      }, {
+        "keyword" : "const",
+        "type" : "keyword"
+      }, {
+        "keyword" : "continue",
+        "type" : "keyword"
+      }, {
+        "keyword" : "default",
+        "type" : "keyword"
+      }, {
+        "keyword" : "defer",
+        "type" : "keyword"
+      }, {
+        "keyword" : "else",
+        "type" : "keyword"
+      }, {
+        "keyword" : "fallthrough",
+        "type" : "keyword"
+      }, {
+        "keyword" : "for",
+        "type" : "keyword"
+      }, {
+        "keyword" : "func",
+        "type" : "keyword"
+      }, {
+        "keyword" : "go",
+        "type" : "keyword"
+      }, {
+        "keyword" : "goto",
+        "type" : "keyword"
+      }, {
+        "keyword" : "if",
+        "type" : "keyword"
+      }, {
+        "keyword" : "import",
+        "type" : "keyword"
+      }, {
+        "keyword" : "interface",
+        "type" : "keyword"
+      }, {
+        "keyword" : "map",
+        "type" : "datatype"
+      }, {
+        "keyword" : "package",
+        "type" : "keyword"
+      }, {
+        "keyword" : "range",
+        "type" : "keyword"
+      }, {
+        "keyword" : "return",
+        "type" : "keyword"
+      }, {
+        "keyword" : "select",
+        "type" : "keyword"
+      }, {
+        "keyword" : "struct",
+        "type" : "keyword"
+      }, {
+        "keyword" : "switch",
+        "type" : "keyword"
+      }, {
+        "keyword" : "type",
+        "type" : "keyword"
+      }, {
+        "keyword" : "var",
+        "type" : "keyword"
+      }, {
+        "keyword" : "int",
+        "type" : "datatype"
+      }, {
+        "keyword" : "int8",
+        "type" : "datatype"
+      }, {
+        "keyword" : "int16",
+        "type" : "datatype"
+      }, {
+        "keyword" : "int32",
+        "type" : "datatype"
+      }, {
+        "keyword" : "int64",
+        "type" : "datatype"
+      }, {
+        "keyword" : "uint",
+        "type" : "datatype"
+      }, {
+        "keyword" : "uint8",
+        "type" : "datatype"
+      }, {
+        "keyword" : "uint16",
+        "type" : "datatype"
+      }, {
+        "keyword" : "uint32",
+        "type" : "datatype"
+      }, {
+        "keyword" : "uint64",
+        "type" : "datatype"
+      }, {
+        "keyword" : "uintptr",
+        "type" : "datatype"
+      }, {
+        "keyword" : "byte",
+        "type" : "datatype"
+      }, {
+        "keyword" : "rune",
+        "type" : "datatype"
+      }, {
+        "keyword" : "float32",
+        "type" : "datatype"
+      }, {
+        "keyword" : "float64",
+        "type" : "datatype"
+      }, {
+        "keyword" : "complex64",
+        "type" : "datatype"
+      }, {
+        "keyword" : "complex128",
+        "type" : "datatype"
+      }, {
+        "keyword" : "string",
+        "type" : "datatype"
+      }, {
+        "keyword" : "bool",
+        "type" : "datatype"
+      }, {
+        "keyword" : "error",
+        "type" : "datatype"
+      }, {
+        "keyword" : "interface{}",
+        "type" : "datatype"
+      }, {
+        "keyword" : "slice",
+        "type" : "datatype"
+      }, {
+        "keyword" : "nil",
+        "type" : "literal"
+      }, {
+        "keyword" : "true",
+        "type" : "literal"
+      }, {
+        "keyword" : "false",
+        "type" : "literal"
+      }, {
+        "keyword" : "iota",
+        "type" : "literal"
+      } ]
+    },
+    "Java" : {
+      "shorthand" : [ {
+        "input" : "sysout",
+        "description" : "System.out.println(",
+        "replacement" : "System.out.println("
+      }, {
+        "input" : "syserr",
+        "description" : "System.err.println(",
+        "replacement" : "System.err.println("
+      } ],
+      "basic" : [ {
+        "keyword" : "abstract",
+        "type" : "keyword"
+      }, {
+        "keyword" : "assert",
+        "type" : "keyword"
+      }, {
+        "keyword" : "boolean",
+        "type" : "keyword"
+      }, {
+        "keyword" : "break",
+        "type" : "keyword"
+      }, {
+        "keyword" : "byte",
+        "type" : "keyword"
+      }, {
+        "keyword" : "case",
+        "type" : "keyword"
+      }, {
+        "keyword" : "catch",
+        "type" : "keyword"
+      }, {
+        "keyword" : "char",
+        "type" : "keyword"
+      }, {
+        "keyword" : "class",
+        "type" : "keyword"
+      }, {
+        "keyword" : "const",
+        "type" : "keyword"
+      }, {
+        "keyword" : "continue",
+        "type" : "keyword"
+      }, {
+        "keyword" : "default",
+        "type" : "keyword"
+      }, {
+        "keyword" : "do",
+        "type" : "keyword"
+      }, {
+        "keyword" : "double",
+        "type" : "keyword"
+      }, {
+        "keyword" : "else",
+        "type" : "keyword"
+      }, {
+        "keyword" : "enum",
+        "type" : "keyword"
+      }, {
+        "keyword" : "extends",
+        "type" : "keyword"
+      }, {
+        "keyword" : "final",
+        "type" : "keyword"
+      }, {
+        "keyword" : "finally",
+        "type" : "keyword"
+      }, {
+        "keyword" : "float",
+        "type" : "keyword"
+      }, {
+        "keyword" : "for",
+        "type" : "keyword"
+      }, {
+        "keyword" : "if",
+        "type" : "keyword"
+      }, {
+        "keyword" : "goto",
+        "type" : "keyword"
+      }, {
+        "keyword" : "implements",
+        "type" : "keyword"
+      }, {
+        "keyword" : "import",
+        "type" : "keyword"
+      }, {
+        "keyword" : "instanceof",
+        "type" : "keyword"
+      }, {
+        "keyword" : "int",
+        "type" : "keyword"
+      }, {
+        "keyword" : "interface",
+        "type" : "keyword"
+      }, {
+        "keyword" : "long",
+        "type" : "keyword"
+      }, {
+        "keyword" : "native",
+        "type" : "keyword"
+      }, {
+        "keyword" : "new",
+        "type" : "keyword"
+      }, {
+        "keyword" : "package",
+        "type" : "keyword"
+      }, {
+        "keyword" : "private",
+        "type" : "keyword"
+      }, {
+        "keyword" : "protected",
+        "type" : "keyword"
+      }, {
+        "keyword" : "public",
+        "type" : "keyword"
+      }, {
+        "keyword" : "return",
+        "type" : "keyword"
+      }, {
+        "keyword" : "short",
+        "type" : "keyword"
+      }, {
+        "keyword" : "static",
+        "type" : "keyword"
+      }, {
+        "keyword" : "strictfp",
+        "type" : "keyword"
+      }, {
+        "keyword" : "super",
+        "type" : "keyword"
+      }, {
+        "keyword" : "switch",
+        "type" : "keyword"
+      }, {
+        "keyword" : "synchronized",
+        "type" : "keyword"
+      }, {
+        "keyword" : "this",
+        "type" : "keyword"
+      }, {
+        "keyword" : "throw",
+        "type" : "keyword"
+      }, {
+        "keyword" : "throws",
+        "type" : "keyword"
+      }, {
+        "keyword" : "transient",
+        "type" : "keyword"
+      }, {
+        "keyword" : "try",
+        "type" : "keyword"
+      }, {
+        "keyword" : "void",
+        "type" : "keyword"
+      }, {
+        "keyword" : "volatile",
+        "type" : "keyword"
+      }, {
+        "keyword" : "while",
+        "type" : "keyword"
+      }, {
+        "keyword" : "sealed",
+        "type" : "keyword"
+      }, {
+        "keyword" : "non-sealed",
+        "type" : "keyword"
+      }, {
+        "keyword" : "permits",
+        "type" : "keyword"
+      }, {
+        "keyword" : "record",
+        "type" : "keyword"
+      }, {
+        "keyword" : "var",
+        "type" : "keyword"
+      }, {
+        "keyword" : "yield",
+        "type" : "keyword"
+      }, {
+        "keyword" : "module",
+        "type" : "keyword"
+      }, {
+        "keyword" : "opens",
+        "type" : "keyword"
+      }, {
+        "keyword" : "exports",
+        "type" : "keyword"
+      }, {
+        "keyword" : "requires",
+        "type" : "keyword"
+      }, {
+        "keyword" : "provides",
+        "type" : "keyword"
+      }, {
+        "keyword" : "uses",
+        "type" : "keyword"
+      }, {
+        "keyword" : "with",
+        "type" : "keyword"
+      }, {
+        "keyword" : "to",
+        "type" : "keyword"
+      }, {
+        "keyword" : "transitive",
+        "type" : "keyword"
+      }, {
+        "keyword" : "String",
+        "type" : "datatype"
+      }, {
+        "keyword" : "Object",
+        "type" : "datatype"
+      }, {
+        "keyword" : "Integer",
+        "type" : "datatype"
+      }, {
+        "keyword" : "Long",
+        "type" : "datatype"
+      }, {
+        "keyword" : "Short",
+        "type" : "datatype"
+      }, {
+        "keyword" : "Byte",
+        "type" : "datatype"
+      }, {
+        "keyword" : "Character",
+        "type" : "datatype"
+      }, {
+        "keyword" : "Double",
+        "type" : "datatype"
+      }, {
+        "keyword" : "Float",
+        "type" : "datatype"
+      }, {
+        "keyword" : "Boolean",
+        "type" : "datatype"
+      }, {
+        "keyword" : "Void",
+        "type" : "datatype"
+      }, {
+        "keyword" : "List",
+        "type" : "datatype"
+      }, {
+        "keyword" : "Map",
+        "type" : "datatype"
+      }, {
+        "keyword" : "Set",
+        "type" : "datatype"
+      }, {
+        "keyword" : "Optional",
+        "type" : "datatype"
+      }, {
+        "keyword" : "Stream",
+        "type" : "datatype"
+      }, {
+        "keyword" : "null",
+        "type" : "literal"
+      }, {
+        "keyword" : "true",
+        "type" : "literal"
+      }, {
+        "keyword" : "false",
+        "type" : "literal"
+      } ]
+    },
+    "C++" : {
+      "shorthand" : [ ],
+      "basic" : [ {
+        "keyword" : "asm",
+        "type" : "keyword"
+      }, {
+        "keyword" : "auto",
+        "type" : "keyword"
+      }, {
+        "keyword" : "break",
+        "type" : "keyword"
+      }, {
+        "keyword" : "case",
+        "type" : "keyword"
+      }, {
+        "keyword" : "catch",
+        "type" : "keyword"
+      }, {
+        "keyword" : "char",
+        "type" : "datatype"
+      }, {
+        "keyword" : "class",
+        "type" : "keyword"
+      }, {
+        "keyword" : "const",
+        "type" : "keyword"
+      }, {
+        "keyword" : "const_cast",
+        "type" : "keyword"
+      }, {
+        "keyword" : "continue",
+        "type" : "keyword"
+      }, {
+        "keyword" : "default",
+        "type" : "keyword"
+      }, {
+        "keyword" : "delete",
+        "type" : "keyword"
+      }, {
+        "keyword" : "do",
+        "type" : "keyword"
+      }, {
+        "keyword" : "double",
+        "type" : "datatype"
+      }, {
+        "keyword" : "dynamic_cast",
+        "type" : "keyword"
+      }, {
+        "keyword" : "else",
+        "type" : "keyword"
+      }, {
+        "keyword" : "enum",
+        "type" : "keyword"
+      }, {
+        "keyword" : "explicit",
+        "type" : "keyword"
+      }, {
+        "keyword" : "export",
+        "type" : "keyword"
+      }, {
+        "keyword" : "extern",
+        "type" : "keyword"
+      }, {
+        "keyword" : "false",
+        "type" : "literal"
+      }, {
+        "keyword" : "float",
+        "type" : "datatype"
+      }, {
+        "keyword" : "for",
+        "type" : "keyword"
+      }, {
+        "keyword" : "friend",
+        "type" : "keyword"
+      }, {
+        "keyword" : "goto",
+        "type" : "keyword"
+      }, {
+        "keyword" : "if",
+        "type" : "keyword"
+      }, {
+        "keyword" : "inline",
+        "type" : "keyword"
+      }, {
+        "keyword" : "int",
+        "type" : "datatype"
+      }, {
+        "keyword" : "long",
+        "type" : "datatype"
+      }, {
+        "keyword" : "mutable",
+        "type" : "keyword"
+      }, {
+        "keyword" : "namespace",
+        "type" : "keyword"
+      }, {
+        "keyword" : "new",
+        "type" : "keyword"
+      }, {
+        "keyword" : "operator",
+        "type" : "keyword"
+      }, {
+        "keyword" : "private",
+        "type" : "keyword"
+      }, {
+        "keyword" : "protected",
+        "type" : "keyword"
+      }, {
+        "keyword" : "public",
+        "type" : "keyword"
+      }, {
+        "keyword" : "register",
+        "type" : "keyword"
+      }, {
+        "keyword" : "reinterpret_cast",
+        "type" : "keyword"
+      }, {
+        "keyword" : "return",
+        "type" : "keyword"
+      }, {
+        "keyword" : "short",
+        "type" : "datatype"
+      }, {
+        "keyword" : "signed",
+        "type" : "keyword"
+      }, {
+        "keyword" : "sizeof",
+        "type" : "keyword"
+      }, {
+        "keyword" : "static",
+        "type" : "keyword"
+      }, {
+        "keyword" : "static_cast",
+        "type" : "keyword"
+      }, {
+        "keyword" : "struct",
+        "type" : "keyword"
+      }, {
+        "keyword" : "switch",
+        "type" : "keyword"
+      }, {
+        "keyword" : "template",
+        "type" : "keyword"
+      }, {
+        "keyword" : "this",
+        "type" : "keyword"
+      }, {
+        "keyword" : "throw",
+        "type" : "keyword"
+      }, {
+        "keyword" : "true",
+        "type" : "literal"
+      }, {
+        "keyword" : "try",
+        "type" : "keyword"
+      }, {
+        "keyword" : "typedef",
+        "type" : "keyword"
+      }, {
+        "keyword" : "typeid",
+        "type" : "keyword"
+      }, {
+        "keyword" : "typename",
+        "type" : "keyword"
+      }, {
+        "keyword" : "union",
+        "type" : "keyword"
+      }, {
+        "keyword" : "unsigned",
+        "type" : "keyword"
+      }, {
+        "keyword" : "using",
+        "type" : "keyword"
+      }, {
+        "keyword" : "virtual",
+        "type" : "keyword"
+      }, {
+        "keyword" : "void",
+        "type" : "datatype"
+      }, {
+        "keyword" : "volatile",
+        "type" : "keyword"
+      }, {
+        "keyword" : "wchar_t",
+        "type" : "datatype"
+      }, {
+        "keyword" : "while",
+        "type" : "keyword"
+      }, {
+        "keyword" : "concept",
+        "type" : "keyword"
+      }, {
+        "keyword" : "requires",
+        "type" : "keyword"
+      }, {
+        "keyword" : "consteval",
+        "type" : "keyword"
+      }, {
+        "keyword" : "constinit",
+        "type" : "keyword"
+      }, {
+        "keyword" : "co_await",
+        "type" : "keyword"
+      }, {
+        "keyword" : "co_return",
+        "type" : "keyword"
+      }, {
+        "keyword" : "co_yield",
+        "type" : "keyword"
+      }, {
+        "keyword" : "char8_t",
+        "type" : "keyword"
+      }, {
+        "keyword" : "import",
+        "type" : "keyword"
+      }, {
+        "keyword" : "module",
+        "type" : "keyword"
+      }, {
+        "keyword" : "bool",
+        "type" : "datatype"
+      }, {
+        "keyword" : "size_t",
+        "type" : "datatype"
+      }, {
+        "keyword" : "ptrdiff_t",
+        "type" : "datatype"
+      }, {
+        "keyword" : "std::string",
+        "type" : "datatype"
+      }, {
+        "keyword" : "std::vector",
+        "type" : "datatype"
+      }, {
+        "keyword" : "std::map",
+        "type" : "datatype"
+      }, {
+        "keyword" : "nullptr",
+        "type" : "literal"
+      } ]
+    },
+    "Rust" : {
+      "shorthand" : [ ],
+      "basic" : [ {
+        "keyword" : "as",
+        "type" : "keyword"
+      }, {
+        "keyword" : "break",
+        "type" : "keyword"
+      }, {
+        "keyword" : "const",
+        "type" : "keyword"
+      }, {
+        "keyword" : "continue",
+        "type" : "keyword"
+      }, {
+        "keyword" : "crate",
+        "type" : "keyword"
+      }, {
+        "keyword" : "else",
+        "type" : "keyword"
+      }, {
+        "keyword" : "enum",
+        "type" : "keyword"
+      }, {
+        "keyword" : "extern",
+        "type" : "keyword"
+      }, {
+        "keyword" : "false",
+        "type" : "literal"
+      }, {
+        "keyword" : "fn",
+        "type" : "keyword"
+      }, {
+        "keyword" : "for",
+        "type" : "keyword"
+      }, {
+        "keyword" : "if",
+        "type" : "keyword"
+      }, {
+        "keyword" : "impl",
+        "type" : "keyword"
+      }, {
+        "keyword" : "in",
+        "type" : "keyword"
+      }, {
+        "keyword" : "let",
+        "type" : "keyword"
+      }, {
+        "keyword" : "loop",
+        "type" : "keyword"
+      }, {
+        "keyword" : "match",
+        "type" : "keyword"
+      }, {
+        "keyword" : "mod",
+        "type" : "keyword"
+      }, {
+        "keyword" : "move",
+        "type" : "keyword"
+      }, {
+        "keyword" : "mut",
+        "type" : "keyword"
+      }, {
+        "keyword" : "pub",
+        "type" : "keyword"
+      }, {
+        "keyword" : "ref",
+        "type" : "keyword"
+      }, {
+        "keyword" : "return",
+        "type" : "keyword"
+      }, {
+        "keyword" : "self",
+        "type" : "keyword"
+      }, {
+        "keyword" : "static",
+        "type" : "keyword"
+      }, {
+        "keyword" : "struct",
+        "type" : "keyword"
+      }, {
+        "keyword" : "super",
+        "type" : "keyword"
+      }, {
+        "keyword" : "trait",
+        "type" : "keyword"
+      }, {
+        "keyword" : "true",
+        "type" : "literal"
+      }, {
+        "keyword" : "type",
+        "type" : "keyword"
+      }, {
+        "keyword" : "unsafe",
+        "type" : "keyword"
+      }, {
+        "keyword" : "use",
+        "type" : "keyword"
+      }, {
+        "keyword" : "where",
+        "type" : "keyword"
+      }, {
+        "keyword" : "while",
+        "type" : "keyword"
+      }, {
+        "keyword" : "async",
+        "type" : "keyword"
+      }, {
+        "keyword" : "await",
+        "type" : "keyword"
+      }, {
+        "keyword" : "dyn",
+        "type" : "keyword"
+      }, {
+        "keyword" : "try",
+        "type" : "keyword"
+      }, {
+        "keyword" : "union",
+        "type" : "keyword"
+      }, {
+        "keyword" : "Self",
+        "type" : "keyword"
+      }, {
+        "keyword" : "box",
+        "type" : "keyword"
+      }, {
+        "keyword" : "i8",
+        "type" : "datatype"
+      }, {
+        "keyword" : "i16",
+        "type" : "datatype"
+      }, {
+        "keyword" : "i32",
+        "type" : "datatype"
+      }, {
+        "keyword" : "i64",
+        "type" : "datatype"
+      }, {
+        "keyword" : "i128",
+        "type" : "datatype"
+      }, {
+        "keyword" : "isize",
+        "type" : "datatype"
+      }, {
+        "keyword" : "u8",
+        "type" : "datatype"
+      }, {
+        "keyword" : "u16",
+        "type" : "datatype"
+      }, {
+        "keyword" : "u32",
+        "type" : "datatype"
+      }, {
+        "keyword" : "u64",
+        "type" : "datatype"
+      }, {
+        "keyword" : "u128",
+        "type" : "datatype"
+      }, {
+        "keyword" : "usize",
+        "type" : "datatype"
+      }, {
+        "keyword" : "f32",
+        "type" : "datatype"
+      }, {
+        "keyword" : "f64",
+        "type" : "datatype"
+      }, {
+        "keyword" : "bool",
+        "type" : "datatype"
+      }, {
+        "keyword" : "char",
+        "type" : "datatype"
+      }, {
+        "keyword" : "str",
+        "type" : "datatype"
+      }, {
+        "keyword" : "String",
+        "type" : "datatype"
+      }, {
+        "keyword" : "Vec",
+        "type" : "datatype"
+      }, {
+        "keyword" : "Option",
+        "type" : "datatype"
+      }, {
+        "keyword" : "Result",
+        "type" : "datatype"
+      }, {
+        "keyword" : "Box",
+        "type" : "datatype"
+      }, {
+        "keyword" : "None",
+        "type" : "literal"
+      }, {
+        "keyword" : "Some",
+        "type" : "literal"
+      }, {
+        "keyword" : "Ok",
+        "type" : "literal"
+      }, {
+        "keyword" : "Err",
+        "type" : "literal"
+      } ]
+    },
+    "JavaScript" : {
+      "shorthand" : [ ],
+      "basic" : [ {
+        "keyword" : "await",
+        "type" : "keyword"
+      }, {
+        "keyword" : "break",
+        "type" : "keyword"
+      }, {
+        "keyword" : "case",
+        "type" : "keyword"
+      }, {
+        "keyword" : "catch",
+        "type" : "keyword"
+      }, {
+        "keyword" : "class",
+        "type" : "keyword"
+      }, {
+        "keyword" : "const",
+        "type" : "keyword"
+      }, {
+        "keyword" : "continue",
+        "type" : "keyword"
+      }, {
+        "keyword" : "debugger",
+        "type" : "keyword"
+      }, {
+        "keyword" : "default",
+        "type" : "keyword"
+      }, {
+        "keyword" : "delete",
+        "type" : "keyword"
+      }, {
+        "keyword" : "do",
+        "type" : "keyword"
+      }, {
+        "keyword" : "else",
+        "type" : "keyword"
+      }, {
+        "keyword" : "enum",
+        "type" : "keyword"
+      }, {
+        "keyword" : "export",
+        "type" : "keyword"
+      }, {
+        "keyword" : "extends",
+        "type" : "keyword"
+      }, {
+        "keyword" : "false",
+        "type" : "literal"
+      }, {
+        "keyword" : "finally",
+        "type" : "keyword"
+      }, {
+        "keyword" : "for",
+        "type" : "keyword"
+      }, {
+        "keyword" : "function",
+        "type" : "keyword"
+      }, {
+        "keyword" : "if",
+        "type" : "keyword"
+      }, {
+        "keyword" : "implements",
+        "type" : "keyword"
+      }, {
+        "keyword" : "import",
+        "type" : "keyword"
+      }, {
+        "keyword" : "in",
+        "type" : "keyword"
+      }, {
+        "keyword" : "instanceof",
+        "type" : "keyword"
+      }, {
+        "keyword" : "interface",
+        "type" : "keyword"
+      }, {
+        "keyword" : "let",
+        "type" : "keyword"
+      }, {
+        "keyword" : "new",
+        "type" : "keyword"
+      }, {
+        "keyword" : "null",
+        "type" : "literal"
+      }, {
+        "keyword" : "package",
+        "type" : "keyword"
+      }, {
+        "keyword" : "private",
+        "type" : "keyword"
+      }, {
+        "keyword" : "protected",
+        "type" : "keyword"
+      }, {
+        "keyword" : "public",
+        "type" : "keyword"
+      }, {
+        "keyword" : "return",
+        "type" : "keyword"
+      }, {
+        "keyword" : "static",
+        "type" : "keyword"
+      }, {
+        "keyword" : "super",
+        "type" : "keyword"
+      }, {
+        "keyword" : "switch",
+        "type" : "keyword"
+      }, {
+        "keyword" : "this",
+        "type" : "keyword"
+      }, {
+        "keyword" : "throw",
+        "type" : "keyword"
+      }, {
+        "keyword" : "true",
+        "type" : "literal"
+      }, {
+        "keyword" : "try",
+        "type" : "keyword"
+      }, {
+        "keyword" : "typeof",
+        "type" : "keyword"
+      }, {
+        "keyword" : "var",
+        "type" : "keyword"
+      }, {
+        "keyword" : "void",
+        "type" : "keyword"
+      }, {
+        "keyword" : "while",
+        "type" : "keyword"
+      }, {
+        "keyword" : "with",
+        "type" : "keyword"
+      }, {
+        "keyword" : "yield",
+        "type" : "keyword"
+      }, {
+        "keyword" : "async",
+        "type" : "keyword"
+      }, {
+        "keyword" : "eval",
+        "type" : "keyword"
+      }, {
+        "keyword" : "arguments",
+        "type" : "keyword"
+      }, {
+        "keyword" : "constructor",
+        "type" : "keyword"
+      }, {
+        "keyword" : "Array",
+        "type" : "datatype"
+      }, {
+        "keyword" : "Object",
+        "type" : "datatype"
+      }, {
+        "keyword" : "Number",
+        "type" : "datatype"
+      }, {
+        "keyword" : "String",
+        "type" : "datatype"
+      }, {
+        "keyword" : "Boolean",
+        "type" : "datatype"
+      }, {
+        "keyword" : "Symbol",
+        "type" : "datatype"
+      }, {
+        "keyword" : "BigInt",
+        "type" : "datatype"
+      }, {
+        "keyword" : "Map",
+        "type" : "datatype"
+      }, {
+        "keyword" : "Set",
+        "type" : "datatype"
+      }, {
+        "keyword" : "WeakMap",
+        "type" : "datatype"
+      }, {
+        "keyword" : "WeakSet",
+        "type" : "datatype"
+      }, {
+        "keyword" : "Promise",
+        "type" : "datatype"
+      }, {
+        "keyword" : "JSON",
+        "type" : "datatype"
+      }, {
+        "keyword" : "Math",
+        "type" : "datatype"
+      }, {
+        "keyword" : "Date",
+        "type" : "datatype"
+      }, {
+        "keyword" : "RegExp",
+        "type" : "datatype"
+      }, {
+        "keyword" : "Error",
+        "type" : "datatype"
+      }, {
+        "keyword" : "Intl",
+        "type" : "datatype"
+      }, {
+        "keyword" : "undefined",
+        "type" : "literal"
+      }, {
+        "keyword" : "NaN",
+        "type" : "literal"
+      }, {
+        "keyword" : "Infinity",
+        "type" : "literal"
+      } ]
+    },
+    "The C Programming Language" : {
+      "shorthand" : [ ],
+      "basic" : [ {
+        "keyword" : "auto",
+        "type" : "keyword"
+      }, {
+        "keyword" : "break",
+        "type" : "keyword"
+      }, {
+        "keyword" : "case",
+        "type" : "keyword"
+      }, {
+        "keyword" : "char",
+        "type" : "datatype"
+      }, {
+        "keyword" : "const",
+        "type" : "keyword"
+      }, {
+        "keyword" : "continue",
+        "type" : "keyword"
+      }, {
+        "keyword" : "default",
+        "type" : "keyword"
+      }, {
+        "keyword" : "do",
+        "type" : "keyword"
+      }, {
+        "keyword" : "double",
+        "type" : "datatype"
+      }, {
+        "keyword" : "else",
+        "type" : "keyword"
+      }, {
+        "keyword" : "enum",
+        "type" : "keyword"
+      }, {
+        "keyword" : "extern",
+        "type" : "keyword"
+      }, {
+        "keyword" : "float",
+        "type" : "datatype"
+      }, {
+        "keyword" : "for",
+        "type" : "keyword"
+      }, {
+        "keyword" : "goto",
+        "type" : "keyword"
+      }, {
+        "keyword" : "if",
+        "type" : "keyword"
+      }, {
+        "keyword" : "inline",
+        "type" : "keyword"
+      }, {
+        "keyword" : "int",
+        "type" : "datatype"
+      }, {
+        "keyword" : "long",
+        "type" : "datatype"
+      }, {
+        "keyword" : "register",
+        "type" : "keyword"
+      }, {
+        "keyword" : "restrict",
+        "type" : "keyword"
+      }, {
+        "keyword" : "return",
+        "type" : "keyword"
+      }, {
+        "keyword" : "short",
+        "type" : "datatype"
+      }, {
+        "keyword" : "signed",
+        "type" : "datatype"
+      }, {
+        "keyword" : "sizeof",
+        "type" : "keyword"
+      }, {
+        "keyword" : "static",
+        "type" : "keyword"
+      }, {
+        "keyword" : "struct",
+        "type" : "keyword"
+      }, {
+        "keyword" : "switch",
+        "type" : "keyword"
+      }, {
+        "keyword" : "typedef",
+        "type" : "keyword"
+      }, {
+        "keyword" : "union",
+        "type" : "keyword"
+      }, {
+        "keyword" : "unsigned",
+        "type" : "datatype"
+      }, {
+        "keyword" : "void",
+        "type" : "datatype"
+      }, {
+        "keyword" : "volatile",
+        "type" : "keyword"
+      }, {
+        "keyword" : "while",
+        "type" : "keyword"
+      }, {
+        "keyword" : "alignas",
+        "type" : "keyword"
+      }, {
+        "keyword" : "alignof",
+        "type" : "keyword"
+      }, {
+        "keyword" : "_Atomic",
+        "type" : "keyword"
+      }, {
+        "keyword" : "_Bool",
+        "type" : "keyword"
+      }, {
+        "keyword" : "_Complex",
+        "type" : "keyword"
+      }, {
+        "keyword" : "_Imaginary",
+        "type" : "keyword"
+      }, {
+        "keyword" : "_Static_assert",
+        "type" : "keyword"
+      }, {
+        "keyword" : "_Thread_local",
+        "type" : "keyword"
+      }, {
+        "keyword" : "size_t",
+        "type" : "datatype"
+      }, {
+        "keyword" : "ptrdiff_t",
+        "type" : "datatype"
+      }, {
+        "keyword" : "intptr_t",
+        "type" : "datatype"
+      }, {
+        "keyword" : "NULL",
+        "type" : "literal"
+      }, {
+        "keyword" : "true",
+        "type" : "literal"
+      }, {
+        "keyword" : "false",
+        "type" : "literal"
+      } ]
+    },
+    "Python" : {
+      "shorthand" : [ ],
+      "basic" : [ {
+        "keyword" : "False",
+        "type" : "literal"
+      }, {
+        "keyword" : "None",
+        "type" : "literal"
+      }, {
+        "keyword" : "True",
+        "type" : "literal"
+      }, {
+        "keyword" : "and",
+        "type" : "keyword"
+      }, {
+        "keyword" : "as",
+        "type" : "keyword"
+      }, {
+        "keyword" : "assert",
+        "type" : "keyword"
+      }, {
+        "keyword" : "async",
+        "type" : "keyword"
+      }, {
+        "keyword" : "await",
+        "type" : "keyword"
+      }, {
+        "keyword" : "break",
+        "type" : "keyword"
+      }, {
+        "keyword" : "class",
+        "type" : "keyword"
+      }, {
+        "keyword" : "continue",
+        "type" : "keyword"
+      }, {
+        "keyword" : "def",
+        "type" : "keyword"
+      }, {
+        "keyword" : "del",
+        "type" : "keyword"
+      }, {
+        "keyword" : "elif",
+        "type" : "keyword"
+      }, {
+        "keyword" : "else",
+        "type" : "keyword"
+      }, {
+        "keyword" : "except",
+        "type" : "keyword"
+      }, {
+        "keyword" : "finally",
+        "type" : "keyword"
+      }, {
+        "keyword" : "for",
+        "type" : "keyword"
+      }, {
+        "keyword" : "from",
+        "type" : "keyword"
+      }, {
+        "keyword" : "global",
+        "type" : "keyword"
+      }, {
+        "keyword" : "if",
+        "type" : "keyword"
+      }, {
+        "keyword" : "import",
+        "type" : "keyword"
+      }, {
+        "keyword" : "in",
+        "type" : "keyword"
+      }, {
+        "keyword" : "is",
+        "type" : "keyword"
+      }, {
+        "keyword" : "lambda",
+        "type" : "keyword"
+      }, {
+        "keyword" : "nonlocal",
+        "type" : "keyword"
+      }, {
+        "keyword" : "not",
+        "type" : "keyword"
+      }, {
+        "keyword" : "or",
+        "type" : "keyword"
+      }, {
+        "keyword" : "pass",
+        "type" : "keyword"
+      }, {
+        "keyword" : "raise",
+        "type" : "keyword"
+      }, {
+        "keyword" : "return",
+        "type" : "keyword"
+      }, {
+        "keyword" : "try",
+        "type" : "keyword"
+      }, {
+        "keyword" : "while",
+        "type" : "keyword"
+      }, {
+        "keyword" : "with",
+        "type" : "keyword"
+      }, {
+        "keyword" : "yield",
+        "type" : "keyword"
+      }, {
+        "keyword" : "match",
+        "type" : "keyword"
+      }, {
+        "keyword" : "case",
+        "type" : "keyword"
+      }, {
+        "keyword" : "print",
+        "type" : "keyword"
+      }, {
+        "keyword" : "int",
+        "type" : "datatype"
+      }, {
+        "keyword" : "float",
+        "type" : "datatype"
+      }, {
+        "keyword" : "complex",
+        "type" : "datatype"
+      }, {
+        "keyword" : "bool",
+        "type" : "datatype"
+      }, {
+        "keyword" : "str",
+        "type" : "datatype"
+      }, {
+        "keyword" : "bytes",
+        "type" : "datatype"
+      }, {
+        "keyword" : "bytearray",
+        "type" : "datatype"
+      }, {
+        "keyword" : "list",
+        "type" : "datatype"
+      }, {
+        "keyword" : "tuple",
+        "type" : "datatype"
+      }, {
+        "keyword" : "range",
+        "type" : "datatype"
+      }, {
+        "keyword" : "dict",
+        "type" : "datatype"
+      }, {
+        "keyword" : "set",
+        "type" : "datatype"
+      }, {
+        "keyword" : "frozenset",
+        "type" : "datatype"
+      }, {
+        "keyword" : "memoryview",
+        "type" : "datatype"
+      }, {
+        "keyword" : "Ellipsis",
+        "type" : "literal"
+      }, {
+        "keyword" : "NotImplemented",
+        "type" : "literal"
+      } ]
+    }
+  },
+  "name" : "Prism Autocomplete",
+  "description" : "Autocomplete for Java, JavaScript, TypeScript, Python, C, C++, Go, and Rust.",
+  "enabled" : true
+}

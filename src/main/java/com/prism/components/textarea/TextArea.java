@@ -2,22 +2,30 @@ package com.prism.components.textarea;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.io.File;
 
+import javax.swing.JList;
 import javax.swing.text.Document;
 
+import org.fife.ui.autocomplete.AutoCompletion;
+import org.fife.ui.autocomplete.Completion;
+import org.fife.ui.autocomplete.CompletionCellRenderer;
+import org.fife.ui.autocomplete.DefaultCompletionProvider;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
 import org.fife.ui.rsyntaxtextarea.Token;
 
 import com.prism.Prism;
 import com.prism.config.Config;
+import com.prism.managers.AutocompleteManager;
+import com.prism.utils.Languages;
 
 public class TextArea extends RSyntaxTextArea {
 
+    public Prism prism = Prism.getInstance();
+
     public TextArea() {
         super();
-
-        Prism prism = Prism.getInstance();
 
         setAnimateBracketMatching(false);
         setShowMatchedBracketPopup(prism.config.getBoolean(Config.Key.SHOW_MATCHED_BRACKET_POPUP, true));
@@ -96,6 +104,43 @@ public class TextArea extends RSyntaxTextArea {
                 Config.Key.MARKUP_TAG_NAME);
 
         setSyntaxScheme(scheme);
+    }
+
+    public void addAutocomplete(File file) {
+        try {
+            DefaultCompletionProvider provider = new DefaultCompletionProvider();
+
+            if (prism.config.getBoolean(Config.Key.AUTOCOMPLETE_AUTO_POPUP_ENABLED, true)) {
+                provider.setAutoActivationRules(true, ".");
+            }
+
+            AutocompleteManager.getBasic(provider, Languages.getFullName(file));
+
+            AutocompleteManager.getShorthand(provider, Languages.getFullName(file));
+
+            if (provider != null) {
+                AutoCompletion ac = new AutoCompletion(provider);
+
+                if (prism.config.getBoolean(Config.Key.AUTOCOMPLETE_AUTO_POPUP_ENABLED, true)) {
+                    ac.setAutoActivationEnabled(true);
+                    ac.setAutoActivationDelay(500);
+                }
+
+                ac.setListCellRenderer(new CompletionCellRenderer() {
+                    @Override
+                    protected void prepareForOtherCompletion(JList<?> list,
+                            Completion c, int index, boolean selected, boolean hasFocus) {
+                        super.prepareForOtherCompletion(list, c, index, selected, hasFocus);
+
+                        setIcon(super.getIcon());
+                    }
+                });
+
+                ac.install(this);
+            }
+        } catch (Exception e) {
+
+        }
     }
 
     private Color getConfigSyntaxHighlightingTokenColor(Config.Key key) {

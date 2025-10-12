@@ -7,6 +7,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -107,7 +108,8 @@ public class Prism extends JFrame {
             ErrorDialog.showErrorDialog(this, e);
         }
 
-        pluginLoader = new PluginLoader(null);
+        pluginLoader = new PluginLoader(new File("plugins"));
+        pluginLoader.loadPlugins();
 
         loadingFrame = new LoadingFrame();
         loadingFrame.setVisible(true);
@@ -148,6 +150,25 @@ public class Prism extends JFrame {
                     config.set(Config.Key.WINDOW_POSITION_X, (int) getLocation().getX());
                     config.set(Config.Key.WINDOW_POSITION_Y, (int) getLocation().getY());
                 }
+
+                String[] recentFilePaths = {};
+
+                for (PrismFile pf : FileManager.files) {
+                    if (pf.getPath() == null) {
+                        continue;
+                    }
+
+                    String[] newArray = Arrays.copyOf(recentFilePaths, recentFilePaths.length + 1);
+
+                    newArray[newArray.length - 1] = pf.getPath();
+
+                    recentFilePaths = newArray;
+                }
+
+                config.set(Config.Key.RECENT_OPENED_FILES, recentFilePaths);
+
+                config.set(Config.Key.PRIMARY_SPLITPANE_DIVIDER_LOCATION, primarySplitPane.getDividerLocation());
+                config.set(Config.Key.SECONDARY_SPLITPANE_DIVIDER_LOCATION, secondarySplitPane.getDividerLocation());
             }
         });
 
@@ -197,13 +218,13 @@ public class Prism extends JFrame {
 
         secondarySplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, textAreaTabbedPane, new JClosableComponent(
                 JClosableComponent.ComponentType.LOWER_SIDEBAR, lowerSidebarHeader, lowerSidebar));
-        secondarySplitPane.setDividerLocation(300);
+        secondarySplitPane.setDividerLocation(config.getInt(Config.Key.SECONDARY_SPLITPANE_DIVIDER_LOCATION, 300));
         secondarySplitPane.setResizeWeight(0.3);
 
         // File Explorer, Code outline, Plugins
         fileExplorer = new FileExplorer(directory);
         codeOutline = new CodeOutline();
-        pluginsPanel = new PluginsPanel();
+        pluginsPanel = new PluginsPanel(pluginLoader.getPlugins());
 
         // Primary Split pane
         sidebarHeader = new JLabel("File Explorer");
@@ -212,7 +233,7 @@ public class Prism extends JFrame {
         primarySplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                 new JClosableComponent(JClosableComponent.ComponentType.SIDEBAR, sidebarHeader, sidebar),
                 secondarySplitPane);
-        primarySplitPane.setDividerLocation(250);
+        primarySplitPane.setDividerLocation(config.getInt(Config.Key.PRIMARY_SPLITPANE_DIVIDER_LOCATION, 250));
         primarySplitPane.setResizeWeight(0.3);
 
         add(primarySplitPane);
@@ -241,6 +262,11 @@ public class Prism extends JFrame {
         searchAndReplaceAndStatusBarPanel.add(statusBarPanel, BorderLayout.SOUTH);
 
         add(searchAndReplaceAndStatusBarPanel, BorderLayout.SOUTH);
+
+        // End
+        if (config.getBoolean(Config.Key.OPEN_RECENT_FILES, true)) {
+            FileManager.openRecentFiles();
+        }
 
         bookmarks.updateTreeData(TextAreaManager.getBookmarksOfAllFiles());
     }
@@ -288,7 +314,7 @@ public class Prism extends JFrame {
             int lineStartOffset = textArea.getLineStartOffset(lineNumber - 1);
             column = caretPosition - lineStartOffset;
         } catch (BadLocationException e) {
-            
+
         }
 
         String language = "Plain Text";
@@ -331,7 +357,7 @@ public class Prism extends JFrame {
                         secondarySplitPane.repaint();
 
                         secondarySplitPane.setDividerSize(5);
-                        secondarySplitPane.setDividerLocation(300);
+                        secondarySplitPane.setDividerLocation(config.getInt(Config.Key.SECONDARY_SPLITPANE_DIVIDER_LOCATION, 300));
                         secondarySplitPane.setResizeWeight(0.3);
                         break;
                     case SIDEBAR:
@@ -342,7 +368,7 @@ public class Prism extends JFrame {
                         primarySplitPane.repaint();
 
                         primarySplitPane.setDividerSize(5);
-                        primarySplitPane.setDividerLocation(300);
+                        primarySplitPane.setDividerLocation(config.getInt(Config.Key.PRIMARY_SPLITPANE_DIVIDER_LOCATION, 250));
                         primarySplitPane.setResizeWeight(0.3);
                         break;
                     default:

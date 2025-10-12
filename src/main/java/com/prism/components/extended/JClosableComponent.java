@@ -18,9 +18,11 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import com.prism.Prism;
+import com.prism.config.Config;
 import com.prism.utils.ResourceUtil;
 
 public class JClosableComponent extends JPanel {
+
     public static Prism prism = Prism.getInstance();
 
     public static enum ComponentType {
@@ -67,10 +69,12 @@ public class JClosableComponent extends JPanel {
                     prism.removedComponents.add(JClosableComponent.this);
 
                     switch (JClosableComponent.this.getType()) {
-                        case SIDEBAR:
+                        case LOWER_SIDEBAR:
+                            prism.config.set(Config.Key.SECONDARY_SPLITPANE_DIVIDER_LOCATION, prism.secondarySplitPane.getDividerLocation());
                             prism.secondarySplitPane.setDividerSize(0);
                             break;
-                        case LOWER_SIDEBAR:
+                        case SIDEBAR:
+                            prism.config.set(Config.Key.PRIMARY_SPLITPANE_DIVIDER_LOCATION, prism.secondarySplitPane.getDividerLocation());
                             prism.primarySplitPane.setDividerSize(0);
                             break;
                         default:

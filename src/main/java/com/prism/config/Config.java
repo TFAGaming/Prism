@@ -36,7 +36,7 @@ public class Config {
         AUTO_COMPLETION_ENABLED(19),
         CODE_FOLDING_ENABLED(20),
         TEXTAREA_ZOOM(21),
-        RECENT_FILES(22),
+        OPEN_RECENT_FILES(22),
         CHECK_FOR_UPDATES(23),
         MAX_FILE_SIZE_FOR_WARNING(24),
         WARN_BEFORE_OPENING_LARGE_FILES(25),
@@ -44,6 +44,11 @@ public class Config {
         SHOW_LINE_NUMBERS(27),
         CODE_OUTLINE_IGNORE_COMMENTS(28),
         FILE_EXPLORER_USE_SYSTEM_ICONS(29),
+        AUTOCOMPLETE_ENABLED(30),
+        AUTOCOMPLETE_AUTO_POPUP_ENABLED(31),
+        PRIMARY_SPLITPANE_DIVIDER_LOCATION(32),
+        SECONDARY_SPLITPANE_DIVIDER_LOCATION(33),
+        RECENT_OPENED_FILES(34),
 
         // Token color keys
         ANNOTATION(100),
@@ -141,7 +146,7 @@ public class Config {
     }
 
     public void set(Key key, String[] values) {
-        configMap.put(key.getId(), String.join(",", values));
+        configMap.put(key.getId(), String.join("\\|", values));
 
         try {
             save();
@@ -181,7 +186,7 @@ public class Config {
 
     public String[] getStringArray(Key key) {
         String v = configMap.get(key.getId());
-        return (v != null && !v.isEmpty()) ? v.split(",") : new String[0];
+        return (v != null && !v.isEmpty()) ? v.split("\\|") : new String[0];
     }
 
     public void save() throws IOException {
@@ -190,7 +195,7 @@ public class Config {
             props.setProperty(String.valueOf(entry.getKey()), entry.getValue());
         }
         try (FileOutputStream fos = new FileOutputStream(this.configFile)) {
-            props.store(fos, "Application Configuration");
+            props.store(fos, "Prism Configuration, DO NOT MODIFY IF YOU KNOW WHAT YOU ARE DOING");
         }
     }
 

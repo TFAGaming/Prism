@@ -15,7 +15,6 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeSelectionModel;
 
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
-import org.fife.ui.rsyntaxtextarea.Token;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 import com.prism.Prism;
@@ -75,6 +74,7 @@ public class ConfigurationDialog extends JFrame {
 
         // Add children to Editor node
         DefaultMutableTreeNode syntaxHighlightingNode = new DefaultMutableTreeNode("Syntax Highlighting");
+        DefaultMutableTreeNode autocompleteNode = new DefaultMutableTreeNode("Autocomplete");
         DefaultMutableTreeNode languagesNode = new DefaultMutableTreeNode("Languages");
 
         // Add children to Languages node
@@ -92,6 +92,7 @@ public class ConfigurationDialog extends JFrame {
         languagesNode.add(javascriptNode);
 
         editorNode.add(syntaxHighlightingNode);
+        editorNode.add(autocompleteNode);
         editorNode.add(languagesNode);
 
         root.add(generalNode);
@@ -131,6 +132,7 @@ public class ConfigurationDialog extends JFrame {
 
         // New panels for editor children
         SyntaxHighlightingPanel syntaxHighlightingPanel = new SyntaxHighlightingPanel();
+        AutocompletePanel autocompletePanel = new AutocompletePanel();
         CPanel cPanel = new CPanel();
         CppPanel cppPanel = new CppPanel();
         JavaPanel javaPanel = new JavaPanel();
@@ -143,6 +145,7 @@ public class ConfigurationDialog extends JFrame {
 
         // Add the new panels
         rightPanel.add(syntaxHighlightingPanel, "Syntax Highlighting");
+        rightPanel.add(autocompletePanel, "Autocomplete");
         rightPanel.add(cPanel, "C");
         rightPanel.add(cppPanel, "C++");
         rightPanel.add(javaPanel, "Java");
@@ -236,14 +239,6 @@ public class ConfigurationDialog extends JFrame {
         return panel;
     }
 
-    private JComboBox newJComboBox(String[] data) {
-        JComboBox comboBox = new JComboBox<>(data);
-
-        comboBox.setFocusable(false);
-
-        return comboBox;
-    }
-
     // General Configuration Panel
     private class GeneralPanel extends JPanel {
 
@@ -330,6 +325,19 @@ public class ConfigurationDialog extends JFrame {
             });
 
             add(newJPanelLeftLayout(checkBox));
+
+            // 0_1
+            JCheckBox checkBox0_1 = new JCheckBox("Open recent files on startup");
+            checkBox0_1.setFocusable(false);
+            checkBox0_1.setSelected(prism.config.getBoolean(Config.Key.OPEN_RECENT_FILES, true));
+            checkBox0_1.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    prism.config.set(Config.Key.OPEN_RECENT_FILES, checkBox0_1.isSelected());
+                }
+            });
+
+            add(newJPanelLeftLayout(checkBox0_1));
 
             // 1
             JCheckBox checkBox1 = new JCheckBox("Anti-Aliasing");
@@ -806,6 +814,44 @@ public class ConfigurationDialog extends JFrame {
             } catch (NumberFormatException e) {
                 return Color.WHITE;
             }
+        }
+    }
+
+    // General Configuration Panel
+    private class AutocompletePanel extends JPanel {
+
+        public AutocompletePanel() {
+            initializeUI();
+        }
+
+        private void initializeUI() {
+            setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+            setBorder(new EmptyBorder(5, 5, 5, 5));
+
+            // 1
+            JCheckBox checkBox1 = new JCheckBox("Enable Autocomplete");
+            checkBox1.setFocusable(false);
+            checkBox1.setSelected(prism.config.getBoolean(Config.Key.AUTOCOMPLETE_ENABLED, true));
+            checkBox1.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    prism.config.set(Config.Key.AUTOCOMPLETE_ENABLED, checkBox1.isSelected());
+                }
+            });
+
+            add(newJPanelLeftLayout(checkBox1));
+
+            // 2
+            JCheckBox checkBox2 = new JCheckBox("Autocomplete automatic popup menu");
+            checkBox2.setFocusable(false);
+            checkBox2.setSelected(prism.config.getBoolean(Config.Key.AUTOCOMPLETE_AUTO_POPUP_ENABLED, true));
+            checkBox2.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    prism.config.set(Config.Key.AUTOCOMPLETE_AUTO_POPUP_ENABLED, checkBox2.isSelected());
+                }
+            });
+            add(newJPanelLeftLayout(checkBox2));
         }
     }
 

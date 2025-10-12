@@ -17,6 +17,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -190,6 +191,10 @@ public class FileManager {
             textArea.setSyntaxEditingStyle(Languages.getHighlighter(file));
             textArea.addSyntaxHighlighting();
 
+            if (prism.config.getBoolean(Config.Key.AUTOCOMPLETE_ENABLED, true)) {
+                textArea.addAutocomplete(file);
+            }
+
             PrismFile prismFile = new PrismFile(file, textArea);
 
             files.add(prismFile);
@@ -240,6 +245,18 @@ public class FileManager {
             prism.textAreaTabbedPane.addImageViewerTab(prismFile);
 
             prism.textAreaTabbedPane.redirectUserToTab(prismFile);
+        }
+    }
+
+    public static void openRecentFiles() {
+        String[] recentFilePaths = prism.config.getStringArray(Config.Key.RECENT_OPENED_FILES);
+
+        for (String path : recentFilePaths) {
+            File file = new File(path);
+
+            if (file.exists() && file.isFile()) {
+                openFile(file);
+            }
         }
     }
 
