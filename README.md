@@ -1,60 +1,48 @@
-# Prism — Code Editor based on Java Swing
+# [Prism](https://github.com/TFAGaming/Prism/) — Code Editor based on Java Swing
 
 > **Status:** 🚧 *Under active development* 🚧<br> 
 > **Platform:** Windows 7 (x86-64) → Latest Windows release  
 
 **Prism** is an **open-source**, **lightweight**, **super-fast**, and **highly customizable** code editor built entirely with **Java Swing**. Designed for performance and simplicity, Prism aims to deliver a smooth editing experience for developers who prefer a native desktop editor without the overhead of large frameworks.
 
+[Click here](#installation) to install Prism.
+
+### Note:
+
 **Prism** is software designed for low-end computers, especially for users who still continue using outdated operating system versions, such as Windows 7. The application keeps its simplicity, without AI integration, and especially its performance.
 
 If you currently have a device that has the ability to run other IDEs without any issues, then we recommend you not use Prism, unless you want to try it out!
 
-[Click here](#installation) to install Prism.
-
 ## Features
 
-### 1. Core Editing
-- Syntax highlighting for popular languages
-- Smooth and responsive text rendering
-- Multiple tabs & sessions
-- Line numbers and auto-indentation
-- Autocomplete
-- Compiler error checker (upcoming)
+Prism is packed with powerful features designed for speed and efficiency, helping you write, navigate, and run your code with ease.
 
-### 2. Bookmarks & Navigation
-- Add bookmarks to key lines for quick navigation
-- Jump between definitions or markers
-- Quick file switcher & recent file list
+### 💻 Core Editing Experience
 
-### 3. Code Outline
-- Real-time structural view of your code
-- Clickable symbols for fast navigation 
+* **Syntax Highlighting:** Beautiful and accurate coloring for popular programming languages.
+* **Smooth Rendering:** Enjoy responsive, lag-free text rendering, even with large files (depending on your graphics card).
+* **Advanced Text Features:** Includes essential features like **line numbers**, **multiple tabs & sessions**, and smart **auto-indentation**.
+* **IntelliSense:** Powerful **Autocomplete** to speed up your coding.
+* **Compiler Error Checker** (Upcoming!): Real-time feedback on code errors.
 
-### 4. Tools & Shortcuts
-- Quick run commands via tools (upcoming)
-- Integrated search and replace
+### 🧭 Navigation & Workflow
 
-### 5. Built-in Terminal
-- Access a system terminal directly within Prism (Powershell/Command prompt)
-- Run scripts and commands without leaving the editor  
+* **File Explorer:** A familiar **tree-style project view** with drag-and-drop support for easy file management (move, open, and view details).
+* **Quick Jumps:** Add **bookmarks** to key lines and quickly **jump between definitions** or markers.
+* **Code Outline:** Get a **real-time, structural view** of your code with clickable symbols for fast navigation.
+* **File Switching:** Use the **quick file switcher** and **recent file list** to open files instantly.
+* **Integrated Search:** Powerful, built-in **search and replace** functionality.
 
-### 6. Text Comparison
-- Side-by-side diff viewer  
-- Highlighted line changes  
+### 🛠️ Integrated Tools
 
-### 7. File Explorer
-- Tree-style project view  
-- Quick open, move files, and file details
-- Drag-and-drop file support
+* **Built-in Terminal:** Access a **system terminal** (Powershell/Command prompt) directly inside Prism to run scripts and commands easily.
+* **Text Comparison (Difference):** Use the **side-by-side diff viewer** with highlighted line changes to compare files quickly.
+* **Quick Commands** (Upcoming!): Execute scripts and commands directly via integrated tools.
 
-### 8. Plugins & Customization
-- Extensible plugin system 
-- Configurable settings via JSON
+### ⚙️ Performance & Customization
 
-### 9. Performance
-- Built for speed with efficient Swing rendering  
-- Low memory footprint  
-- Optimized for both old and modern systems  
+* **Built for Speed:** Optimized rendering and a **low memory footprint** ensure a snappy experience on both modern and older systems.
+* **Extensible:** Customize your setup with the **plugin system** and easily configure settings via **JSON**.
 
 ## Requirements
 
@@ -70,14 +58,14 @@ The **Java Runtime Environment** (**JRE**), SE 21, is bundled within the applica
 <details>
 <summary>Installation Screenshot</summary>
 
-<img src="./assets/screenshot-installation.png">
+<img src="./assets/screenshot-installation.png" />
 </details>
 
 ## Screenshots
 
 #### Windows 7 Home Basic Service Pack 1 (64-bit)
 
-<img src="./assets/screenshot-win7-1.png">
+<img src="./assets/screenshot-win7.png" />
 
 ## Development
 
