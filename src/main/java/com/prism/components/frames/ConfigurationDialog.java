@@ -596,6 +596,7 @@ public class ConfigurationDialog extends JFrame {
         private JComboBox<String> tokenComboBox;
         private JButton colorButton;
         private com.prism.components.textarea.TextArea previewTextArea;
+        private JComboBox previewLanguagesComboBox;
 
         public SyntaxHighlightingPanel() {
             initializeTokenMap();
@@ -652,82 +653,369 @@ public class ConfigurationDialog extends JFrame {
             add(newJPanelLeftLayout(new JLabel("Token: "), tokenComboBox));
             add(newJPanelLeftLayout(new JLabel("Color: "), colorButton));
 
-            add(newJPanelLeftLayout(new JLabel("Preview Text Area:")));
+            String[] languages = { "Java", "TypeScript", "Groovy", "HTML", "C", "C++" };
+            String[] languagesCodeSamples = {
+                    """
+                            package com.example.tokens;
 
-            previewTextArea = new com.prism.components.textarea.TextArea();
-            previewTextArea.setEditable(false);
-            previewTextArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
-            previewTextArea.addSyntaxHighlighting();
-            previewTextArea.setText("""
-                    package com.example.tokens;
+                            import java.io.Serializable;
+                            import java.util.List;
+                            import static java.lang.Math.PI;
 
-                    import java.io.Serializable;
-                    import java.util.List;
-                    import static java.lang.Math.PI;
+                            public class TokenExample implements Serializable {
 
-                    public class TokenExample implements Serializable {
+                                private static final int MAX_VALUE = 100;
+                                protected String name = "Java";
+                                public volatile boolean active = true;
 
-                        private static final int MAX_VALUE = 100;
-                        protected String name = "Java";
-                        public volatile boolean active = true;
+                                public TokenExample() {
+                                    super();
+                                }
 
-                        public TokenExample() {
-                            super();
-                        }
+                                public static void main(String[] args) {
+                                    int x = 10;
+                                    double y = 20.5;
+                                    char grade = 'A';
+                                    boolean isValid = true;
+                                    String message = "Hello, World!";
 
-                        public static void main(String[] args) {
-                            int x = 10;
-                            double y = 20.5;
-                            char grade = 'A';
-                            boolean isValid = true;
-                            String message = "Hello, World!";
-
-                            if (x < y && isValid) {
-                                System.out.println(message + " The value of PI is: " + PI);
-                            } else {
-                                for (int i = 0; i < 5; i++) {
-                                    switch (i) {
-                                        case 0:
-                                            System.out.println("Case zero");
-                                            break;
-                                        case 1:
-                                            System.out.println("Case one");
-                                            break;
-                                        default:
-                                            System.out.println("Other case");
+                                    if (x < y && isValid) {
+                                        System.out.println(message + " The value of PI is: " + PI);
+                                    } else {
+                                        for (int i = 0; i < 5; i++) {
+                                            switch (i) {
+                                                case 0:
+                                                    System.out.println("Case zero");
+                                                    break;
+                                                case 1:
+                                                    System.out.println("Case one");
+                                                    break;
+                                                default:
+                                                    System.out.println("Other case");
+                                            }
+                                        }
                                     }
+
+                                    try {
+                                        List<Integer> numbers = null;
+                                        int first = numbers.get(0); // This will throw NullPointerException
+                                    } catch (NullPointerException e) {
+                                        System.err.println("Caught an exception: " + e.getMessage());
+                                    } finally {
+                                        System.out.println("Finally block executed.");
+                                    }
+
+                                    long bigNumber = 1234567890123L;
+                                    float smallFloat = 3.14f;
+                                    short s = 50;
+                                    byte b = 127;
+                                }
+
+                                public final void processData(int data) throws IllegalArgumentException {
+                                    if (data > MAX_VALUE) {
+                                        throw new IllegalArgumentException("Data exceeds max value.");
+                                    }
+                                    synchronized (this) {
+                                        // Some synchronized operation
+                                    }
+                                }
+
+                                enum Status {
+                                    PENDING, COMPLETE, FAILED
+                                }
+                            }
+                                                """,
+                    """
+                                                            interface Vehicle {
+                              model: string;
+                              year: number;
+                              startEngine(): void;
+                            }
+
+                            enum FuelType {
+                              Gasoline = 'GAS',
+                              Electric = 'ELEC',
+                              Hybrid = 'HYB',
+                            }
+
+                            class Car implements Vehicle {
+                              private _mileage: number = 0;
+
+                              constructor(
+                                public readonly model: string,
+                                private _year: number,
+                                public fuel: FuelType
+                              ) {
+                                if (_year < 1900) {
+                                    throw new Error('Invalid year.');
+                                }
+                              }
+
+                              get year(): number {
+                                return this._year;
+                              }
+
+                              set mileage(distance: number) {
+                                if (distance > this._mileage) {
+                                    this._mileage = distance;
+                                }
+                              }
+
+                              startEngine(): void {
+                                console.log(`${this.model} engine started.`);
+                              }
+
+                              async checkBattery(level: number): Promise<boolean> {
+                                await new Promise(r => setTimeout(r, 50));
+                                return level > 0.5;
+                              }
+                            }
+
+                            function serviceVehicle(v: Vehicle | null): void {
+                              if (v) {
+                                const isElectric = (v as Car).fuel === FuelType.Electric;
+                                console.log(`Service check for ${v.model}.`);
+                                v.startEngine();
+
+                                if (isElectric) {
+                                    (v as Car).checkBattery(0.8).then(ok => {
+                                        console.log(`Battery status OK: ${ok}`);
+                                    });
+                                }
+                              } else {
+                                const defaultModel = v?.model ?? 'Unknown Vehicle';
+                                console.error(`Cannot service: ${defaultModel}`);
+                              }
+                            }
+
+                            // Main execution
+                            const myCar = new Car('Tesla Model 3', 2024, FuelType.Electric);
+                            myCar.mileage = 1500;
+
+                            serviceVehicle(myCar);
+
+                            const prices: number[] = [9.99, 15.50, 20.00, 5.00];
+                            const total = prices.reduce((acc, p) => acc + p, 0);
+
+                            console.log(`Total Price: $${total.toFixed(2)}`);
+                                                            """,
+                    """
+                                                                #!/usr/bin/env groovy
+                            def projectName = 'Groovy Syntax Preview'
+
+                            def multiplier = { a, b ->
+                                // Single line comment inside a Closure
+                                a * b
+                            }
+
+                            def technologies = ['Java', 'Groovy', 'Grails', 'Spock']
+                            def properties = [
+                                name: projectName,
+                                version: 1.0,
+                                'status': 'Active'
+                            ]
+
+                            def rating = properties.rating ?: 'N/A' // Elvis Operator
+                            def firstTech = technologies?.get(0) // Safe Navigation
+
+                            println "Project: ${properties.name} (v${rating})"
+
+                            class Task {
+                                String description
+                                Date dueDate
+
+                                Task(String desc) {
+                                    this.description = desc
+                                    this.dueDate = new Date()
                                 }
                             }
 
+                            def tasks = [new Task('Write Code'), new Task('Test App')]
+
+                            tasks.each { task ->
+                                println "Task: ${task.description}"
+                            }
+
                             try {
-                                List<Integer> numbers = null;
-                                int first = numbers.get(0); // This will throw NullPointerException
-                            } catch (NullPointerException e) {
-                                System.err.println("Caught an exception: " + e.getMessage());
+                                def result = multiplier 5, 4
+                                if (result < 0) {
+                                    throw new IllegalArgumentException('Result cannot be negative.')
+                                }
+                            } catch (e) {
+                                println "Error caught: ${e.message}"
                             } finally {
-                                System.out.println("Finally block executed.");
+                                println 'Execution complete.'
+                            }
+                                                                """,
+                    """
+                                            <!DOCTYPE html>
+                            <html lang="en">
+                            <head>
+                                <meta charset="UTF-8">
+                                <title>Highlight Test Site</title>
+
+                                <style>
+                                    body {
+                                        font-family: Arial, sans-serif;
+                                        background-color: #f4f4f4;
+                                    }
+                                    .container {
+                                        width: 80%;
+                                        margin: 0 auto;
+                                        border: 1px solid #ccc;
+                                    }
+                                </style>
+                            </head>
+                            <body>
+                                <div class="container">
+                                    <h1>Welcome to the Test Page</h1>
+                                    <p>This is a paragraph of text to test basic HTML tag recognition.</p>
+
+                                    <a href="https://example.com" target="_blank">Visit Example</a>
+                                    <button id="myButton">Click Me</button>
+                                </div>
+
+                                <script>
+                                    // JavaScript variable and function
+                                    const button = document.getElementById('myButton');
+
+                                    button.addEventListener('click', function() {
+                                        console.log("Button was clicked!");
+                                        // Check for string literal highlighting
+                                        alert("Button clicked successfully.");
+                                    });
+                                </script>
+                            </body>
+                            </html>
+                                                        """,
+                    """
+                                                                                                      #include <stdio.h>
+                            #include <stdlib.h> // For EXIT_SUCCESS
+
+                            // Macro definition
+                            #define MAX_VALUE 100
+
+                            // Function prototype
+                            int calculate_sum(int a, int b);
+
+                            /**
+                             * Main function entry point.
+                             */
+                            int main(void) {
+                                int x = 50;
+                                const int y = 25; // Constant variable
+
+                                // Pointer declaration
+                                int *ptr_x = &x;
+
+                                if (x > y) {
+                                    printf("X is greater than Y.\n");
+                                } else {
+                                    printf("Y is greater than X.\n");
+                                }
+
+                                // Function call and assignment
+                                int sum = calculate_sum(*ptr_x, y);
+
+                                for (int i = 0; i < 5; i++) {
+                                    printf("Iteration: %d, Sum: %d\n", i, sum);
+                                }
+
+                                return EXIT_SUCCESS;
                             }
 
-                            long bigNumber = 1234567890123L;
-                            float smallFloat = 3.14f;
-                            short s = 50;
-                            byte b = 127;
-                        }
-
-                        public final void processData(int data) throws IllegalArgumentException {
-                            if (data > MAX_VALUE) {
-                                throw new IllegalArgumentException("Data exceeds max value.");
+                            // Function definition
+                            int calculate_sum(int a, int b) {
+                                return a + b;
                             }
-                            synchronized (this) {
-                                // Some synchronized operation
-                            }
-                        }
+                                                                                                        """,
+                    """
+                                            #include <iostream>
+                            #include <vector> // STL container
 
-                        enum Status {
-                            PENDING, COMPLETE, FAILED
-                        }
+                            using namespace std;
+
+                            // Class definition
+                            class Point {
+                            public:
+                                // Constructor
+                                Point(int x, int y) : _x(x), _y(y) {}
+
+                                // Constant method
+                                void print() const {
+                                    cout << "(" << _x << ", " << _y << ")" << endl;
+                                }
+
+                            private:
+                                int _x;
+                                int _y;
+                            };
+
+                            // Function template
+                            template <typename T>
+                            T maximum(T a, T b) {
+                                return (a > b) ? a : b;
+                            }
+
+                            int main() {
+                                // Initialization using initializer list
+                                vector<int> numbers = {10, 20, 30, 40};
+
+                                Point p1(1, 2);
+
+                                // Range-based for loop
+                                for (int num : numbers) {
+                                    cout << "Number: " << num << endl;
+                                }
+
+                                // Template function call
+                                double max_val = maximum(5.5, 9.9);
+                                cout << "Max double: " << max_val << endl;
+
+                                return 0;
+                            }
+                                                        """
+            };
+
+            previewTextArea = new com.prism.components.textarea.TextArea();
+            previewLanguagesComboBox = new JComboBox<>(languages);
+            previewLanguagesComboBox.setSelectedIndex(0);
+            previewLanguagesComboBox.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    int index = previewLanguagesComboBox.getSelectedIndex();
+
+                    previewTextArea.setText(languagesCodeSamples[index].trim());
+
+                    switch (index) {
+                        case 0:
+                            previewTextArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
+                            break;
+                        case 1:
+                            previewTextArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_TYPESCRIPT);
+                            break;
+                        case 2:
+                            previewTextArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_GROOVY);
+                            break;
+                        case 3:
+                            previewTextArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_HTML);
+                            break;
+                        case 4:
+                            previewTextArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_C);
+                            break;
+                        case 5:
+                            previewTextArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS);
+                            break;
                     }
-                                        """.trim());
+                }
+            });
+
+            add(newJPanelLeftLayout(new JLabel("Preview Text Area:"), previewLanguagesComboBox));
+
+            previewTextArea.setEditable(false);
+            previewTextArea.setText(languagesCodeSamples[0].trim());
+            previewTextArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
+            previewTextArea.addSyntaxHighlighting();
 
             add(newJPanelLeftLayout(new RTextScrollPane(previewTextArea)));
         }
@@ -836,7 +1124,7 @@ public class ConfigurationDialog extends JFrame {
             checkBox1.setSelected(prism.config.getBoolean(Config.Key.AUTOCOMPLETE_ENABLED, true));
 
             checkBox2.setEnabled(checkBox1.isSelected());
-            
+
             checkBox1.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
