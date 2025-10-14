@@ -276,7 +276,7 @@ public class Prism extends JFrame {
     }
 
     public static String getVersion() {
-        return "1.0.0";
+        return "1.0.0-build-14.10.2025";
     }
 
     public void setSystemLookAndFeel() {

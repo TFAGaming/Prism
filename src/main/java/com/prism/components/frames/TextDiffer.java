@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
@@ -17,6 +18,7 @@ import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rtextarea.Gutter;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 import com.github.difflib.DiffUtils;
@@ -34,14 +36,21 @@ public class TextDiffer extends JFrame {
     private TextArea oldTextArea;
     private TextArea newTextArea;
 
-    private final Highlighter.HighlightPainter removedPainter =
-            new DefaultHighlighter.DefaultHighlightPainter(new Color(255, 190, 190)); // Light Red
+    private RTextScrollPane oldScrollPane;
+    private RTextScrollPane newScrollPane;
 
-    private final Highlighter.HighlightPainter addedPainter =
-            new DefaultHighlighter.DefaultHighlightPainter(new Color(190, 255, 190)); // Light Green
-            
-    private final Highlighter.HighlightPainter changedPainter =
-            new DefaultHighlighter.DefaultHighlightPainter(new Color(255, 255, 150)); // Light Yellow
+    private final Icon YELLOW_ICON = ResourceUtil.getIcon("icons/outline2.gif");
+    private final Icon GREEN_ICON = ResourceUtil.getIcon("icons/outline3.gif");
+    private final Icon RED_ICON = ResourceUtil.getIcon("icons/outline1.gif");
+
+    private final Highlighter.HighlightPainter removedPainter
+            = new DefaultHighlighter.DefaultHighlightPainter(new Color(255, 190, 190)); // Light Red
+
+    private final Highlighter.HighlightPainter addedPainter
+            = new DefaultHighlighter.DefaultHighlightPainter(new Color(190, 255, 190)); // Light Green
+
+    private final Highlighter.HighlightPainter changedPainter
+            = new DefaultHighlighter.DefaultHighlightPainter(new Color(255, 255, 150)); // Light Yellow
 
     public TextDiffer(File oldFile, String oldText, File file, String text) {
         setTitle("Text Comparison: " + file.getAbsolutePath());
@@ -50,14 +59,14 @@ public class TextDiffer extends JFrame {
         setLocationRelativeTo(null);
 
         setIconImage(ResourceUtil.getIcon("icons/Prism.png").getImage());
-        
+
         oldTextArea = createTextArea(oldFile, oldText);
         newTextArea = createTextArea(file, text);
-        
-        RTextScrollPane oldScrollPane = new RTextScrollPane(oldTextArea);
+
+        oldScrollPane = new RTextScrollPane(oldTextArea);
         oldScrollPane.setBorder(new EmptyBorder(2, 2, 2, 2));
 
-        RTextScrollPane newScrollPane = new RTextScrollPane(newTextArea);
+        newScrollPane = new RTextScrollPane(newTextArea);
         newScrollPane.setBorder(new EmptyBorder(2, 2, 2, 2));
 
         JPanel leftPanel = new JPanel();
@@ -73,14 +82,14 @@ public class TextDiffer extends JFrame {
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
         splitPane.setResizeWeight(0.5);
         splitPane.setBorder(new EmptyBorder(0, 5, 0, 5));
-        
+
         SwingUtilities.invokeLater(() -> splitPane.setDividerLocation(0.5));
-        
+
         this.getContentPane().setLayout(new BorderLayout());
         this.getContentPane().add(splitPane, BorderLayout.CENTER);
-        
+
         compareAndHighlight(oldText, text);
-        
+
         setVisible(true);
     }
 
@@ -108,25 +117,47 @@ public class TextDiffer extends JFrame {
             Patch<String> patch = DiffUtils.diff(oldLines, newLines);
 
             for (AbstractDelta<String> delta : patch.getDeltas()) {
-                
+
                 int originalStart = delta.getSource().getPosition();
                 int originalSize = delta.getSource().getLines().size();
-                
+
                 int revisedStart = delta.getTarget().getPosition();
                 int revisedSize = delta.getTarget().getLines().size();
-                
+
                 if (delta instanceof DeleteDelta) {
                     highlightLineRange(oldTextArea, originalStart, originalStart + originalSize - 1, removedPainter);
+
+                    addLineTrackingIcon(oldScrollPane, originalStart, originalStart + originalSize - 1, RED_ICON, "Delete");
                 } else if (delta instanceof InsertDelta) {
                     highlightLineRange(newTextArea, revisedStart, revisedStart + revisedSize - 1, addedPainter);
+
+                    addLineTrackingIcon(newScrollPane, revisedStart, revisedStart + revisedSize - 1, GREEN_ICON, "Insert");
                 } else if (delta instanceof ChangeDelta) {
                     highlightLineRange(oldTextArea, originalStart, originalStart + originalSize - 1, changedPainter);
                     highlightLineRange(newTextArea, revisedStart, revisedStart + revisedSize - 1, changedPainter);
+
+                    addLineTrackingIcon(oldScrollPane, originalStart, originalStart + originalSize - 1, YELLOW_ICON, "Change");
+                    addLineTrackingIcon(newScrollPane, revisedStart, revisedStart + revisedSize - 1, YELLOW_ICON, "Change");
                 }
             }
         } catch (Exception e) {
-            System.err.println("FATAL ERROR: Could not perform diff using java-diff-utils. " +
-                               "Ensure the 'java-diff-utils' Maven dependency is configured. Error: " + e.getMessage());
+            
+        }
+    }
+
+    private void addLineTrackingIcon(RTextScrollPane scrollPane, int startLineIndex, int endLineIndex, Icon icon, String tip) {
+        Gutter gutter = scrollPane.getGutter();
+
+        if (!gutter.isBookmarkingEnabled()) {
+            gutter.setBookmarkingEnabled(true);
+        }
+
+        for (int i = startLineIndex; i <= endLineIndex; i++) {
+            try {
+                gutter.addLineTrackingIcon(i, icon, tip); 
+            } catch (BadLocationException e) {
+                
+            }
         }
     }
 
@@ -134,7 +165,7 @@ public class TextDiffer extends JFrame {
         try {
             int startOffset = textArea.getLineStartOffset(startLineIndex);
             int endOffset;
-            
+
             if (endLineIndex + 1 < textArea.getLineCount()) {
                 endOffset = textArea.getLineStartOffset(endLineIndex + 1);
             } else {
