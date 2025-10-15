@@ -29,6 +29,7 @@ import com.prism.utils.ResourceUtil;
 public class PrismMenuBar extends JMenuBar {
     public Prism prism = Prism.getInstance();
 
+    // Existing Menu Items
     JMenuItem menuItemNewFile;
     JMenuItem menuItemOpenFile;
     JMenuItem menuItemOpenFolder;
@@ -49,6 +50,31 @@ public class PrismMenuBar extends JMenuBar {
     JMenuItem menuItemNewTool;
     JMenuItem menuItemHelp;
     JMenuItem menuItemAbout;
+
+    // --- New Menu Items ---
+    // File Menu
+    JMenuItem menuItemCloseFile;
+    JMenuItem menuItemCloseAll;
+
+    // Edit Menu
+    JMenuItem menuItemFind;
+    JMenuItem menuItemReplace;
+
+    // View Menu
+    JMenuItem menuItemToggleFullScreen;
+
+    // Tools Menu
+    JMenuItem menuItemRunTool;
+    JMenuItem menuItemManageTools;
+
+    // Go Menu
+    JMenuItem menuItemGoToLine;
+    JMenuItem menuItemNextTab;
+    JMenuItem menuItemPreviousTab;
+
+    // Help Menu
+    JMenuItem menuItemCheckForUpdates;
+    // ----------------------
 
     public PrismMenuBar() {
         /*
@@ -110,6 +136,24 @@ public class PrismMenuBar extends JMenuBar {
             }
         });
 
+        menuItemCloseFile = createMenuItem("Close File", ResourceUtil.getIcon("icons/close.png"), null,
+                KeyStroke.getKeyStroke(KeyEvent.VK_W, KeyEvent.CTRL_DOWN_MASK));
+        menuItemCloseFile.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //prism.textAreaTabbedPane.closeCurrentFile();
+            }
+        });
+
+        menuItemCloseAll = createMenuItem("Close All", null, null, null);
+        menuItemCloseAll.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Assuming a method exists to close all tabs
+                //prism.textAreaTabbedPane.closeAllFiles();
+            }
+        });
+
         menuItemCloseApp = createMenuItem("Exit", null, null,
                 null);
         menuItemCloseApp.addActionListener(new ActionListener() {
@@ -130,6 +174,9 @@ public class PrismMenuBar extends JMenuBar {
         fileMenu.add(menuItemSave);
         fileMenu.add(menuItemSaveAs);
         fileMenu.add(menuItemSaveAll);
+        fileMenu.addSeparator();
+        fileMenu.add(menuItemCloseFile); // New
+        fileMenu.add(menuItemCloseAll); // New
         fileMenu.addSeparator();
         fileMenu.add(menuItemCloseApp);
 
@@ -220,6 +267,26 @@ public class PrismMenuBar extends JMenuBar {
             }
         });
 
+        menuItemFind = createMenuItem("Find", ResourceUtil.getIcon("icons/find.png"), null,
+                KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.CTRL_DOWN_MASK));
+        menuItemFind.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Placeholder for opening a Find dialog or panel
+                System.out.println("Opening Find dialog/panel...");
+            }
+        });
+
+        menuItemReplace = createMenuItem("Replace...", ResourceUtil.getIcon("icons/replace.png"), null,
+                KeyStroke.getKeyStroke(KeyEvent.VK_H, KeyEvent.CTRL_DOWN_MASK));
+        menuItemReplace.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Placeholder for opening a Replace dialog
+                System.out.println("Opening Replace dialog...");
+            }
+        });
+
         menuItemOptions = createMenuItem("Options", null, null, null);
         menuItemOptions.addActionListener(new ActionListener() {
             @Override
@@ -236,6 +303,9 @@ public class PrismMenuBar extends JMenuBar {
         editMenu.add(menuItemPaste);
         editMenu.add(menuItemDelete);
         editMenu.add(menuItemSelectAll);
+        editMenu.addSeparator();
+        editMenu.add(menuItemFind); // New
+        editMenu.add(menuItemReplace); // New
         editMenu.addSeparator();
         editMenu.add(menuItemOptions);
 
@@ -262,8 +332,19 @@ public class PrismMenuBar extends JMenuBar {
             }
         });
 
+        menuItemToggleFullScreen = createMenuItem("Toggle Full Screen", ResourceUtil.getIcon("icons/fullscreen.png"), null,
+                KeyStroke.getKeyStroke(KeyEvent.VK_F11, 0));
+        menuItemToggleFullScreen.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //prism.toggleFullScreen();
+            }
+        });
+
         viewMenu.add(menuItemSidebar);
         viewMenu.add(menuItemLowerSidebar);
+        viewMenu.addSeparator();
+        viewMenu.add(menuItemToggleFullScreen); // New
 
         /*
          * Tools menu
@@ -279,13 +360,73 @@ public class PrismMenuBar extends JMenuBar {
             }
         });
 
+        // --- New Tools Menu Items ---
+        menuItemRunTool = createMenuItem("Run Tool", ResourceUtil.getIcon("icons/run.png"), null,
+                KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
+        menuItemRunTool.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Placeholder for running the currently configured tool
+                System.out.println("Running current tool...");
+            }
+        });
+
+        menuItemManageTools = createMenuItem("Manage Tools...", null, null, null);
+        menuItemManageTools.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Placeholder for opening a dialog to manage tools
+                System.out.println("Opening Manage Tools dialog...");
+            }
+        });
+        // ----------------------------
+
         toolsMenu.add(menuItemNewTool);
+        toolsMenu.add(menuItemRunTool); // New
+        toolsMenu.add(menuItemManageTools); // New
 
         /*
          * Go menu
          */
 
         JMenu goMenu = new JMenu("Go");
+
+        // --- New Go Menu Items ---
+        menuItemGoToLine = createMenuItem("Go to Line...", null, null,
+                KeyStroke.getKeyStroke(KeyEvent.VK_G, KeyEvent.CTRL_DOWN_MASK));
+        menuItemGoToLine.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Placeholder for bringing up a Go to Line input box/dialog
+                //prism.textAreaTabbedPane.getCurrentFile().getTextArea().focusOnGoToLineInput();
+            }
+        });
+
+        menuItemNextTab = createMenuItem("Next Tab", null, null,
+                KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN, KeyEvent.CTRL_DOWN_MASK));
+        menuItemNextTab.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Placeholder for switching to the next tab
+                //prism.textAreaTabbedPane.switchToNextTab();
+            }
+        });
+
+        menuItemPreviousTab = createMenuItem("Previous Tab", null, null,
+                KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, KeyEvent.CTRL_DOWN_MASK));
+        menuItemPreviousTab.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Placeholder for switching to the previous tab
+                //prism.textAreaTabbedPane.switchToPreviousTab();
+            }
+        });
+        // -------------------------
+
+        goMenu.add(menuItemGoToLine); // New
+        goMenu.addSeparator();
+        goMenu.add(menuItemNextTab); // New
+        goMenu.add(menuItemPreviousTab); // New
 
         /*
          * Help menu
@@ -313,6 +454,16 @@ public class PrismMenuBar extends JMenuBar {
             }
         });
 
+        // --- New Help Menu Item ---
+        menuItemCheckForUpdates = createMenuItem("Check for Updates...", null, null, null);
+        menuItemCheckForUpdates.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Placeholder for logic to check for updates
+                //JOptionPane.showMessageDialog(prism, "Checking for updates...", "Update", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+
         menuItemAbout = createMenuItem("About Prism", ResourceUtil.getIcon("icons/information.png"),
                 null,
                 null);
@@ -324,6 +475,7 @@ public class PrismMenuBar extends JMenuBar {
         });
 
         helpMenu.add(menuItemHelp);
+        helpMenu.add(menuItemCheckForUpdates);
         helpMenu.addSeparator();
         helpMenu.add(menuItemAbout);
 
@@ -343,9 +495,23 @@ public class PrismMenuBar extends JMenuBar {
         PrismFile prismFile = prism.textAreaTabbedPane.getCurrentFile();
 
         if (prismFile == null) {
+            // Disable all file/edit actions when no file is open
+            menuItemSave.setEnabled(false);
+            menuItemSaveAs.setEnabled(false);
+            menuItemCloseFile.setEnabled(false); // New
+            menuItemUndo.setEnabled(false);
+            menuItemRedo.setEnabled(false);
+            menuItemCut.setEnabled(false);
+            menuItemCopy.setEnabled(false);
+            menuItemPaste.setEnabled(false);
+            menuItemDelete.setEnabled(false);
+            menuItemSelectAll.setEnabled(false);
+            menuItemFind.setEnabled(false); // New
+            menuItemReplace.setEnabled(false); // New
+            menuItemGoToLine.setEnabled(false); // New
             return;
         }
-        
+
         com.prism.components.textarea.TextArea textArea = prismFile.getTextArea();
 
         if (textArea != null) {
@@ -353,6 +519,18 @@ public class PrismMenuBar extends JMenuBar {
             menuItemUndo.setEnabled(textArea.canUndo());
 
             menuItemSave.setEnabled(!prismFile.isSaved());
+
+            // General text area functions are enabled if a text area exists
+            menuItemSaveAs.setEnabled(true);
+            menuItemCloseFile.setEnabled(true); // New
+            menuItemCut.setEnabled(true);
+            menuItemCopy.setEnabled(true);
+            menuItemPaste.setEnabled(true);
+            menuItemDelete.setEnabled(true);
+            menuItemSelectAll.setEnabled(true);
+            menuItemFind.setEnabled(true); // New
+            menuItemReplace.setEnabled(true); // New
+            menuItemGoToLine.setEnabled(true); // New
         }
     }
 

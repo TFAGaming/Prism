@@ -85,6 +85,9 @@ public class Prism extends JFrame {
     public JSplitPane primarySplitPane;
     public JSplitPane secondarySplitPane;
 
+    public JClosableComponent lowerSidebarClosableComponent;
+    public JClosableComponent sidebarClosableComponent;
+
     public List<JClosableComponent> removedComponents = new ArrayList<JClosableComponent>();
 
     public Prism(String[] args) {
@@ -169,6 +172,9 @@ public class Prism extends JFrame {
 
                 config.set(Config.Key.PRIMARY_SPLITPANE_DIVIDER_LOCATION, primarySplitPane.getDividerLocation());
                 config.set(Config.Key.SECONDARY_SPLITPANE_DIVIDER_LOCATION, secondarySplitPane.getDividerLocation());
+
+                config.set(Config.Key.SIDEBAR_CLOSABLE_COMPONENT_OPENED, sidebarClosableComponent.isClosed());
+                config.set(Config.Key.LOWER_SIDEBAR_CLOSABLE_COMPONENT_OPENED, lowerSidebarClosableComponent.isClosed());
             }
         });
 
@@ -216,8 +222,15 @@ public class Prism extends JFrame {
         lowerSidebarHeader = new JLabel("Console");
         lowerSidebar = new LowerSidebar(lowerSidebarHeader, terminalArea, bookmarksArea, tasksArea);
 
-        secondarySplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, textAreaTabbedPane, new JClosableComponent(
-                JClosableComponent.ComponentType.LOWER_SIDEBAR, lowerSidebarHeader, lowerSidebar));
+        lowerSidebarClosableComponent = new JClosableComponent(JClosableComponent.ComponentType.LOWER_SIDEBAR,
+                lowerSidebarHeader, lowerSidebar);
+
+        if (config.getBoolean(Config.Key.LOWER_SIDEBAR_CLOSABLE_COMPONENT_OPENED, false)) {
+            lowerSidebarClosableComponent.closeComponent();
+        }
+
+        secondarySplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, textAreaTabbedPane,
+                lowerSidebarClosableComponent);
         secondarySplitPane.setDividerLocation(config.getInt(Config.Key.SECONDARY_SPLITPANE_DIVIDER_LOCATION, 300));
         secondarySplitPane.setResizeWeight(0.3);
 
@@ -230,11 +243,16 @@ public class Prism extends JFrame {
         sidebarHeader = new JLabel("File Explorer");
         sidebar = new Sidebar(sidebarHeader, fileExplorer, codeOutline, pluginsPanel);
 
-        primarySplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-                new JClosableComponent(JClosableComponent.ComponentType.SIDEBAR, sidebarHeader, sidebar),
-                secondarySplitPane);
+        sidebarClosableComponent = new JClosableComponent(JClosableComponent.ComponentType.SIDEBAR, sidebarHeader,
+                sidebar);
+
+        primarySplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, sidebarClosableComponent, secondarySplitPane);
         primarySplitPane.setDividerLocation(config.getInt(Config.Key.PRIMARY_SPLITPANE_DIVIDER_LOCATION, 250));
         primarySplitPane.setResizeWeight(0.3);
+
+        if (config.getBoolean(Config.Key.SIDEBAR_CLOSABLE_COMPONENT_OPENED, false)) {
+            sidebarClosableComponent.closeComponent();
+        }
 
         add(primarySplitPane);
 
@@ -276,7 +294,7 @@ public class Prism extends JFrame {
     }
 
     public static String getVersion() {
-        return "1.0.0-build-14.10.2025";
+        return "1.0.0-build-15.10.2025";
     }
 
     public void setSystemLookAndFeel() {
@@ -357,7 +375,8 @@ public class Prism extends JFrame {
                         secondarySplitPane.repaint();
 
                         secondarySplitPane.setDividerSize(5);
-                        secondarySplitPane.setDividerLocation(config.getInt(Config.Key.SECONDARY_SPLITPANE_DIVIDER_LOCATION, 300));
+                        secondarySplitPane.setDividerLocation(
+                                config.getInt(Config.Key.SECONDARY_SPLITPANE_DIVIDER_LOCATION, 300));
                         secondarySplitPane.setResizeWeight(0.3);
                         break;
                     case SIDEBAR:
@@ -368,7 +387,8 @@ public class Prism extends JFrame {
                         primarySplitPane.repaint();
 
                         primarySplitPane.setDividerSize(5);
-                        primarySplitPane.setDividerLocation(config.getInt(Config.Key.PRIMARY_SPLITPANE_DIVIDER_LOCATION, 250));
+                        primarySplitPane
+                                .setDividerLocation(config.getInt(Config.Key.PRIMARY_SPLITPANE_DIVIDER_LOCATION, 250));
                         primarySplitPane.setResizeWeight(0.3);
                         break;
                     default:

@@ -37,7 +37,8 @@ public class JClosableComponent extends JPanel {
 
         setLayout(new BorderLayout());
 
-        JGradientPanel headerPanel = new JGradientPanel(Color.decode("#f0f0f0"), Color.decode("#bcbcbc"), JGradientPanel.Direction.BOTTOM_TO_TOP);
+        JGradientPanel headerPanel = new JGradientPanel(Color.decode("#f0f0f0"), Color.decode("#bcbcbc"),
+                JGradientPanel.Direction.BOTTOM_TO_TOP);
         headerPanel.setLayout(new BorderLayout());
 
         header.setOpaque(false);
@@ -70,11 +71,13 @@ public class JClosableComponent extends JPanel {
 
                     switch (JClosableComponent.this.getType()) {
                         case LOWER_SIDEBAR:
-                            prism.config.set(Config.Key.SECONDARY_SPLITPANE_DIVIDER_LOCATION, prism.secondarySplitPane.getDividerLocation());
+                            prism.config.set(Config.Key.SECONDARY_SPLITPANE_DIVIDER_LOCATION,
+                                    prism.secondarySplitPane.getDividerLocation());
                             prism.secondarySplitPane.setDividerSize(0);
                             break;
                         case SIDEBAR:
-                            prism.config.set(Config.Key.PRIMARY_SPLITPANE_DIVIDER_LOCATION, prism.primarySplitPane.getDividerLocation());
+                            prism.config.set(Config.Key.PRIMARY_SPLITPANE_DIVIDER_LOCATION,
+                                    prism.primarySplitPane.getDividerLocation());
                             prism.primarySplitPane.setDividerSize(0);
                             break;
                         default:
@@ -92,5 +95,46 @@ public class JClosableComponent extends JPanel {
 
     public ComponentType getType() {
         return this.type;
+    }
+
+    public boolean isClosed() {
+        if (!prism.removedComponents.isEmpty()) {
+            for (int i = 0; i < prism.removedComponents.size(); i++) {
+                JClosableComponent component = prism.removedComponents.get(i);
+
+                if (component.getType() == getType()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public void closeComponent() {
+        Container parent = JClosableComponent.this.getParent();
+
+        if (parent != null) {
+            parent.remove(JClosableComponent.this);
+            parent.revalidate();
+            parent.repaint();
+
+            prism.removedComponents.add(JClosableComponent.this);
+
+            switch (JClosableComponent.this.getType()) {
+                case LOWER_SIDEBAR:
+                    prism.config.set(Config.Key.SECONDARY_SPLITPANE_DIVIDER_LOCATION,
+                            prism.secondarySplitPane.getDividerLocation());
+                    prism.secondarySplitPane.setDividerSize(0);
+                    break;
+                case SIDEBAR:
+                    prism.config.set(Config.Key.PRIMARY_SPLITPANE_DIVIDER_LOCATION,
+                            prism.primarySplitPane.getDividerLocation());
+                    prism.primarySplitPane.setDividerSize(0);
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }
