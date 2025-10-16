@@ -8,7 +8,7 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
-import com.prism.components.frames.EditToolFrame;
+import com.prism.components.definition.Tool;
 import com.prism.managers.ToolsManager;
 
 public class TasksList extends JPanel {
@@ -43,7 +43,7 @@ public class TasksList extends JPanel {
         add(new JScrollPane(table), BorderLayout.CENTER);
     }
 
-    public EditToolFrame.Tool getSelectedTool() {
+    public Tool getSelectedTool() {
         int column = table.getSelectedColumn();
 
         if (column == -1) {
@@ -53,7 +53,7 @@ public class TasksList extends JPanel {
         return ToolsManager.tools.get(column);
     }
 
-    public void addRow(EditToolFrame.Tool tool) {
+    public void addRow(Tool tool) {
         model.addRow(new Object[] { tool.getName(), tool.getDescription() });
     }
 

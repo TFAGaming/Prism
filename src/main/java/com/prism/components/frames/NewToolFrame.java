@@ -30,27 +30,15 @@ import com.prism.managers.FileManager;
 import com.prism.managers.ToolsManager;
 import com.prism.utils.ResourceUtil;
 
-public class EditToolFrame extends JFrame {
+public class NewToolFrame extends JFrame {
     public Prism prism = Prism.getInstance();
 
     private JExtendedTextField nameField, descriptionField, directoryField, shortcutField;
     private final DefaultListModel<String> argumentsModel = new DefaultListModel<>();
     private JList<String> argumentsList;
 
-    public Tool tool;
-
-    public EditToolFrame(Tool tool) {
-        this.tool = tool;
-
-        for (int i = 0; i < tool.getArguments().size(); i++) {
-            String arg = tool.getArguments().get(i);
-
-            if (arg != null && !arg.trim().isEmpty()) {
-                argumentsModel.addElement(arg.trim());
-            }
-        }
-
-        setTitle("Edit a Tool (ID: " + tool.getId().toString() + ")");
+    public NewToolFrame() {
+        setTitle("New Tool");
         setSize(600, 500);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -60,11 +48,6 @@ public class EditToolFrame extends JFrame {
         setIconImage(ResourceUtil.getIcon("icons/Prism.png").getImage());
 
         init();
-
-        this.nameField.setText(tool.getName());
-        this.descriptionField.setText(tool.getDescription());
-        this.directoryField.setText(tool.getDirectory().getAbsolutePath());
-        this.shortcutField.setText(tool.getShortcut());
 
         setVisible(true);
     }
@@ -193,14 +176,14 @@ public class EditToolFrame extends JFrame {
 
         // Bottom OK/Cancel
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JButton updateBtn = new JButton("Update");
-        updateBtn.setPreferredSize(new Dimension(80, 25));
-        updateBtn.setFocusable(false);
+        JButton okBtn = new JButton("OK");
+        okBtn.setPreferredSize(new Dimension(80, 25));
+        okBtn.setFocusable(false);
         
         JButton cancelBtn = new JButton("Cancel");
         cancelBtn.setPreferredSize(new Dimension(80, 25));
         cancelBtn.setFocusable(false);
-        bottomPanel.add(updateBtn);
+        bottomPanel.add(okBtn);
         bottomPanel.add(cancelBtn);
 
         add(mainPanel, BorderLayout.CENTER);
@@ -271,7 +254,7 @@ public class EditToolFrame extends JFrame {
             }
         });
 
-        updateBtn.addActionListener(e -> {
+        okBtn.addActionListener(e -> {
             if (nameField.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "The tool name cannot be an empty string.", "Invalid Input",
                         JOptionPane.ERROR_MESSAGE);
@@ -310,17 +293,14 @@ public class EditToolFrame extends JFrame {
                 return;
             }
 
-            tool.setName(nameField.getText());
-            tool.setDescription(descriptionField.getText());
-            tool.setDirectory(directory);
-            tool.setShortcut(shortcutField.getText());
-            tool.setArguments(new ArrayList<>());
+            Tool tool = new Tool(nameField.getText(), descriptionField.getText(), directory, shortcutField.getText(),
+                    new ArrayList<>());
 
             for (int i = 0; i < argumentsModel.size(); i++) {
                 tool.addArgument(argumentsModel.get(i));
             }
 
-            ToolsManager.updateTool(tool);
+            ToolsManager.addTool(tool);
 
             if (isDisplayable()) {
                 dispose();

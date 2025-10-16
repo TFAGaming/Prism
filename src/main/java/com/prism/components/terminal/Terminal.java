@@ -13,11 +13,13 @@ import java.util.List;
 import java.util.ArrayList;
 
 import com.prism.Prism;
+import com.prism.components.definition.Tool;
 import com.prism.components.extended.JExtendedTextField;
 
 public class Terminal extends JPanel {
+
     public Prism prism = Prism.getInstance();
-    
+
     private JTextField dirPathLabel;
 
     private String currentDirectory = "";
@@ -35,10 +37,10 @@ public class Terminal extends JPanel {
     public int shell = 0;
     public JTextPane terminalArea;
     public JExtendedTextField commandTextField;
-    public JComboBox<String> comboBoxCommands; 
-    
+    public JComboBox<String> comboBoxCommands;
+
     // Default styles for ANSI parsing
-    private Style currentStyle; 
+    private Style currentStyle;
     private static final Color DEFAULT_FOREGROUND = Color.decode("#000000"); // Black
     private static final Color DEFAULT_BACKGROUND = Color.decode("#FFFFFF"); // White
 
@@ -59,13 +61,12 @@ public class Terminal extends JPanel {
         terminalArea.setForeground(DEFAULT_FOREGROUND);
         terminalArea.setCaretColor(DEFAULT_FOREGROUND);
         terminalArea.setEditable(false);
-        
+
         // Initialize the default style
         currentStyle = terminalArea.addStyle("default", null);
         StyleConstants.setForeground(currentStyle, DEFAULT_FOREGROUND);
         StyleConstants.setBackground(currentStyle, DEFAULT_BACKGROUND);
         StyleConstants.setBold(currentStyle, false);
-
 
         JScrollPane scrollPane = new JScrollPane(terminalArea);
         add(scrollPane, BorderLayout.CENTER);
@@ -84,27 +85,27 @@ public class Terminal extends JPanel {
                 if (commandsIndex != -1) {
                     commandsIndex = -1;
                 }
-                
+
                 char keyChar = event.getKeyChar();
 
                 if (keyChar == KeyEvent.VK_ENTER) {
-                    event.consume(); 
+                    event.consume();
                     String command = commandTextField.getText().trim();
-                    
+
                     if (command.isEmpty()) {
                         appendToTerminal("\n", DEFAULT_FOREGROUND);
                         appendPrompt();
                         return;
                     }
 
-                    commandTextField.setText(""); 
-                    
+                    commandTextField.setText("");
+
                     // Append command to terminal first (always default color/style for user input)
                     appendToTerminal(command + "\n", DEFAULT_FOREGROUND);
-                    
+
                     if (isAlive()) {
-                         // Active process -> treat as input
-                         try {
+                        // Active process -> treat as input
+                        try {
                             processWriter.write(command + "\n");
                             processWriter.flush();
                         } catch (IOException ex) {
@@ -115,7 +116,7 @@ public class Terminal extends JPanel {
                         executeCommand(command);
                     }
                     // Reset history index after execution
-                    commandsIndex = -1; 
+                    commandsIndex = -1;
                 }
             }
 
@@ -128,19 +129,19 @@ public class Terminal extends JPanel {
                 int keyCode = event.getKeyCode();
 
                 if (keyCode == KeyEvent.VK_UP) {
-                    event.consume(); 
+                    event.consume();
 
                     if (commandsIndex == -1) {
                         commandsIndex = commands.size() - 1;
                     } else {
                         commandsIndex--;
                         if (commandsIndex < 0) {
-                            commandsIndex = commands.size() - 1; 
+                            commandsIndex = commands.size() - 1;
                         }
                     }
                     commandTextField.setText(commands.get(commandsIndex));
                 } else if (keyCode == KeyEvent.VK_DOWN) {
-                    event.consume(); 
+                    event.consume();
 
                     if (commandsIndex != -1) {
                         commandsIndex++;
@@ -157,7 +158,7 @@ public class Terminal extends JPanel {
 
         secondaryPanel.add(commandTextField, BorderLayout.CENTER);
 
-        comboBoxCommands = new JComboBox<>(new String[] { "No commands..." });
+        comboBoxCommands = new JComboBox<>(new String[]{"No commands..."});
         comboBoxCommands.setBorder(new EmptyBorder(0, 5, 0, 5));
         comboBoxCommands.setFocusable(false);
         comboBoxCommands.setEnabled(false);
@@ -177,7 +178,7 @@ public class Terminal extends JPanel {
         secondaryPanel.add(comboBoxCommands, BorderLayout.EAST);
 
         dirPathLabel = new JTextField();
-        updateDirPathLabel(); 
+        updateDirPathLabel();
         dirPathLabel.setEnabled(false);
         dirPathLabel.setEditable(false);
         dirPathLabel.setBorder(new EmptyBorder(0, 5, 0, 5));
@@ -199,7 +200,7 @@ public class Terminal extends JPanel {
             default:
                 shellName = "Command Prompt";
         }
-        
+
         appendToTerminal(shellName + ", ", DEFAULT_FOREGROUND);
 
         appendToTerminal("Path: " + (currentDirectory == null ? "(None)" : currentDirectory) + "\n", DEFAULT_FOREGROUND);
@@ -207,11 +208,31 @@ public class Terminal extends JPanel {
 
         terminalArea.addMouseListener(new MouseListener() {
             // (Mouse Listener methods remain the same)
-            @Override public void mouseClicked(MouseEvent e) { if (SwingUtilities.isRightMouseButton(e)) showPopupMenu(e); }
-            @Override public void mousePressed(MouseEvent e) { if (SwingUtilities.isRightMouseButton(e)) showPopupMenu(e); }
-            @Override public void mouseReleased(MouseEvent e) {}
-            @Override public void mouseEntered(MouseEvent e) {}
-            @Override public void mouseExited(MouseEvent e) {}
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (SwingUtilities.isRightMouseButton(e)) {
+                    showPopupMenu(e);
+            
+                }}
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (SwingUtilities.isRightMouseButton(e)) {
+                    showPopupMenu(e);
+            
+                }}
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+            }
 
             private void showPopupMenu(MouseEvent e) {
                 /* TerminalPopupMenu menu = new TerminalPopupMenu(scriptor); menu.show(e.getComponent(), e.getX(), e.getY()); */
@@ -233,13 +254,13 @@ public class Terminal extends JPanel {
         }
 
         commands.add(command);
-        commandsIndex = -1; 
+        commandsIndex = -1;
 
         if (!comboBoxCommands.isEnabled()) {
             comboBoxCommands.setEnabled(true);
         }
 
-        comboBoxCommands.setModel(new DefaultComboBoxModel<>(commands.toArray(new String[0]))); 
+        comboBoxCommands.setModel(new DefaultComboBoxModel<>(commands.toArray(new String[0])));
         comboBoxCommands.setSelectedIndex(commands.size() - 1);
 
         commandTextField.setText("");
@@ -253,7 +274,7 @@ public class Terminal extends JPanel {
             appendToTerminal("Process directory path: " + currentDirectory + "\n", DEFAULT_FOREGROUND);
             appendPrompt();
         } else if (command.trim().startsWith("exit")) {
-             // For internal exit, just print prompt
+            // For internal exit, just print prompt
             appendPrompt();
         } else {
             // External command execution
@@ -264,7 +285,7 @@ public class Terminal extends JPanel {
                 switch (shell) {
                     case 0: // Command Prompt
                         // Use /c to terminate after command, allowing external exit handling
-                        commandArray = new String[]{"cmd.exe", "/c", command}; 
+                        commandArray = new String[]{"cmd.exe", "/c", command};
                         break;
                     case 1: // PowerShell
                         commandArray = new String[]{"powershell.exe", "-Command", command};
@@ -272,7 +293,7 @@ public class Terminal extends JPanel {
                     default:
                         commandArray = new String[]{"cmd.exe", "/c", command};
                 }
-                
+
                 processBuilder.command(commandArray);
                 processBuilder.directory(new File(currentDirectory));
                 processBuilder.redirectErrorStream(true);
@@ -284,17 +305,17 @@ public class Terminal extends JPanel {
                 processOutputThread = new Thread(() -> {
                     try (BufferedReader processReader = new BufferedReader(
                             new InputStreamReader(currentProcess.getInputStream(), Charset.forName("Cp850")))) {
-                        
+
                         int character;
-                        StringBuilder buffer = new StringBuilder(); 
+                        StringBuilder buffer = new StringBuilder();
 
                         while ((character = processReader.read()) != -1) {
                             buffer.append((char) character);
-                            
+
                             // Check for line ending or a large buffer size
-                            if (character == '\n' || character == '\r' || buffer.length() > 1024) { 
+                            if (character == '\n' || character == '\r' || buffer.length() > 1024) {
                                 final String outputLine = buffer.toString();
-                                buffer.setLength(0); 
+                                buffer.setLength(0);
 
                                 SwingUtilities.invokeLater(() -> {
                                     // Use the new parser for output
@@ -302,17 +323,19 @@ public class Terminal extends JPanel {
                                 });
                             }
                         }
-                        
+
                         // Handle any remaining text in the buffer 
                         if (buffer.length() > 0) {
-                             final String outputLine = buffer.toString();
-                             SwingUtilities.invokeLater(() -> {
+                            final String outputLine = buffer.toString();
+                            SwingUtilities.invokeLater(() -> {
                                 parseAndAppendToTerminal(outputLine);
                             });
                         }
 
                     } catch (IOException ex) {
-                        if (!currentProcess.isAlive()) return; 
+                        if (!currentProcess.isAlive()) {
+                            return;
+                        }
                         SwingUtilities.invokeLater(() -> {
                             appendToTerminal("Error reading process output: " + ex.getMessage() + "\n", Color.RED, true);
                         });
@@ -325,16 +348,19 @@ public class Terminal extends JPanel {
                 new Thread(() -> {
                     try {
                         int exitCode = currentProcess.waitFor();
-                        
+
                         try {
-                            if (processWriter != null) processWriter.close();
-                        } catch (IOException ignored) {} 
-                        
+                            if (processWriter != null) {
+                                processWriter.close();
+                            }
+                        } catch (IOException ignored) {
+                        }
+
                         SwingUtilities.invokeLater(() -> {
                             // Print process exit status
                             String statusMessage;
                             Color statusColor;
-                            
+
                             if (exitCode == 0) {
                                 statusMessage = "\n[Process finished successfully (Exit Code: 0)]\n";
                                 statusColor = new Color(0, 150, 0); // Dark Green
@@ -342,7 +368,7 @@ public class Terminal extends JPanel {
                                 statusMessage = "\n[Process finished with error (Exit Code: " + exitCode + ")]\n";
                                 statusColor = Color.RED;
                             }
-                            
+
                             appendToTerminal(statusMessage, statusColor, true);
                             appendPrompt();
                         });
@@ -357,7 +383,7 @@ public class Terminal extends JPanel {
 
             } catch (IOException ex) {
                 appendToTerminal("Error: Unable to start command (" + ex.getMessage() + ")\n", Color.RED, true);
-                appendPrompt(); 
+                appendPrompt();
             }
         }
     }
@@ -369,7 +395,7 @@ public class Terminal extends JPanel {
         int ansiCodeIndex;
 
         // ANSI escape sequence start: ESC [
-        final String ANSI_START = "\u001B["; 
+        final String ANSI_START = "\u001B[";
 
         while (startIndex < text.length()) {
             ansiCodeIndex = text.indexOf(ANSI_START, startIndex);
@@ -379,7 +405,8 @@ public class Terminal extends JPanel {
                 String segment = text.substring(startIndex);
                 try {
                     doc.insertString(doc.getLength(), segment, currentStyle);
-                } catch (BadLocationException e) {}
+                } catch (BadLocationException e) {
+                }
                 break;
             }
 
@@ -388,7 +415,8 @@ public class Terminal extends JPanel {
                 String segment = text.substring(startIndex, ansiCodeIndex);
                 try {
                     doc.insertString(doc.getLength(), segment, currentStyle);
-                } catch (BadLocationException e) {}
+                } catch (BadLocationException e) {
+                }
             }
 
             // 2. Find the end of the ANSI sequence (SGR codes end with 'm')
@@ -396,20 +424,21 @@ public class Terminal extends JPanel {
             if (ansiEndIndex == -1) {
                 // Incomplete ANSI sequence, treat the rest as regular text
                 String segment = text.substring(ansiCodeIndex);
-                 try {
+                try {
                     doc.insertString(doc.getLength(), segment, currentStyle);
-                } catch (BadLocationException e) {}
+                } catch (BadLocationException e) {
+                }
                 break;
             }
 
             // 3. Parse and apply the ANSI code
             String code = text.substring(ansiCodeIndex + ANSI_START.length(), ansiEndIndex);
             applyAnsiCode(code);
-            
+
             // 4. Update the start index for the next segment
             startIndex = ansiEndIndex + 1;
         }
-        
+
         // Auto-scroll to bottom
         terminalArea.setCaretPosition(doc.getLength());
     }
@@ -417,14 +446,14 @@ public class Terminal extends JPanel {
     private void applyAnsiCode(String code) {
         // SGR (Select Graphic Rendition) codes are separated by semicolons
         String[] codes = code.split(";");
-        
+
         // Create a new style based on the current style for modification
-        Style newStyle = terminalArea.addStyle(null, currentStyle); 
-        
+        Style newStyle = terminalArea.addStyle(null, currentStyle);
+
         for (String c : codes) {
             try {
                 int sgrCode = Integer.parseInt(c);
-                
+
                 if (sgrCode == 0) {
                     // Reset all attributes
                     newStyle = terminalArea.addStyle("reset", null);
@@ -449,26 +478,35 @@ public class Terminal extends JPanel {
                     StyleConstants.setBold(newStyle, true); // Often bright is just bolded standard color
                 }
                 // (More complex codes like 38;5 and 48;5 for 256 colors are ignored for simplicity)
-                
+
             } catch (NumberFormatException e) {
                 // Ignore non-numeric or invalid codes
             }
         }
         currentStyle = newStyle; // Update the current active style
     }
-    
+
     // Maps standard ANSI foreground codes (30-37) to Java Colors
     private Color getStyleForAnsiCode(int code) {
         switch (code) {
-            case 30: return Color.BLACK;
-            case 31: return Color.RED;
-            case 32: return Color.GREEN;
-            case 33: return Color.YELLOW;
-            case 34: return Color.BLUE;
-            case 35: return Color.MAGENTA;
-            case 36: return Color.CYAN;
-            case 37: return Color.WHITE;
-            default: return DEFAULT_FOREGROUND;
+            case 30:
+                return Color.BLACK;
+            case 31:
+                return Color.RED;
+            case 32:
+                return Color.GREEN;
+            case 33:
+                return Color.YELLOW;
+            case 34:
+                return Color.BLUE;
+            case 35:
+                return Color.MAGENTA;
+            case 36:
+                return Color.CYAN;
+            case 37:
+                return Color.WHITE;
+            default:
+                return DEFAULT_FOREGROUND;
         }
     }
     // --- END NEW FEATURE ---
@@ -480,12 +518,12 @@ public class Terminal extends JPanel {
             File dir = new File(currentDirectory);
             baseName = dir.getName();
             if (baseName.isEmpty() && dir.isAbsolute()) {
-                baseName = dir.getAbsolutePath(); 
+                baseName = dir.getAbsolutePath();
             }
         } catch (Exception e) {
             baseName = currentDirectory;
         }
-        
+
         dirPathLabel.setText(">> " + baseName + " >");
     }
 
@@ -497,32 +535,34 @@ public class Terminal extends JPanel {
             appendPrompt();
             return;
         }
-        
+
         StringBuilder newPathBuilder = new StringBuilder();
         for (int i = 1; i < parts.length; i++) {
-            if (i > 1) newPathBuilder.append(" ");
+            if (i > 1) {
+                newPathBuilder.append(" ");
+            }
             newPathBuilder.append(parts[i]);
         }
         String newPath = newPathBuilder.toString().trim();
-        
+
         if (newPath.startsWith("\"") && newPath.endsWith("\"")) {
             newPath = newPath.substring(1, newPath.length() - 1);
         }
-        
+
         File dir;
-        
+
         if (newPath.equals("..")) {
             File currentFile = new File(currentDirectory);
             dir = currentFile.getParentFile();
             if (dir == null) {
-                dir = currentFile; 
+                dir = currentFile;
             }
         } else if (newPath.equals(".")) {
-             dir = new File(currentDirectory);
+            dir = new File(currentDirectory);
         } else {
             File absoluteDir = new File(newPath);
             if (absoluteDir.exists() && absoluteDir.isDirectory()) {
-                 dir = absoluteDir;
+                dir = absoluteDir;
             } else {
                 dir = new File(currentDirectory, newPath);
             }
@@ -530,7 +570,7 @@ public class Terminal extends JPanel {
 
         if (dir != null && dir.exists() && dir.isDirectory()) {
             currentDirectory = dir.getAbsolutePath();
-            updateDirPathLabel(); 
+            updateDirPathLabel();
             appendToTerminal("Changed directory path to: " + currentDirectory + "\n", DEFAULT_FOREGROUND);
             appendPrompt();
         } else {
@@ -545,14 +585,14 @@ public class Terminal extends JPanel {
 
         if (dir != null && dir.exists() && dir.isDirectory()) {
             currentDirectory = dir.getAbsolutePath();
-            SwingUtilities.invokeLater(this::updateDirPathLabel); 
+            SwingUtilities.invokeLater(this::updateDirPathLabel);
         }
     }
 
     // Helper method to apply basic non-ANSI styles (for prompts/errors)
     private void appendToTerminal(String text, Color color, boolean... details) {
         StyledDocument doc = terminalArea.getStyledDocument();
-        
+
         Style basicStyle = terminalArea.addStyle("basic_" + color.getRGB() + "_" + (details.length > 0 && details[0]), null);
         StyleConstants.setForeground(basicStyle, color);
         StyleConstants.setBackground(basicStyle, DEFAULT_BACKGROUND);
@@ -563,7 +603,7 @@ public class Terminal extends JPanel {
 
         try {
             doc.insertString(doc.getLength(), text, basicStyle);
-            terminalArea.setCaretPosition(doc.getLength()); 
+            terminalArea.setCaretPosition(doc.getLength());
         } catch (BadLocationException e) {
         }
     }
@@ -580,16 +620,19 @@ public class Terminal extends JPanel {
     public void closeProcess() {
         // ... (unchanged)
         if (currentProcess != null && currentProcess.isAlive()) {
-            currentProcess.destroyForcibly(); 
+            currentProcess.destroyForcibly();
             currentProcess = null;
             awaitingInput = false;
-             try {
-                if (processWriter != null) processWriter.close();
-            } catch (IOException ignored) {}
+            try {
+                if (processWriter != null) {
+                    processWriter.close();
+                }
+            } catch (IOException ignored) {
+            }
             if (processOutputThread != null && processOutputThread.isAlive()) {
                 processOutputThread.interrupt();
             }
-            
+
             SwingUtilities.invokeLater(() -> {
                 appendToTerminal("\n[Process terminated by user.]\n", Color.RED, true);
                 appendPrompt();
@@ -605,8 +648,8 @@ public class Terminal extends JPanel {
             return;
         }
 
-        closeProcess(); 
-        
+        closeProcess();
+
         String lastCommand = commands.get(commands.size() - 1);
 
         appendToTerminal(lastCommand + "\n", DEFAULT_FOREGROUND);
@@ -625,10 +668,20 @@ public class Terminal extends JPanel {
         closeProcess();
 
         String lastCommand = commands.get(commands.size() - 1);
-        
+
         appendToTerminal(lastCommand + "\n", DEFAULT_FOREGROUND);
 
         executeCommand(lastCommand);
+    }
+
+    public void executeTool(Tool tool) {
+        closeProcess();
+
+        appendToTerminal("Executing tool: " + tool.getName() + "\n", DEFAULT_FOREGROUND);
+
+        for (String argument : tool.getArguments()) {
+            executeCommand(argument);
+        }
     }
 
     public void setAwaitingInput(boolean awaiting) {
@@ -637,7 +690,7 @@ public class Terminal extends JPanel {
 
     public void clearTerminal() {
         // ... (unchanged)
-        closeProcess(); 
+        closeProcess();
 
         terminalArea.setText("");
 

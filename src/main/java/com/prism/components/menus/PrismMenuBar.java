@@ -7,12 +7,14 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 
 import com.prism.Prism;
@@ -21,12 +23,17 @@ import com.prism.components.files.PrismFile;
 import com.prism.components.frames.AboutPrism;
 import com.prism.components.frames.ConfigurationDialog;
 import com.prism.components.frames.EditToolFrame;
+import com.prism.components.frames.NewToolFrame;
 import com.prism.components.frames.WarningDialog;
+import com.prism.components.terminal.Terminal;
 import com.prism.components.textarea.TextArea;
 import com.prism.managers.FileManager;
+import com.prism.managers.ToolsManager; // Import the manager
+import com.prism.components.definition.Tool; // Import the Tool definition
 import com.prism.utils.ResourceUtil;
 
 public class PrismMenuBar extends JMenuBar {
+
     public Prism prism = Prism.getInstance();
 
     // Existing Menu Items
@@ -66,6 +73,10 @@ public class PrismMenuBar extends JMenuBar {
     // Tools Menu
     JMenuItem menuItemRunTool;
     JMenuItem menuItemManageTools;
+
+    // Custom tools list components
+    private JMenu toolsMenu;
+    private JSeparator toolMenuSeparator;
 
     // Go Menu
     JMenuItem menuItemGoToLine;
@@ -183,7 +194,6 @@ public class PrismMenuBar extends JMenuBar {
         /*
          * Edit menu
          */
-
         JMenu editMenu = new JMenu("Edit");
 
         menuItemUndo = createMenuItem("Undo", ResourceUtil.getIcon("icons/undo.gif"), null,
@@ -292,7 +302,8 @@ public class PrismMenuBar extends JMenuBar {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new ConfigurationDialog();
-            };
+            }
+        ;
         });
 
         editMenu.add(menuItemUndo);
@@ -312,7 +323,6 @@ public class PrismMenuBar extends JMenuBar {
         /*
          * View menu
          */
-
         JMenu viewMenu = new JMenu("View");
 
         menuItemSidebar = createMenuItem("Sidebar", ResourceUtil.getIcon("icons/sidebar.gif"), null, null);
@@ -349,25 +359,13 @@ public class PrismMenuBar extends JMenuBar {
         /*
          * Tools menu
          */
-
-        JMenu toolsMenu = new JMenu("Tools");
+        toolsMenu = new JMenu("Tools");
 
         menuItemNewTool = createMenuItem("New Tool", null, null, null);
         menuItemNewTool.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new EditToolFrame();
-            }
-        });
-
-        // --- New Tools Menu Items ---
-        menuItemRunTool = createMenuItem("Run Tool", ResourceUtil.getIcon("icons/run.png"), null,
-                KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
-        menuItemRunTool.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Placeholder for running the currently configured tool
-                System.out.println("Running current tool...");
+                new NewToolFrame();
             }
         });
 
@@ -375,20 +373,64 @@ public class PrismMenuBar extends JMenuBar {
         menuItemManageTools.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Placeholder for opening a dialog to manage tools
-                System.out.println("Opening Manage Tools dialog...");
+                List<Tool> allTools = ToolsManager.getAllTools();
+
+                if (allTools.isEmpty()) {
+                    JOptionPane.showMessageDialog(
+                            prism,
+                            "No tools have been defined yet. Please create a new tool first.",
+                            "Manage Tools",
+                            JOptionPane.INFORMATION_MESSAGE
+                    );
+                    return;
+                }
+
+                String[] toolNames = allTools.stream()
+                        .map(Tool::getName)
+                        .toArray(String[]::new);
+
+                String selectedToolName = (String) JOptionPane.showInputDialog(
+                        prism,
+                        "Select a tool to edit:",
+                        "Manage Tools",
+                        JOptionPane.PLAIN_MESSAGE,
+                        null,
+                        toolNames,
+                        toolNames[0]
+                );
+
+                if (selectedToolName != null) {
+                    Tool selectedTool = allTools.stream()
+                            .filter(tool -> tool.getName().equals(selectedToolName))
+                            .findFirst()
+                            .orElse(null);
+
+                    if (selectedTool != null) {
+                        new EditToolFrame(selectedTool);
+                    } else {
+                        JOptionPane.showMessageDialog(
+                                prism,
+                                "Error finding tool: " + selectedToolName,
+                                "Error",
+                                JOptionPane.ERROR_MESSAGE
+                        );
+                    }
+                }
             }
         });
         // ----------------------------
 
         toolsMenu.add(menuItemNewTool);
-        toolsMenu.add(menuItemRunTool); // New
         toolsMenu.add(menuItemManageTools); // New
+
+        toolMenuSeparator = new JSeparator();
+        toolsMenu.add(toolMenuSeparator);
+
+        refreshToolsMenu();
 
         /*
          * Go menu
          */
-
         JMenu goMenu = new JMenu("Go");
 
         // --- New Go Menu Items ---
@@ -431,7 +473,6 @@ public class PrismMenuBar extends JMenuBar {
         /*
          * Help menu
          */
-
         JMenu helpMenu = new JMenu("Help");
 
         menuItemHelp = createMenuItem("Help?", ResourceUtil.getIcon("icons/help.gif"),
@@ -482,13 +523,60 @@ public class PrismMenuBar extends JMenuBar {
         /*
          * End
          */
-
         add(fileMenu);
         add(editMenu);
         add(viewMenu);
         add(toolsMenu);
         add(goMenu);
         add(helpMenu);
+    }
+
+    public void refreshToolsMenu() {
+        int initialItemCount = toolsMenu.getMenuComponentCount();
+        int separatorIndex = -1;
+
+        for (int i = 0; i < initialItemCount; i++) {
+            if (toolsMenu.getMenuComponent(i) == toolMenuSeparator) {
+                separatorIndex = i;
+                break;
+            }
+        }
+
+        if (separatorIndex != -1) {
+            for (int i = initialItemCount - 1; i > separatorIndex; i--) {
+                toolsMenu.remove(i);
+            }
+        }
+
+        for (Tool tool : ToolsManager.getAllTools()) {
+            JMenuItem toolItem = createMenuItem(
+                    tool.getName(),
+                    null,
+                    tool.getDescription().isEmpty() ? null : tool.getDescription(),
+                    null
+            );
+
+            toolItem.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    Terminal terminal = prism.terminalTabbedPane.getCurrentTerminal();
+
+                    if (terminal == null) {
+                        JOptionPane.showMessageDialog(prism, "Something went wrong; Unable to get the current terminal.",
+                                "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    terminal.executeTool(tool);
+                }
+            });
+
+            toolsMenu.add(toolItem);
+        }
+
+        toolsMenu.revalidate();
+        toolsMenu.repaint();
     }
 
     public void updateMenuBar() {

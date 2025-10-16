@@ -48,6 +48,7 @@ import com.prism.components.toolbar.TasksToolbar;
 import com.prism.config.Config;
 import com.prism.managers.FileManager;
 import com.prism.managers.TextAreaManager;
+import com.prism.managers.ToolsManager;
 import com.prism.plugins.PluginLoader;
 import com.prism.utils.Languages;
 import com.prism.utils.ResourceUtil;
@@ -287,6 +288,8 @@ public class Prism extends JFrame {
         }
 
         bookmarks.updateTreeData(TextAreaManager.getBookmarksOfAllFiles());
+
+        ToolsManager.loadTools();
     }
 
     public static Prism getInstance() {
