@@ -75,7 +75,7 @@ public class MathPanel extends JPanel implements ActionListener {
 
         for (String label : buttonLabels) {
             JButton button = new JButton(label);
-            button.setFocusable(false);
+            button.setFocusable(true);
             button.setFont(new Font("Monospaced", Font.PLAIN, 16));
             button.addActionListener(this);
 

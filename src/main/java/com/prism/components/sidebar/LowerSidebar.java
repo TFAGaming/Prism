@@ -15,7 +15,7 @@ public class LowerSidebar extends JTabbedPane {
         super(JTabbedPane.BOTTOM);
 
         setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-        setFocusable(false);
+        setFocusable(true);
 
         addTasks(tasksArea);
         addTerminalArea(terminalArea);

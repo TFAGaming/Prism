@@ -71,6 +71,26 @@ The **Java Runtime Environment** (**JRE**), SE 21, is bundled within the applica
 
 Want to contribute? Prism is open for collaboration as development continues.
 
+## Making an Installer for Windows
+
+### Wrapping `.jar` file to Windows native executable (`.exe`) file
+
+Use [Launch4J](https://launch4j.sourceforge.net/). Launch4j is a cross-platform tool for wrapping Java applications distributed as jars in lightweight Windows native executables.
+
+You can load the example Launch4J script from [here](./installer/Launch4j%20config.example.xml). Please ensure all paths are updated to the current ones before building.
+
+Make sure that the JRE path (in JRE tab) is "**JRE**", not "**%JAVA_HOME%;%PATH%**".
+
+### Creating an executable (`.exe`) installer file
+
+Use [Inno Setup](https://jrsoftware.org/isinfo.php). Inno Setup is a free, open-source installer creation tool for Windows that compiles an application's files into a single executable installer file.
+
+You can load the example Inno Setup script from [here](./installer/Installer%20config.example.iss). Please ensure all paths are updated to the current ones before building.
+
+Make sure to include the following files and directories:
+- [README.md](./README.md)
+- [JRE](./JRE/)
+
 ## License
 
 Prism is released under the [Apache License 2.0](./LICENSE.txt)

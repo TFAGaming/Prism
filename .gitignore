@@ -3,9 +3,11 @@ target/
 com/prism/
 src/test/
 .vscode/
+installer/Installer config.iss
+installer/Launch4J config.xml
 config.properties
 prism.jar
-Prism.exe
+*.exe
 Prism_Installer.ico
 Prism_Installer.bmp
 inno_welcome_img.bmp

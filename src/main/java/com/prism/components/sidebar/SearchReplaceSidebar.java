@@ -40,13 +40,13 @@ public class SearchReplaceSidebar extends JPanel {
         optionsPanel.setBorder(new EmptyBorder(5, 0, 10, 0));
 
         caseSensitiveCheck = new JCheckBox("Case Sensitive");
-        caseSensitiveCheck.setFocusable(false);
+        caseSensitiveCheck.setFocusable(true);
 
         wholeWordCheck = new JCheckBox("Whole Word");
-        wholeWordCheck.setFocusable(false);
+        wholeWordCheck.setFocusable(true);
 
         regexCheck = new JCheckBox("Regex");
-        regexCheck.setFocusable(false);
+        regexCheck.setFocusable(true);
 
         optionsPanel.add(regexCheck);
         optionsPanel.add(wholeWordCheck);
@@ -58,7 +58,7 @@ public class SearchReplaceSidebar extends JPanel {
         replacePanel.setBorder(new EmptyBorder(0, 0, 10, 0));
 
         replaceCheck = new JCheckBox("Replace: ");
-        replaceCheck.setFocusable(false);
+        replaceCheck.setFocusable(true);
         replaceCheck.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
@@ -88,13 +88,13 @@ public class SearchReplaceSidebar extends JPanel {
         buttonPanel.setLayout(new FlowLayout());
 
         upButton = new JButton("Up");
-        upButton.setFocusable(false);
+        upButton.setFocusable(true);
         upButton.setPreferredSize(new Dimension(80, 25));
         downButton = new JButton("Down");
-        downButton.setFocusable(false);
+        downButton.setFocusable(true);
         downButton.setPreferredSize(new Dimension(80, 25));
         replaceButton = new JButton("Replace");
-        replaceButton.setFocusable(false);
+        replaceButton.setFocusable(true);
         replaceButton.setPreferredSize(new Dimension(80, 25));
         replaceButton.setEnabled(false);
 

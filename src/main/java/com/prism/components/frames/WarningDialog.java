@@ -53,11 +53,11 @@ public class WarningDialog extends JDialog {
         // Buttons
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JButton detailsButton = new JButton("Show Details >>");
-        detailsButton.setFocusable(false);
+        detailsButton.setFocusable(true);
         JButton copyButton = new JButton("Copy to Clipboard");
-        copyButton.setFocusable(false);
+        copyButton.setFocusable(true);
         JButton closeButton = new JButton("Close");
-        closeButton.setFocusable(false);
+        closeButton.setFocusable(true);
 
         buttonPanel.add(copyButton);
         buttonPanel.add(detailsButton);

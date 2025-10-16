@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>PATH_TO_JAR_FILE</jar>
+  <outfile>PATH_TO_OUTPUT_EXE_FILE</outfile>
+  <errTitle></errTitle>
+  <cmdLine></cmdLine>
+  <chdir>.</chdir>
+  <priority>normal</priority>
+  <downloadUrl></downloadUrl>
+  <supportUrl></supportUrl>
+  <stayAlive>false</stayAlive>
+  <restartOnCrash>true</restartOnCrash>
+  <manifest></manifest>
+  <icon>PATH_TO_ICON_FILE</icon>
+  <singleInstance>
+    <mutexName>Prism.exe</mutexName>
+    <windowTitle>Prism.exe</windowTitle>
+  </singleInstance>
+  <jre>
+    <path>JRE</path>
+    <requiresJdk>false</requiresJdk>
+    <requires64Bit>true</requires64Bit>
+    <minVersion>21</minVersion>
+    <maxVersion></maxVersion>
+  </jre>
+  <messages>
+    <startupErr>An error occurred while starting the application.
+Please contact the developers of Prism to resolve the issue.</startupErr>
+    <jreNotFoundErr>This application requires a Java Runtime Environment. (ERR_NOT_FOUND)
+Please install JRE on your computer: https://www.java.com/en/download/</jreNotFoundErr>
+    <jreVersionErr>This application requires a Java Runtime Environment. (ERR_JRE_VERSION)
+Please re-install JRE on your computer: https://www.java.com/en/download/</jreVersionErr>
+    <launcherErr>The registry refers to a nonexistent Java Runtime Environment installation or the runtime is corrupted.
+Please re-install JRE on your computer: https://www.java.com/en/download/</launcherErr>
+    <instanceAlreadyExistsMsg>An application instance is already running!</instanceAlreadyExistsMsg>
+  </messages>
+</launch4jConfig>

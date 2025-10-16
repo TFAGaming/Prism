@@ -11,7 +11,7 @@ public class TerminalLowerbar extends JTabbedPane {
         super(JTabbedPane.BOTTOM);
 
         setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-        setFocusable(false);
+        setFocusable(true);
 
         addTasks();
         addTerminalArea(terminalArea);

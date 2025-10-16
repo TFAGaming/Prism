@@ -68,7 +68,7 @@ public class FileExplorer extends JTree {
 
         setRootVisible(true);
         setShowsRootHandles(true);
-        setFocusable(false);
+        setFocusable(true);
 
         setCellRenderer(new FileTreeCellRenderer());
 
@@ -773,7 +773,7 @@ public class FileExplorer extends JTree {
 
         // Create combo box with directory options
         JComboBox<String> comboBox = new JComboBox<>();
-        comboBox.setFocusable(false);
+        comboBox.setFocusable(true);
         for (File dir : directories) {
             comboBox.addItem(dir.getAbsolutePath());
         }

@@ -47,7 +47,7 @@ public class TasksToolbar extends JPanel {
         });
 
         JCheckBox checkboxSendNotification = new JCheckBox("Send notification on Windows?");
-        checkboxSendNotification.setFocusable(false);
+        checkboxSendNotification.setFocusable(true);
         checkboxSendNotification.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -70,7 +70,7 @@ public class TasksToolbar extends JPanel {
     private JButton createButton(String label, ImageIcon buttonIcon, String tooltip) {
         JButton button = new JButton(label);
         button.setPreferredSize(new Dimension(80, 25));
-        button.setFocusable(false);
+        button.setFocusable(true);
 
         if (tooltip != null) {
             button.setToolTipText(tooltip);

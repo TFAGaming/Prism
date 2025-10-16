@@ -49,7 +49,7 @@ public class BookmarksToolbar extends JPanel {
     private JButton createButton(String label, ImageIcon buttonIcon, String tooltip) {
         JButton button = new JButton(label);
         button.setPreferredSize(new Dimension(80, 25));
-        button.setFocusable(false);
+        button.setFocusable(true);
 
         if (tooltip != null) {
             button.setToolTipText(tooltip);

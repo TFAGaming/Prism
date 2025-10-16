@@ -95,7 +95,7 @@ public class EditToolFrame extends JFrame {
         JButton browseDirectory = new JButton();
         browseDirectory.setIcon(ResourceUtil.getIcon("icons/browse.gif"));
         browseDirectory.setPreferredSize(new Dimension(24, 24));
-        browseDirectory.setFocusable(false);
+        browseDirectory.setFocusable(true);
 
         shortcutField = new JExtendedTextField(60);
         shortcutField.setPlaceholder(
@@ -158,7 +158,7 @@ public class EditToolFrame extends JFrame {
 
         //argumentsModel = new DefaultListModel<>();
         argumentsList = new JList<>(argumentsModel);
-        argumentsList.setFocusable(false);
+        argumentsList.setFocusable(true);
         argumentsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane scrollPane = new JScrollPane(argumentsList);
 
@@ -167,15 +167,15 @@ public class EditToolFrame extends JFrame {
         // Buttons for arguments
         JPanel argButtonsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JButton addBtn = new JButton("Add");
-        addBtn.setFocusable(false);
+        addBtn.setFocusable(true);
         JButton removeBtn = new JButton("Remove");
-        removeBtn.setFocusable(false);
+        removeBtn.setFocusable(true);
         JButton modifyBtn = new JButton("Modify");
-        modifyBtn.setFocusable(false);
+        modifyBtn.setFocusable(true);
         JButton upBtn = new JButton("Move Up");
-        upBtn.setFocusable(false);
+        upBtn.setFocusable(true);
         JButton downBtn = new JButton("Move Down");
-        downBtn.setFocusable(false);
+        downBtn.setFocusable(true);
 
         argButtonsPanel.add(addBtn);
         argButtonsPanel.add(removeBtn);
@@ -195,11 +195,11 @@ public class EditToolFrame extends JFrame {
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JButton updateBtn = new JButton("Update");
         updateBtn.setPreferredSize(new Dimension(80, 25));
-        updateBtn.setFocusable(false);
+        updateBtn.setFocusable(true);
         
         JButton cancelBtn = new JButton("Cancel");
         cancelBtn.setPreferredSize(new Dimension(80, 25));
-        cancelBtn.setFocusable(false);
+        cancelBtn.setFocusable(true);
         bottomPanel.add(updateBtn);
         bottomPanel.add(cancelBtn);
 

@@ -85,7 +85,7 @@ public class FileExplorerToolbar extends JToolBar {
             button.setIcon(new ImageIcon(scaledImage));
         }
 
-        button.setFocusPainted(false);
+        button.setFocusPainted(true);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         return button;

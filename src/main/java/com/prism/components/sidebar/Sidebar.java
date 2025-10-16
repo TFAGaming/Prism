@@ -26,7 +26,7 @@ public class Sidebar extends JTabbedPane {
         super(JTabbedPane.BOTTOM);
 
         setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-        setFocusable(false);
+        setFocusable(true);
 
         addFileExplorer(fileExplorer);
         addOutline(codeOutline);

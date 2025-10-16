@@ -105,7 +105,7 @@ public class ConfigurationDialog extends JFrame {
         configTree.setCellRenderer(new NullIconTreeCellRenderer());
         configTree.setRootVisible(true);
         configTree.setShowsRootHandles(true);
-        configTree.setFocusable(false);
+        configTree.setFocusable(true);
 
         // Expand all nodes
         for (int i = 0; i < configTree.getRowCount(); i++) {
@@ -158,10 +158,10 @@ public class ConfigurationDialog extends JFrame {
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
         okButton = new JButton("OK");
-        okButton.setFocusable(false);
+        okButton.setFocusable(true);
         okButton.setPreferredSize(new Dimension(80, 25));
         cancelButton = new JButton("Cancel");
-        cancelButton.setFocusable(false);
+        cancelButton.setFocusable(true);
         cancelButton.setPreferredSize(new Dimension(80, 25));
 
         okButton.addActionListener(new ActionListener() {
@@ -228,7 +228,7 @@ public class ConfigurationDialog extends JFrame {
 
             component.setAlignmentX(Component.LEFT_ALIGNMENT);
             component.setMaximumSize(component.getPreferredSize());
-            component.setFocusable(false);
+            component.setFocusable(true);
 
             panel.add(component);
             panel.add(Box.createRigidArea(new Dimension(5, 0)));
@@ -252,7 +252,7 @@ public class ConfigurationDialog extends JFrame {
 
             // 1
             JCheckBox checkBox1 = new JCheckBox("Check for Updates");
-            checkBox1.setFocusable(false);
+            checkBox1.setFocusable(true);
             checkBox1.setSelected(prism.config.getBoolean(Config.Key.CHECK_FOR_UPDATES, false));
             checkBox1.addActionListener(new ActionListener() {
                 @Override
@@ -267,9 +267,9 @@ public class ConfigurationDialog extends JFrame {
             JCheckBox checkBox2 = new JCheckBox("Warn before opening files larger than (MB): ");
             JSpinner maxFileSize = new JSpinner(
                     new SpinnerNumberModel(prism.config.getInt(Config.Key.MAX_FILE_SIZE_FOR_WARNING, 10), 1, 500, 1));
-            checkBox2.setFocusable(false);
+            checkBox2.setFocusable(true);
             checkBox2.setSelected(prism.config.getBoolean(Config.Key.WARN_BEFORE_OPENING_LARGE_FILES, true));
-            maxFileSize.setFocusable(false);
+            maxFileSize.setFocusable(true);
             maxFileSize.setEnabled(prism.config.getBoolean(Config.Key.WARN_BEFORE_OPENING_LARGE_FILES, true));
             checkBox2.addActionListener(new ActionListener() {
                 @Override
@@ -290,7 +290,7 @@ public class ConfigurationDialog extends JFrame {
 
             // 3
             JCheckBox checkBox3 = new JCheckBox("Use system icons for File explorer");
-            checkBox3.setFocusable(false);
+            checkBox3.setFocusable(true);
             checkBox3.setSelected(prism.config.getBoolean(Config.Key.FILE_EXPLORER_USE_SYSTEM_ICONS, true));
             checkBox3.addActionListener(new ActionListener() {
                 @Override
@@ -315,7 +315,7 @@ public class ConfigurationDialog extends JFrame {
 
             // 0
             JCheckBox checkBox = new JCheckBox("Show line numbers");
-            checkBox.setFocusable(false);
+            checkBox.setFocusable(true);
             checkBox.setSelected(prism.config.getBoolean(Config.Key.SHOW_LINE_NUMBERS, true));
             checkBox.addActionListener(new ActionListener() {
                 @Override
@@ -328,7 +328,7 @@ public class ConfigurationDialog extends JFrame {
 
             // 0_1
             JCheckBox checkBox0_1 = new JCheckBox("Open recent files on startup");
-            checkBox0_1.setFocusable(false);
+            checkBox0_1.setFocusable(true);
             checkBox0_1.setSelected(prism.config.getBoolean(Config.Key.OPEN_RECENT_FILES, true));
             checkBox0_1.addActionListener(new ActionListener() {
                 @Override
@@ -341,7 +341,7 @@ public class ConfigurationDialog extends JFrame {
 
             // 1
             JCheckBox checkBox1 = new JCheckBox("Anti-Aliasing");
-            checkBox1.setFocusable(false);
+            checkBox1.setFocusable(true);
             checkBox1.setSelected(prism.config.getBoolean(Config.Key.ANTI_ALIASING_ENABLED, true));
             checkBox1.addActionListener(new ActionListener() {
                 @Override
@@ -356,9 +356,9 @@ public class ConfigurationDialog extends JFrame {
             JCheckBox checkBox2 = new JCheckBox("Auto-Indent, Tab size: ");
             JSpinner autoIndentTabSize = new JSpinner(
                     new SpinnerNumberModel(prism.config.getInt(Config.Key.TAB_SIZE, 4), 1, 8, 1));
-            checkBox2.setFocusable(false);
+            checkBox2.setFocusable(true);
             checkBox2.setSelected(prism.config.getBoolean(Config.Key.AUTO_INDENT_ENABLED, true));
-            autoIndentTabSize.setFocusable(false);
+            autoIndentTabSize.setFocusable(true);
             autoIndentTabSize.setEnabled(prism.config.getBoolean(Config.Key.AUTO_INDENT_ENABLED, true));
             checkBox2.addActionListener(new ActionListener() {
                 @Override
@@ -379,7 +379,7 @@ public class ConfigurationDialog extends JFrame {
 
             // 3
             JCheckBox checkBox3 = new JCheckBox("Close curly braces");
-            checkBox3.setFocusable(false);
+            checkBox3.setFocusable(true);
             checkBox3.setSelected(prism.config.getBoolean(Config.Key.CLOSE_CURLY_BRACES, true));
             checkBox3.addActionListener(new ActionListener() {
                 @Override
@@ -392,7 +392,7 @@ public class ConfigurationDialog extends JFrame {
 
             // 4
             JCheckBox checkBox4 = new JCheckBox("Close markup tags");
-            checkBox4.setFocusable(false);
+            checkBox4.setFocusable(true);
             checkBox4.setSelected(prism.config.getBoolean(Config.Key.CLOSE_MARKUP_TAGS, true));
             checkBox4.addActionListener(new ActionListener() {
                 @Override
@@ -405,7 +405,7 @@ public class ConfigurationDialog extends JFrame {
 
             // 5
             JCheckBox checkBox5 = new JCheckBox("Bookmarks");
-            checkBox5.setFocusable(false);
+            checkBox5.setFocusable(true);
             checkBox5.setSelected(prism.config.getBoolean(Config.Key.BOOK_MARKS, true));
             checkBox5.addActionListener(new ActionListener() {
                 @Override
@@ -418,7 +418,7 @@ public class ConfigurationDialog extends JFrame {
 
             // 6
             JCheckBox checkBox6 = new JCheckBox("Bracket matching");
-            checkBox6.setFocusable(false);
+            checkBox6.setFocusable(true);
             checkBox6.setSelected(prism.config.getBoolean(Config.Key.BRACKET_MATCHING_ENABLED, true));
             checkBox6.addActionListener(new ActionListener() {
                 @Override
@@ -431,7 +431,7 @@ public class ConfigurationDialog extends JFrame {
 
             // 7
             JCheckBox checkBox7 = new JCheckBox("Mark occurences");
-            checkBox7.setFocusable(false);
+            checkBox7.setFocusable(true);
             checkBox7.setSelected(prism.config.getBoolean(Config.Key.MARK_OCCURRENCES, true));
             checkBox7.addActionListener(new ActionListener() {
                 @Override
@@ -444,7 +444,7 @@ public class ConfigurationDialog extends JFrame {
 
             // 8
             JCheckBox checkBox8 = new JCheckBox("Fade current line highlight");
-            checkBox8.setFocusable(false);
+            checkBox8.setFocusable(true);
             checkBox8.setSelected(prism.config.getBoolean(Config.Key.FADE_CURRENT_LINE_HIGHLIGHT, true));
             checkBox8.addActionListener(new ActionListener() {
                 @Override
@@ -455,7 +455,7 @@ public class ConfigurationDialog extends JFrame {
 
             // 9
             JCheckBox checkBox9 = new JCheckBox("Highlight current line");
-            checkBox9.setFocusable(false);
+            checkBox9.setFocusable(true);
             checkBox9.setSelected(prism.config.getBoolean(Config.Key.HIGHLIGHT_CURRENT_LINE, true));
             checkBox9.addActionListener(new ActionListener() {
                 @Override
@@ -468,7 +468,7 @@ public class ConfigurationDialog extends JFrame {
 
             // 10
             JCheckBox checkBox10 = new JCheckBox("Word wrap");
-            checkBox10.setFocusable(false);
+            checkBox10.setFocusable(true);
             checkBox10.setSelected(prism.config.getBoolean(Config.Key.WORD_WRAP_ENABLED, false));
             checkBox10.addActionListener(new ActionListener() {
                 @Override
@@ -481,7 +481,7 @@ public class ConfigurationDialog extends JFrame {
 
             // 11
             JCheckBox checkBox11 = new JCheckBox("Word wrap style");
-            checkBox11.setFocusable(false);
+            checkBox11.setFocusable(true);
             checkBox11.setSelected(prism.config.getBoolean(Config.Key.WORD_WRAP_STYLE_WORD, true));
             checkBox11.addActionListener(new ActionListener() {
                 @Override
@@ -494,7 +494,7 @@ public class ConfigurationDialog extends JFrame {
 
             // 12
             JCheckBox checkBox12 = new JCheckBox("Code folding");
-            checkBox12.setFocusable(false);
+            checkBox12.setFocusable(true);
             checkBox12.setSelected(prism.config.getBoolean(Config.Key.CODE_FOLDING_ENABLED, true));
             checkBox12.addActionListener(new ActionListener() {
                 @Override
@@ -507,7 +507,7 @@ public class ConfigurationDialog extends JFrame {
 
             // 13
             JCheckBox checkBox13 = new JCheckBox("Show matched bracket popup");
-            checkBox13.setFocusable(false);
+            checkBox13.setFocusable(true);
             checkBox13.setSelected(prism.config.getBoolean(Config.Key.SHOW_MATCHED_BRACKET_POPUP, true));
             checkBox13.addActionListener(new ActionListener() {
                 @Override
@@ -1120,7 +1120,7 @@ public class ConfigurationDialog extends JFrame {
             JCheckBox checkBox1 = new JCheckBox("Enable Autocomplete");
             JCheckBox checkBox2 = new JCheckBox("Autocomplete automatic popup menu");
 
-            checkBox1.setFocusable(false);
+            checkBox1.setFocusable(true);
             checkBox1.setSelected(prism.config.getBoolean(Config.Key.AUTOCOMPLETE_ENABLED, true));
 
             checkBox2.setEnabled(checkBox1.isSelected());
@@ -1137,7 +1137,7 @@ public class ConfigurationDialog extends JFrame {
             add(newJPanelLeftLayout(checkBox1));
 
             // 2
-            checkBox2.setFocusable(false);
+            checkBox2.setFocusable(true);
             checkBox2.setSelected(prism.config.getBoolean(Config.Key.AUTOCOMPLETE_AUTO_POPUP_ENABLED, true));
             checkBox2.addActionListener(new ActionListener() {
                 @Override

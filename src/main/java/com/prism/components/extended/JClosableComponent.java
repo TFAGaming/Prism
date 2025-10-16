@@ -48,7 +48,7 @@ public class JClosableComponent extends JPanel {
 
         JButton closeButton = new JButton();
         closeButton.setBorderPainted(false);
-        closeButton.setFocusPainted(false);
+        closeButton.setFocusPainted(true);
         closeButton.setContentAreaFilled(false);
         closeButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         closeButton.setPreferredSize(new Dimension(16, 16));

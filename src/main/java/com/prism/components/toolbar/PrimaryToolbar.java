@@ -284,7 +284,7 @@ public class PrimaryToolbar extends JToolBar {
         Image scaledImage = buttonIcon.getImage().getScaledInstance(16, 16, Image.SCALE_FAST);
         button.setIcon(new ImageIcon(scaledImage));
 
-        button.setFocusPainted(false);
+        button.setFocusPainted(true);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         return button;

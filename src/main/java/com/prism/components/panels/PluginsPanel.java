@@ -63,7 +63,7 @@ public class PluginsPanel extends JPanel {
         panel.add(nameLabel, gbc);
 
         JCheckBox enabledCheckbox = new JCheckBox("Enabled");
-        enabledCheckbox.setFocusable(false);
+        enabledCheckbox.setFocusable(true);
         enabledCheckbox.setSelected(plugin.getEnabled());
         enabledCheckbox.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
@@ -86,7 +86,7 @@ public class PluginsPanel extends JPanel {
         panel.add(descriptionLabel, gbc);
 
         JButton editButton = new JButton("Edit JSON");
-        editButton.setFocusable(false);
+        editButton.setFocusable(true);
         editButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

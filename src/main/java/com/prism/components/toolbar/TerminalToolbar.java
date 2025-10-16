@@ -158,7 +158,7 @@ public class TerminalToolbar extends JToolBar {
 
         String[] terminalShells = {"Command Prompt", "PowerShell"};
         comboboxTerminalShell = new JComboBox<>(terminalShells);
-        comboboxTerminalShell.setFocusable(false);
+        comboboxTerminalShell.setFocusable(true);
         Dimension preferredSize = comboboxTerminalShell.getPreferredSize();
         preferredSize.width += 20;
         comboboxTerminalShell.setPreferredSize(preferredSize);
@@ -213,7 +213,7 @@ public class TerminalToolbar extends JToolBar {
         Image scaledImage = buttonIcon.getImage().getScaledInstance(16, 16, Image.SCALE_FAST);
         button.setIcon(new ImageIcon(scaledImage));
 
-        button.setFocusPainted(false);
+        button.setFocusPainted(true);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         return button;

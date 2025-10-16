@@ -29,7 +29,7 @@ public class CodeOutline extends JTree {
 
         setRootVisible(true);
         setShowsRootHandles(true);
-        setFocusable(false);
+        setFocusable(true);
 
         setCellRenderer(new CodeOutlineTreeRenderer());
 

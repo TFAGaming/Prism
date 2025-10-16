@@ -30,7 +30,7 @@ public class TasksList extends JPanel {
         };
 
         table = new JTable(model);
-        table.setFocusable(false);
+        table.setFocusable(true);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
 
         table.getColumnModel().getColumn(0).setPreferredWidth(50);

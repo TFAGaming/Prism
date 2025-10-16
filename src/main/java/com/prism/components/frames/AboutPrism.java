@@ -42,7 +42,7 @@ public class AboutPrism extends JFrame {
         setIconImage(ResourceUtil.getIcon("icons/Prism.png").getImage());
 
         JTabbedPane tabbedPane = new JTabbedPane();
-        tabbedPane.setFocusable(false);
+        tabbedPane.setFocusable(true);
 
         tabbedPane.addTab("General", createGeneralPanel());
         tabbedPane.addTab("System", createOperatingSystemPanel());
@@ -56,7 +56,7 @@ public class AboutPrism extends JFrame {
 
         JButton okButton = new JButton("OK");
         okButton.setPreferredSize(new Dimension(80, 25));
-        okButton.setFocusable(false);
+        okButton.setFocusable(true);
         okButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

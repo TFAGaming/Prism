@@ -21,7 +21,7 @@ public class CodeOutlineToolbar extends JPanel {
         setBorder(new EmptyBorder(5, 5, 5, 0));
 
         JCheckBox checkboxIgnoreComments = new JCheckBox("Ignore comments");
-        checkboxIgnoreComments.setFocusable(false);
+        checkboxIgnoreComments.setFocusable(true);
         checkboxIgnoreComments.setSelected(ignoreComments);
         checkboxIgnoreComments.addActionListener(new ActionListener() {
             @Override

@@ -160,7 +160,7 @@ public class Terminal extends JPanel {
 
         comboBoxCommands = new JComboBox<>(new String[]{"No commands..."});
         comboBoxCommands.setBorder(new EmptyBorder(0, 5, 0, 5));
-        comboBoxCommands.setFocusable(false);
+        comboBoxCommands.setFocusable(true);
         comboBoxCommands.setEnabled(false);
         Dimension preferredSize = comboBoxCommands.getPreferredSize();
         preferredSize.width += 20;

@@ -67,7 +67,7 @@ public class Bookmarks extends JPanel {
         DefaultTreeModel treeModel = buildTreeModel(this.fileLineData);
 
         fileTree = new JTree(treeModel);
-        fileTree.setFocusable(false);
+        fileTree.setFocusable(true);
         fileTree.setBorder(new EmptyBorder(5, 5, 5, 0));
 
         fileTree.setCellRenderer(new FileTreeCellRenderer());

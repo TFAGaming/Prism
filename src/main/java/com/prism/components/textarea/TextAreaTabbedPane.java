@@ -54,7 +54,7 @@ public class TextAreaTabbedPane extends JTabbedPane {
     public TextAreaTabbedPane() {
         super();
 
-        setFocusable(false);
+        setFocusable(true);
         setTabLayoutPolicy(SCROLL_TAB_LAYOUT);
 
         addChangeListener(new ChangeListener() {
@@ -290,7 +290,7 @@ public class TextAreaTabbedPane extends JTabbedPane {
 
         JButton closeButton = new JButton("  ✕");
         closeButton.setPreferredSize(new Dimension(17, 17));
-        closeButton.setFocusable(false);
+        closeButton.setFocusable(true);
         closeButton.setBorder(BorderFactory.createEmptyBorder());
         closeButton.setContentAreaFilled(false);
         closeButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -428,7 +428,7 @@ public class TextAreaTabbedPane extends JTabbedPane {
             // Zoom In Button
             JButton zoomInButton = new JButton();
             zoomInButton.setIcon(ResourceUtil.getIcon("icons/zoom_in.png"));
-            zoomInButton.setFocusable(false);
+            zoomInButton.setFocusable(true);
             zoomInButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
             zoomInButton.addActionListener(e -> {
                 imagePanel.setScale(imagePanel.getScale() * 1.2);
@@ -438,7 +438,7 @@ public class TextAreaTabbedPane extends JTabbedPane {
             // Zoom Out Button
             JButton zoomOutButton = new JButton();
             zoomOutButton.setIcon(ResourceUtil.getIcon("icons/zoom_out.png"));
-            zoomOutButton.setFocusable(false);
+            zoomOutButton.setFocusable(true);
             zoomOutButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
             zoomOutButton.addActionListener(e -> {
                 imagePanel.setScale(imagePanel.getScale() / 1.2);
@@ -447,7 +447,7 @@ public class TextAreaTabbedPane extends JTabbedPane {
 
             // Reset Button
             JButton resetButton = new JButton("1:1");
-            resetButton.setFocusable(false);
+            resetButton.setFocusable(true);
             resetButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
             resetButton.addActionListener(e -> {
                 imagePanel.setScale(1.0);

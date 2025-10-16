@@ -61,13 +61,13 @@ public class SearchAndReplace extends JPanel {
 
         // Options
         caseSensitiveCheck = new JCheckBox("Case Sensitive");
-        caseSensitiveCheck.setFocusable(false);
+        caseSensitiveCheck.setFocusable(true);
 
         wholeWordCheck = new JCheckBox("Whole Word");
-        wholeWordCheck.setFocusable(false);
+        wholeWordCheck.setFocusable(true);
 
         regexCheck = new JCheckBox("Regex");
-        regexCheck.setFocusable(false);
+        regexCheck.setFocusable(true);
 
         add(regexCheck);
         add(wholeWordCheck);
@@ -75,7 +75,7 @@ public class SearchAndReplace extends JPanel {
 
         // Replace panel
         replaceCheck = new JCheckBox();
-        replaceCheck.setFocusable(false);
+        replaceCheck.setFocusable(true);
         replaceCheck.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
@@ -176,7 +176,7 @@ public class SearchAndReplace extends JPanel {
         Image scaledImage = buttonIcon.getImage().getScaledInstance(16, 16, Image.SCALE_FAST);
         button.setIcon(new ImageIcon(scaledImage));
 
-        button.setFocusPainted(false);
+        button.setFocusPainted(true);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         return button;

@@ -19,7 +19,7 @@ import com.prism.utils.ResourceUtil;
 
 public class TerminalTabbedPane extends JTabbedPane {
     public TerminalTabbedPane() {
-        setFocusable(false);
+        setFocusable(true);
         setTabLayoutPolicy(SCROLL_TAB_LAYOUT);
         //setTabPlacement(JTabbedPane.RIGHT);
     }
@@ -114,7 +114,7 @@ public class TerminalTabbedPane extends JTabbedPane {
 
         JButton closeButton = new JButton("  ✕");
         closeButton.setPreferredSize(new Dimension(17, 17));
-        closeButton.setFocusable(false);
+        closeButton.setFocusable(true);
         closeButton.setBorder(BorderFactory.createEmptyBorder());
         closeButton.setContentAreaFilled(false);
         closeButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
