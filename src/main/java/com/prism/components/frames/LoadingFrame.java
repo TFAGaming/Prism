@@ -24,9 +24,11 @@ public class LoadingFrame extends JFrame {
 
     public LoadingFrame() {
         setTitle("Prism");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setResizable(false);
         setLayout(new FlowLayout());
+
+        setUndecorated(true);
 
         setIconImage(ResourceUtil.getIcon("icons/Prism.png").getImage());
 

@@ -72,7 +72,8 @@ public class PrismMenuBar extends JMenuBar {
 
     // Tools Menu
     JMenuItem menuItemRunTool;
-    JMenuItem menuItemManageTools;
+    JMenuItem menuItemEditTools;
+    JMenuItem menuItemDeleteTools;
 
     // Custom tools list components
     private JMenu toolsMenu;
@@ -369,8 +370,8 @@ public class PrismMenuBar extends JMenuBar {
             }
         });
 
-        menuItemManageTools = createMenuItem("Manage Tools...", null, null, null);
-        menuItemManageTools.addActionListener(new ActionListener() {
+        menuItemEditTools = createMenuItem("Edit Tools...", null, null, null);
+        menuItemEditTools.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 List<Tool> allTools = ToolsManager.getAllTools();
@@ -407,21 +408,57 @@ public class PrismMenuBar extends JMenuBar {
 
                     if (selectedTool != null) {
                         new EditToolFrame(selectedTool);
-                    } else {
-                        JOptionPane.showMessageDialog(
-                                prism,
-                                "Error finding tool: " + selectedToolName,
-                                "Error",
-                                JOptionPane.ERROR_MESSAGE
-                        );
                     }
                 }
             }
         });
-        // ----------------------------
+        
+        menuItemDeleteTools = createMenuItem("Delete Tool...", null, null, null);
+        menuItemDeleteTools.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                List<Tool> allTools = ToolsManager.getAllTools();
+
+                if (allTools.isEmpty()) {
+                    JOptionPane.showMessageDialog(
+                            prism,
+                            "No tools have been defined yet. Please create a new tool first.",
+                            "Manage Tools",
+                            JOptionPane.INFORMATION_MESSAGE
+                    );
+                    return;
+                }
+
+                String[] toolNames = allTools.stream()
+                        .map(Tool::getName)
+                        .toArray(String[]::new);
+
+                String selectedToolName = (String) JOptionPane.showInputDialog(
+                        prism,
+                        "Select a tool to delete:",
+                        "Manage Tools",
+                        JOptionPane.PLAIN_MESSAGE,
+                        null,
+                        toolNames,
+                        toolNames[0]
+                );
+
+                if (selectedToolName != null) {
+                    Tool selectedTool = allTools.stream()
+                            .filter(tool -> tool.getName().equals(selectedToolName))
+                            .findFirst()
+                            .orElse(null);
+
+                    if (selectedTool != null) {
+                        ToolsManager.removeToolById(selectedTool.getId());
+                    }
+                }
+            }
+        });
 
         toolsMenu.add(menuItemNewTool);
-        toolsMenu.add(menuItemManageTools); // New
+        toolsMenu.add(menuItemEditTools);
+        toolsMenu.add(menuItemDeleteTools);
 
         toolMenuSeparator = new JSeparator();
         toolsMenu.add(toolMenuSeparator);

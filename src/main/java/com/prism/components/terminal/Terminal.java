@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import com.prism.Prism;
 import com.prism.components.definition.Tool;
 import com.prism.components.extended.JExtendedTextField;
+import com.prism.components.files.FileExplorer;
+import com.prism.components.files.PrismFile;
+import com.prism.managers.FileManager;
 
 public class Terminal extends JPanel {
 
@@ -679,7 +682,15 @@ public class Terminal extends JPanel {
 
         appendToTerminal("Executing tool: " + tool.getName() + "\n", DEFAULT_FOREGROUND);
 
+        PrismFile pfile = prism.textAreaTabbedPane.getCurrentFile();
+        File file = pfile.getFile();
+
         for (String argument : tool.getArguments()) {
+            argument = argument.replace("{{current_file_name}}", file == null ? "null" : file.getName());
+            argument = argument.replace("{{current_file_name_no_extension}}", file == null ? "null" : file.getName());
+            argument = argument.replace("{{current_file}}", file == null ? "null" : file.getAbsolutePath());
+            argument = argument.replace("{{current_dir}}", FileManager.getDirectory().getAbsolutePath());
+
             executeCommand(argument);
         }
     }

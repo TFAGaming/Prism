@@ -75,9 +75,7 @@ public class NewToolFrame extends JFrame {
             directoryField.setText(FileManager.getDirectory().getAbsolutePath());
         }
 
-        JButton browseDirectory = new JButton();
-        browseDirectory.setIcon(ResourceUtil.getIcon("icons/browse.gif"));
-        browseDirectory.setPreferredSize(new Dimension(24, 24));
+        JButton browseDirectory = new JButton("Browse...");
         browseDirectory.setFocusable(true);
 
         shortcutField = new JExtendedTextField(60);
